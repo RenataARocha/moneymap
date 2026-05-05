@@ -1,0 +1,7 @@
+{
+  "gastos": [
+    { "categoria": "Alimentação", "valor": 500 },
+    { "categoria": "Lazer", "valor": 200 },
+    { "categoria": "Transporte", "valor": 150 }
+  ]
+}
