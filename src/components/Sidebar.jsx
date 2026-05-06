@@ -1,10 +1,19 @@
 import { NavLink } from "react-router-dom";
-import { LayoutDashboard, BarChart2, Target, User } from "lucide-react";
+import {
+  LayoutDashboard,
+  BarChart2,
+  Lightbulb,
+  List,
+  Target,
+  User,
+} from "lucide-react";
 import "./Sidebar.css";
 
 const navItems = [
   { to: "/dashboard", label: "Início", icon: LayoutDashboard },
   { to: "/analise", label: "Análise", icon: BarChart2 },
+  { to: "/transacoes", label: "Transações", icon: List },
+  { to: "/insights", label: "Insights", icon: Lightbulb },
   { to: "/metas", label: "Metas", icon: Target },
   { to: "/perfil", label: "Perfil", icon: User },
 ];
