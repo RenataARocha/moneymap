@@ -3,7 +3,6 @@ import { useState } from "react";
 // DADOS PROVISÓRIOS — apagar depois que a menina de dados entregar o gastos.json
 import dados from "../data/gastos.json";
 
-import "./Transacoes.css";
 
 const iconesPorCategoria = {
   Alimentação: "🥗",

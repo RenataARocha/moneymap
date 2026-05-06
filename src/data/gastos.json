@@ -1,7 +1,40 @@
 {
-  "gastos": [
-    { "categoria": "Alimentação", "valor": 500 },
-    { "categoria": "Lazer", "valor": 200 },
-    { "categoria": "Transporte", "valor": 150 }
-  ]
+  "usuario": {
+    "id": 1,
+    "nome": "Maria Silva",
+    "email": "maria@email.com",
+    "saldoAtual": 2450.00
+  },
+  "transacoes": [
+    { "id": 1,  "descricao": "iFood",              "categoria": "Alimentação", "valor": 85.90,  "tipo": "saida",   "data": "2026-05-01", "metodoPagamento": "cartao" },
+    { "id": 2,  "descricao": "Supermercado Extra",  "categoria": "Alimentação", "valor": 210.50, "tipo": "saida",   "data": "2026-05-03", "metodoPagamento": "debito" },
+    { "id": 3,  "descricao": "Uber",                "categoria": "Transporte",  "valor": 32.00,  "tipo": "saida",   "data": "2026-05-04", "metodoPagamento": "cartao" },
+    { "id": 4,  "descricao": "Cinema",              "categoria": "Lazer",       "valor": 60.00,  "tipo": "saida",   "data": "2026-05-02", "metodoPagamento": "cartao" },
+    { "id": 5,  "descricao": "Farmácia",            "categoria": "Saúde",       "valor": 120.00, "tipo": "saida",   "data": "2026-05-05", "metodoPagamento": "dinheiro" },
+    { "id": 6,  "descricao": "Aluguel",             "categoria": "Moradia",     "valor": 900.00, "tipo": "saida",   "data": "2026-05-05", "metodoPagamento": "pix" },
+    { "id": 7,  "descricao": "iFood",              "categoria": "Alimentação", "valor": 72.30,  "tipo": "saida",   "data": "2026-05-07", "metodoPagamento": "cartao" },
+    { "id": 8,  "descricao": "Spotify",             "categoria": "Lazer",       "valor": 21.90,  "tipo": "saida",   "data": "2026-05-08", "metodoPagamento": "cartao" },
+    { "id": 9,  "descricao": "Ônibus",              "categoria": "Transporte",  "valor": 15.00,  "tipo": "saida",   "data": "2026-05-09", "metodoPagamento": "dinheiro" },
+    { "id": 10, "descricao": "Restaurante",         "categoria": "Alimentação", "valor": 95.00,  "tipo": "saida",   "data": "2026-05-09", "metodoPagamento": "cartao" },
+    { "id": 11, "descricao": "Academia",            "categoria": "Saúde",       "valor": 89.90,  "tipo": "saida",   "data": "2026-05-10", "metodoPagamento": "debito" },
+    { "id": 12, "descricao": "iFood",              "categoria": "Alimentação", "valor": 68.00,  "tipo": "saida",   "data": "2026-05-10", "metodoPagamento": "cartao" },
+    { "id": 13, "descricao": "Uber",                "categoria": "Transporte",  "valor": 28.50,  "tipo": "saida",   "data": "2026-05-11", "metodoPagamento": "cartao" },
+    { "id": 14, "descricao": "Bar com amigos",      "categoria": "Lazer",       "valor": 110.00, "tipo": "saida",   "data": "2026-05-02", "metodoPagamento": "pix" },
+    { "id": 15, "descricao": "Luz",                 "categoria": "Moradia",     "valor": 145.00, "tipo": "saida",   "data": "2026-05-12", "metodoPagamento": "pix" },
+    { "id": 16, "descricao": "Salário",             "categoria": "Receita",     "valor": 4500.00,"tipo": "entrada", "data": "2026-05-05", "metodoPagamento": "pix" },
+    { "id": 17, "descricao": "Freelance",           "categoria": "Receita",     "valor": 800.00, "tipo": "entrada", "data": "2026-05-10", "metodoPagamento": "pix" },
+    { "id": 18, "descricao": "Supermercado Extra",  "categoria": "Alimentação", "valor": 185.00, "tipo": "saida",   "data": "2026-05-13", "metodoPagamento": "debito" },
+    { "id": 19, "descricao": "Netflix",             "categoria": "Lazer",       "valor": 45.90,  "tipo": "saida",   "data": "2026-05-08", "metodoPagamento": "cartao" },
+    { "id": 20, "descricao": "Posto de gasolina",   "categoria": "Transporte",  "valor": 120.00, "tipo": "saida",   "data": "2026-05-14", "metodoPagamento": "cartao" }
+  ],
+  "mesAnterior": {
+    "totalGastos": 1648.20,
+    "porCategoria": {
+      "Alimentação": 580.00,
+      "Lazer": 180.00,
+      "Transporte": 160.00,
+      "Moradia": 1020.00,
+      "Saúde": 108.20
+    }
+  }
 }

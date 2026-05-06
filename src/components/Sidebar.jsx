@@ -7,7 +7,6 @@ import {
   Target,
   User,
 } from "lucide-react";
-import "./Sidebar.css";
 
 const navItems = [
   { to: "/dashboard", label: "Início", icon: LayoutDashboard },

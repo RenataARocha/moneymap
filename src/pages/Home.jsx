@@ -20,7 +20,6 @@ import CardCategoria from "../components/CardCategoria";
 import Chart from "../components/Chart";
 import Insights from "../components/Insights";
 import TransactionList from "../components/TransactionList";
-import "./Home.css";
 
 function Home() {
   const { usuario, transacoes, mesAnterior } = dados;

@@ -1,0 +1,130 @@
+/* .insights {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.insights__secao {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.insights__titulo {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+}
+
+.insights__lista {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.insights__item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.insights__item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.insights__icone {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    flex-shrink: 0;
+}
+
+.insights__icone--alta {
+    background: rgba(239, 68, 68, 0.12);
+}
+
+.insights__icone--baixa {
+    background: rgba(93, 202, 165, 0.12);
+}
+
+.insights__icone--estavel {
+    background: rgba(93, 202, 165, 0.12);
+}
+
+.insights__icone--padrao {
+    background: rgba(245, 158, 11, 0.12);
+}
+
+.insights__texto {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.insights__texto strong {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.insights__texto span {
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+.insights__rec {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.insights__rec:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.insights__rec--destaque {
+    background: var(--accent-dim);
+    border-radius: 10px;
+    padding: 10px;
+    border-bottom: none;
+    margin-bottom: 6px;
+}
+
+.insights__rec-icone {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    flex-shrink: 0;
+}
+
+.insights__rec--destaque .insights__rec-icone {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.insights__rec-valor {
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    color: var(--accent) !important;
+    font-family: 'Syne', sans-serif;
+} */

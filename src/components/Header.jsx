@@ -1,6 +1,5 @@
 import { Bell } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
-import "./Header.css";
 
 function Header({ nomeUsuario }) {
   const primeiroNome = nomeUsuario ? nomeUsuario.split(" ")[0] : "Usuário";

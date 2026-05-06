@@ -1,5 +1,3 @@
-import "./CardCategoria.css";
-
 const iconesPorCategoria = {
   Alimentação: "🥗",
   Lazer: "🎮",
