@@ -1,0 +1,41 @@
+/* .chart {
+    width: 100%;
+}
+
+.chart__wrap {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.chart__legenda {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    flex: 1;
+}
+
+.chart__legenda-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.chart__legenda-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.chart__legenda-nome {
+    flex: 1;
+}
+
+.chart__legenda-pct {
+    color: var(--text-primary);
+    font-weight: 500;
+} */

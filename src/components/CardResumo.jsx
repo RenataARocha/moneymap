@@ -1,4 +1,3 @@
-import "./CardResumo.css";
 
 function CardResumo({ icone, label, valor, variacao, tipo }) {
   const positivo = variacao >= 0;

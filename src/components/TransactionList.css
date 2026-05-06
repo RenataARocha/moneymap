@@ -1,0 +1,82 @@
+/* .transaction-list {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.transaction-list__titulo {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+}
+
+.transaction-list__tabela {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.transaction-list__tabela thead th {
+    text-align: left;
+    padding: 0 12px 10px 0;
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+    border-bottom: 1px solid var(--border);
+}
+
+.transaction-list__tabela tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+}
+
+.transaction-list__tabela tbody tr:last-child {
+    border-bottom: none;
+}
+
+.transaction-list__tabela tbody tr:hover {
+    background: var(--bg-hover);
+}
+
+.transaction-list__tabela tbody td {
+    padding: 10px 12px 10px 0;
+    color: var(--text-secondary);
+    vertical-align: middle;
+}
+
+.transaction-list__data {
+    color: var(--text-muted) !important;
+    white-space: nowrap;
+}
+
+.transaction-list__desc {
+    color: var(--text-primary) !important;
+}
+
+.transaction-list__badge {
+    background: var(--accent-dim);
+    color: var(--accent);
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
+.transaction-list__valor {
+    font-weight: 500 !important;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.transaction-list__valor.entrada {
+    color: var(--success) !important;
+}
+
+.transaction-list__valor.saida {
+    color: var(--danger) !important;
+} */

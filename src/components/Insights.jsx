@@ -1,5 +1,3 @@
-import "./Insights.css";
-
 const iconesPadrao = {
   alta: "📈",
   baixa: "📉",

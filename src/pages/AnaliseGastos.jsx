@@ -20,8 +20,6 @@ import {
   Cell,
 } from "recharts";
 
-import "./AnaliseGastos.css";
-
 const CORES = ["#5DCAA5", "#1D9E75", "#EBC558", "#64748b", "#ef4444"];
 
 const iconesPorCategoria = {

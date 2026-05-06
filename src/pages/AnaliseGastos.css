@@ -1,0 +1,126 @@
+/* .analise {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 20px;
+    max-width: 1200px;
+    width: 100%;
+}
+
+.analise__header {
+    margin-bottom: 4px;
+}
+
+.analise__titulo {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+    font-family: 'Syne', sans-serif;
+}
+
+.analise__subtitulo {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+.analise__grafico-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.analise__secao-titulo {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+}
+
+.analise__cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+}
+
+.analise__card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: background 0.2s ease;
+}
+
+.analise__card--destaque {
+    border-color: rgba(93, 202, 165, 0.3);
+}
+
+.analise__card-icone {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.analise__card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex: 1;
+}
+
+.analise__card-nome {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.analise__card-valor {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.analise__card-pct {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 5px;
+    min-width: 60px;
+}
+
+.analise__card-pct-valor {
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Syne', sans-serif;
+}
+
+.analise__card-barra {
+    width: 60px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.analise__card-barra-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.4s ease;
+}
+
+@media (max-width: 768px) {
+    .analise__cards {
+        grid-template-columns: 1fr;
+    }
+} */

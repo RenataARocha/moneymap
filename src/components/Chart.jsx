@@ -1,5 +1,4 @@
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
-import "./Chart.css";
 
 const CORES = ["#5DCAA5", "#1D9E75", "#EBC558", "#64748b", "#ef4444"];
 
