@@ -1,68 +1,59 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Quicksand:wght@400;700&display=swap');
 
-/*  DESIGN TOKENS  */
+/* ─── DESIGN TOKENS ─────────────────────────────────── */
 :root {
-    /* Tipografia */
     --fs-sm: 0.875rem;
-    /* 14px */
     --fs-base: 1rem;
-    /* 16px */
     --fs-md: 1.25rem;
-    /* 20px */
     --fs-lg: 1.5rem;
-    /* 24px */
     --fs-xl: 2rem;
-    /* 32px */
-
     --radius: 16px;
     --transition: 0.3s ease;
 }
 
-/*  TEMA ESCURO (padrão) */
+/* ─── TEMA ESCURO ───────────────────────────────────── */
 [data-theme="dark"] {
     --bg-primary: #0D1017;
     --bg-secondary: #161C28;
     --bg-card: #161C28;
     --bg-hover: #1f2735;
-
     --primary: #1A5A5A;
     --primary-light: #589D99;
     --primary-soft: #90CFCB;
-
     --accent: #D7B06B;
     --accent-light: #F1D39F;
-
+    --accent-dim: rgba(215, 176, 107, 0.15);
+    --success: #90CFCB;
+    --danger: #D7B06B;
     --text-primary: #FFFFFF;
     --text-secondary: #90CFCB;
     --text-muted: #589D99;
-
     --border: rgba(255, 255, 255, 0.08);
     --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
-/*  TEMA CLARO  */
+/* ─── TEMA CLARO ────────────────────────────────────── */
 [data-theme="light"] {
     --bg-primary: #AFE2DB;
     --bg-secondary: #FFFFFF;
     --bg-card: #D7F2ED;
     --bg-hover: #c8ebe5;
-
     --primary: #1A5A5A;
     --primary-light: #589D99;
     --primary-soft: #90CFCB;
-
     --accent: #D7B06B;
     --accent-light: #F1D39F;
-
+    --accent-dim: rgba(215, 176, 107, 0.15);
+    --success: #1A5A5A;
+    --danger: #D7B06B;
     --text-primary: #000000;
     --text-secondary: #1A5A5A;
     --text-muted: #589D99;
-
     --border: rgba(0, 0, 0, 0.08);
     --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
-/*  RESET  */
+/* ─── RESET ─────────────────────────────────────────── */
 *,
 *::before,
 *::after {
@@ -71,7 +62,6 @@
     padding: 0;
 }
 
-/*  BASE  */
 html {
     font-size: 16px;
     scroll-behavior: smooth;
@@ -87,7 +77,7 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/*  TIPOGRAFIA  */
+/* ─── TIPOGRAFIA ────────────────────────────────────── */
 h1,
 h2,
 h3,
@@ -122,7 +112,7 @@ small {
     font-size: var(--fs-sm);
 }
 
-/*  ELEMENTOS BASE  */
+/* ─── ELEMENTOS BASE ────────────────────────────────── */
 a {
     text-decoration: none;
     color: inherit;
@@ -143,19 +133,14 @@ button {
 
 input {
     font-family: inherit;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 0.6rem 0.8rem;
-    background: var(--bg-card);
-    color: var(--text-primary);
+    color: inherit;
 }
 
 input:focus {
     outline: none;
-    border-color: var(--primary-light);
 }
 
-/*  SCROLLBAR  */
+/* ─── SCROLLBAR ─────────────────────────────────────── */
 ::-webkit-scrollbar {
     width: 6px;
 }
@@ -173,21 +158,50 @@ input:focus {
     background: var(--primary);
 }
 
-/*  COMPONENTES  */
-.card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
+/* ─── LAYOUT GLOBAL ─────────────────────────────────── */
+.layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* NOVO: wrapper do lado direito */
+.layout__main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.layout__content {
+    flex: 1;
     padding: 1.5rem;
-    transition: all var(--transition);
+    overflow-y: auto;
 }
 
-.card:hover {
-    background: var(--bg-hover);
+.menu-toggle {
+    display: none;
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 1100;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 18px;
+    line-height: 1;
 }
 
-/*  BOTÕES */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 999;
+}
+
+/* ─── BOTÕES GLOBAIS ────────────────────────────────── */
 .btn-primary {
     background: var(--primary);
     color: #fff;
@@ -210,39 +224,15 @@ input:focus {
     background: var(--accent-light);
 }
 
-/*  UTILITÁRIOS  */
-.text-primary {
-    color: var(--text-primary);
-}
+/* ─── RESPONSIVO GLOBAL ─────────────────────────────── */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+    }
 
-.text-secondary {
-    color: var(--text-secondary);
-}
-
-.text-muted {
-    color: var(--text-muted);
-}
-
-.text-brand {
-    color: var(--primary);
-}
-
-.text-accent {
-    color: var(--accent);
-}
-
-.bg-primary {
-    background: var(--bg-primary);
-}
-
-.bg-card {
-    background: var(--bg-card);
-}
-
-.border {
-    border: 1px solid var(--border);
-}
-
-.shadow {
-    box-shadow: var(--shadow);
+    .layout__content {
+        padding: 1rem;
+        padding-top: 4rem;
+        /* espaço pro menu-toggle */
+    }
 }
