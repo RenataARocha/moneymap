@@ -1,10 +1,12 @@
-/* .home {
+.home {
     display: flex;
     flex-direction: column;
-    gap: 14px;
-    padding: 20px;
+    gap: 1.25rem;
+    padding: 1.5rem;
     max-width: 1200px;
     width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
 }
 
 .home__header {
@@ -14,48 +16,62 @@
 }
 
 .home__titulo {
-    font-size: 20px;
-    font-weight: 600;
+    font-size: var(--fs-md);
+    font-weight: 700;
     color: var(--text-primary);
-    font-family: 'Syne', sans-serif;
+    font-family: 'Quicksand', sans-serif;
 }
 
 .home__subtitulo {
-    font-size: 12px;
+    font-size: var(--fs-sm);
     color: var(--text-muted);
-    margin-top: 2px;
+    margin-top: 4px;
 }
 
 .home__cards-topo {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 12px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
 }
 
 .home__meio {
     display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: 14px;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    align-items: stretch;
+    /* era start, muda pra stretch */
 }
 
 .home__chart-card {
     background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px;
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    box-shadow: var(--shadow);
+    transition: all var(--transition);
+    height: 100%;
+    /* ← adiciona isso */
+    box-sizing: border-box;
+    /* ← e isso */
+}
+
+.home__chart-card:hover {
+    background: var(--bg-hover);
 }
 
 .home__secao-titulo {
-    font-size: 11px;
-    color: var(--text-muted);
+    font-size: var(--fs-sm);
+    color: var(--text-primary);
     text-transform: uppercase;
-    letter-spacing: 0.6px;
-    margin-bottom: 14px;
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 500;
+    letter-spacing: 0.08em;
+    margin-bottom: 1rem;
+    font-weight: 600;
 }
 
 @media (max-width: 768px) {
+    .home {
+        padding: 1rem;
+    }
+
     .home__cards-topo {
         grid-template-columns: 1fr;
     }
@@ -63,4 +79,4 @@
     .home__meio {
         grid-template-columns: 1fr;
     }
-} */
+}
