@@ -1,6 +1,7 @@
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
+import { PieChart, Pie, Cell, Tooltip } from "recharts";
+import "./Chart.css";
 
-const CORES = ["#5DCAA5", "#1D9E75", "#EBC558", "#64748b", "#ef4444"];
+const CORES = ["#1A5A5A", "#589D99", "#90CFCB", "#D7B06B", "#F1D39F"];
 
 function Chart({ porCategoria }) {
   const dados = Object.entries(porCategoria).map(([nome, valor]) => ({
@@ -10,35 +11,17 @@ function Chart({ porCategoria }) {
 
   const total = dados.reduce((acc, d) => acc + d.valor, 0);
 
-  const renderLegenda = () => (
-    <ul className="chart__legenda">
-      {dados.map((entry, index) => {
-        const pct = ((entry.valor / total) * 100).toFixed(1);
-        return (
-          <li key={entry.nome} className="chart__legenda-item">
-            <span
-              className="chart__legenda-dot"
-              style={{ background: CORES[index % CORES.length] }}
-            />
-            <span className="chart__legenda-nome">{entry.nome}</span>
-            <span className="chart__legenda-pct">{pct}%</span>
-          </li>
-        );
-      })}
-    </ul>
-  );
-
   return (
     <div className="chart">
       <div className="chart__wrap">
-        <ResponsiveContainer width={150} height={150}>
-          <PieChart>
+        <div className="chart__donut">
+          <PieChart width={240} height={240}>
             <Pie
               data={dados}
               cx="50%"
               cy="50%"
-              innerRadius={45}
-              outerRadius={68}
+              innerRadius={70}
+              outerRadius={110}
               dataKey="valor"
               strokeWidth={0}
             >
@@ -62,8 +45,23 @@ function Chart({ porCategoria }) {
               }}
             />
           </PieChart>
-        </ResponsiveContainer>
-        {renderLegenda()}
+        </div>
+
+        <ul className="chart__legenda">
+          {dados.map((entry, index) => {
+            const pct = ((entry.valor / total) * 100).toFixed(1);
+            return (
+              <li key={entry.nome} className="chart__legenda-item">
+                <span
+                  className="chart__legenda-dot"
+                  style={{ background: CORES[index % CORES.length] }}
+                />
+                <span className="chart__legenda-nome">{entry.nome}</span>
+                <span className="chart__legenda-pct">{pct}%</span>
+              </li>
+            );
+          })}
+        </ul>
       </div>
     </div>
   );
