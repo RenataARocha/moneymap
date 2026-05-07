@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import { getUsuario } from "../services/api";
+import "./Login.css";
 
 function Login() {
   const navigate = useNavigate();

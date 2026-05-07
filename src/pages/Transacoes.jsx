@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getTransacoes } from "../services/api";
+import "./Transacoes.css";
 
 const iconesPorCategoria = {
   Alimentação: "🥗",

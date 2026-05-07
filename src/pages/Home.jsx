@@ -23,6 +23,7 @@ import TransactionList from "../components/TransactionList";
 import imgSaldo from "../assets/saldo.png";
 import imgGasto from "../assets/gasto.png";
 import imgCategoria from "../assets/categoria.png";
+import "./Home.css";
 
 function Home() {
   const [usuario, setUsuario] = useState(null);
