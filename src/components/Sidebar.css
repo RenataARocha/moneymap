@@ -1,28 +1,52 @@
-/* .sidebar {
-    width: 200px;
+.sidebar {
+    width: 220px;
     min-height: 100vh;
-    background: var(--bg-secondary);
+    background: var(--primary);
     border-right: 1px solid var(--border);
-    padding: 20px 0;
+    padding: 1.25rem 0;
     display: flex;
+    justify-content: space-between;
     flex-direction: column;
     flex-shrink: 0;
-    transition: background 0.3s ease;
+    transition: transform var(--transition);
+}
+
+.sidebar__footer {
+    padding: 1rem 0;
+    border-top: 1px solid var(--border);
+    margin-top: auto;
+}
+
+.sidebar__logout {
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--danger);
+    text-align: left;
+}
+
+.sidebar__logout:hover {
+    background: rgba(215, 176, 107, 0.1);
+    color: var(--danger);
 }
 
 .sidebar__logo {
-    padding: 0 20px 28px;
-    font-size: 16px;
-    font-family: 'Syne', sans-serif;
-    font-weight: 600;
+    padding: 0 1.35rem 1.75rem;
+    font-size: var(--fs-md);
+    font-family: 'Quicksand', sans-serif;
 }
 
 .sidebar__logo-money {
     color: var(--text-primary);
+    font-weight: 700;
+    font-size: 1.2rem;
 }
 
 .sidebar__logo-map {
-    color: var(--accent);
+    color: var(--text-primary);
+    font-weight: 500;
+    font-size: 1.2rem;
 }
 
 .sidebar__nav {
@@ -34,24 +58,24 @@
 .sidebar__item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 11px 20px;
-    font-size: 13px;
+    gap: 0.625rem;
+    padding: 0.7rem 1.25rem;
+    font-size: var(--fs-sm);
     color: var(--text-muted);
     text-decoration: none;
-    transition: all 0.15s ease;
-    border-right: 2px solid transparent;
+    transition: all var(--transition);
+    border-right: 3px solid transparent;
 }
 
 .sidebar__item:hover {
     color: var(--text-secondary);
-    background: var(--bg-hover);
+    background: var(--primary);
 }
 
 .sidebar__item--active {
     color: var(--accent);
     background: var(--accent-dim);
-    border-right: 2px solid var(--accent);
+    border-right: 3px solid var(--accent);
 }
 
 .sidebar__icon {
@@ -62,8 +86,7 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    background: rgba(255, 255, 255, 0.04);
-    transition: background 0.15s;
+    background: var(--bg-hover);
 }
 
 .sidebar__item--active .sidebar__icon {
@@ -73,6 +96,15 @@
 
 @media (max-width: 768px) {
     .sidebar {
-        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        transform: translateX(-100%);
+        z-index: 1000;
     }
-} */
+
+    .sidebar--open {
+        transform: translateX(0);
+    }
+}
