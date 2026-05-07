@@ -71,7 +71,6 @@
 
 .analise__grafico-card {
     background: var(--bg-card);
-    border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 1rem;
 }
@@ -116,7 +115,6 @@
 
 .analise__resumo-card {
     background: var(--bg-card);
-    border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 1.25rem;
     display: flex;
@@ -165,7 +163,6 @@
 
 .analise__tabela-card {
     background: var(--bg-card);
-    border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 1rem;
     max-height: 400px;
