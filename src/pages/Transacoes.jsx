@@ -1,8 +1,5 @@
-import { useState } from "react";
-
-// DADOS PROVISÓRIOS — apagar depois que a menina de dados entregar o gastos.json
-import dados from "../data/gastos.json";
-
+import { useEffect, useState } from "react";
+import { getTransacoes } from "../services/api";
 
 const iconesPorCategoria = {
   Alimentação: "🥗",
@@ -15,8 +12,34 @@ const iconesPorCategoria = {
 };
 
 function Transacoes() {
-  const { transacoes } = dados;
+  const [transacoes, setTransacoes] = useState([]);
   const [filtro, setFiltro] = useState("Todas");
+  const [carregando, setCarregando] = useState(true);
+  const [erro, setErro] = useState("");
+
+  useEffect(() => {
+    const carregarTransacoes = async () => {
+      try {
+        setCarregando(true);
+        const transacoesData = await getTransacoes();
+        setTransacoes(transacoesData);
+      } catch (error) {
+        setErro("Não foi possível carregar as transações.");
+      } finally {
+        setCarregando(false);
+      }
+    };
+
+    carregarTransacoes();
+  }, []);
+
+  if (carregando) {
+    return <div className="transacoes">Carregando transações...</div>;
+  }
+
+  if (erro) {
+    return <div className="transacoes">{erro}</div>;
+  }
 
   const categorias = ["Todas", ...new Set(transacoes.map((t) => t.categoria))];
 
