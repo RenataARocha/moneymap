@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Eye, EyeOff } from "lucide-react";
-import "./Login.css";
+import { Eye, EyeOff, Mail, Lock } from "lucide-react";
+import { getUsuario } from "../services/api";
 
 function Login() {
   const navigate = useNavigate();
@@ -11,6 +11,7 @@ function Login() {
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const [erros, setErros] = useState({});
   const [carregando, setCarregando] = useState(false);
+  const [erroLogin, setErroLogin] = useState("");
 
   function validar() {
     const novosErros = {};
@@ -38,12 +39,24 @@ function Login() {
     }
 
     setErros({});
+    setErroLogin("");
     setCarregando(true);
 
-    setTimeout(() => {
-      setCarregando(false);
-      navigate("/dashboard");
-    }, 1200);
+    getUsuario()
+      .then((usuario) => {
+        if (usuario.email.toLowerCase() !== email.trim().toLowerCase()) {
+          setErroLogin("E-mail não encontrado. Use o e-mail cadastrado.");
+          return;
+        }
+
+        navigate("/dashboard");
+      })
+      .catch(() => {
+        setErroLogin("Não foi possível conectar ao servidor. Tente novamente.");
+      })
+      .finally(() => {
+        setCarregando(false);
+      });
   }
 
   function handleKeyDown(e) {
@@ -136,6 +149,8 @@ function Login() {
           />
           Google
         </button>
+
+        {erroLogin && <span className="login__erro">{erroLogin}</span>}
 
         <p className="login__rodape">
           Não tem uma conta?
