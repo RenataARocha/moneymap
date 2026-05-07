@@ -1,7 +1,10 @@
-import { Bell } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import ThemeToggle from "./ThemeToggle";
+import "./Header.css";
 
 function Header({ nomeUsuario }) {
+  const navigate = useNavigate();
+
   const primeiroNome = nomeUsuario ? nomeUsuario.split(" ")[0] : "Usuário";
   const iniciais = nomeUsuario
     ? nomeUsuario
@@ -20,10 +23,11 @@ function Header({ nomeUsuario }) {
 
       <div className="header__acoes">
         <ThemeToggle />
-        <button className="header__sino" title="Notificações">
-          <Bell size={16} />
-        </button>
-        <div className="header__avatar" title={nomeUsuario}>
+        <div
+          className="header__avatar"
+          title={nomeUsuario}
+          onClick={() => navigate("/perfil")}
+        >
           {iniciais}
         </div>
       </div>

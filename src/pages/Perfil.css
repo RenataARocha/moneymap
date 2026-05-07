@@ -1,4 +1,4 @@
-/* .perfil {
+.perfil {
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -166,4 +166,4 @@
 
 .perfil__sair:hover {
     background: rgba(239, 68, 68, 0.08);
-} */
+}

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import dados from "../data/gastos.json"; // PROVISÓRIO
 import { calcularPorCategoria, formatarMoeda } from "../utils/calculations"; // PROVISÓRIO
+import "./Metas.css";
 
 const iconesPorCategoria = {
   Alimentação: "🥗",

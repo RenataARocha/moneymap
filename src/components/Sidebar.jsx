@@ -6,7 +6,9 @@ import {
   List,
   Target,
   User,
+  LogOut,
 } from "lucide-react";
+import "./Sidebar.css";
 
 const navItems = [
   { to: "/dashboard", label: "Início", icon: LayoutDashboard },
@@ -17,9 +19,9 @@ const navItems = [
   { to: "/perfil", label: "Perfil", icon: User },
 ];
 
-function Sidebar() {
+function Sidebar({ aberta, fechar, onLogout }) {
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${aberta ? "sidebar--open" : ""}`}>
       <div className="sidebar__logo">
         <span className="sidebar__logo-money">Money</span>
         <span className="sidebar__logo-map">Map</span>
@@ -30,17 +32,28 @@ function Sidebar() {
           <NavLink
             key={to}
             to={to}
+            onClick={fechar} // fecha ao navegar no mobile
             className={({ isActive }) =>
               `sidebar__item ${isActive ? "sidebar__item--active" : ""}`
             }
           >
             <div className="sidebar__icon">
-              <Icon size={16} />
+              <Icon size={18} />
             </div>
             <span>{label}</span>
           </NavLink>
         ))}
       </nav>
+
+      {/* Botão de logout na parte de baixo */}
+      <div className="sidebar__footer">
+        <button className="sidebar__item sidebar__logout" onClick={onLogout}>
+          <div className="sidebar__icon">
+            <LogOut size={18} />
+          </div>
+          <span>Sair</span>
+        </button>
+      </div>
     </aside>
   );
 }

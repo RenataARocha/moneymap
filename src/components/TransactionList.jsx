@@ -1,3 +1,5 @@
+import "./TransactionList.css";
+
 const iconesPorCategoria = {
   Alimentação: "🥗",
   Lazer: "🎮",

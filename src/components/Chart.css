@@ -1,26 +1,28 @@
-/* .chart {
+.chart {
     width: 100%;
 }
 
 .chart__wrap {
     display: flex;
+    flex-direction: column;
+    /* ← muda de row para column */
     align-items: center;
-    gap: 20px;
+    gap: 1.25rem;
 }
 
 .chart__legenda {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 9px;
-    flex: 1;
+    gap: 0.4rem;
+    width: 100%;
 }
 
 .chart__legenda-item {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 12px;
+    gap: 0.5rem;
+    font-size: var(--fs-sm);
     color: var(--text-secondary);
 }
 
@@ -37,5 +39,9 @@
 
 .chart__legenda-pct {
     color: var(--text-primary);
-    font-weight: 500;
-} */
+    font-weight: 600;
+}
+
+.chart__donut {
+    flex-shrink: 0;
+}

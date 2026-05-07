@@ -1,4 +1,4 @@
-/* .metas {
+.metas {
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -210,4 +210,4 @@
 
 .metas__pct--danger {
     color: var(--danger);
-} */
+}

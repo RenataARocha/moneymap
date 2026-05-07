@@ -9,6 +9,8 @@ import {
   gerarRecomendacoes,
 } from "../utils/calculations";
 
+import "./InsightsPage.css";
+
 const iconesTipo = {
   alta: { icone: "📈", cor: "rgba(239,68,68,0.12)", texto: "#ef4444" },
   baixa: { icone: "📉", cor: "rgba(93,202,165,0.12)", texto: "#5DCAA5" },

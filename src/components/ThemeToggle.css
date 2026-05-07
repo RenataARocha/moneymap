@@ -1,4 +1,4 @@
-/* .theme-toggle {
+.theme-toggle {
     width: 34px;
     height: 34px;
     border-radius: 8px;
@@ -9,11 +9,11 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: all var(--transition);
 }
 
 .theme-toggle:hover {
     background: var(--accent-dim);
     color: var(--accent);
     border-color: var(--accent);
-} */
+}

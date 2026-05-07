@@ -1,4 +1,4 @@
-/* .transacoes {
+.transacoes {
     display: flex;
     flex-direction: column;
     gap: 14px;
@@ -142,4 +142,4 @@
     .transacoes__tabela tbody td:nth-child(4) {
         display: none;
     }
-} */
+}
