@@ -5,11 +5,9 @@ import {
   calcularPorCategoria,
   maiorCategoria,
   formatarMoeda,
+  gerarRecomendacoes,
 } from "../utils/calculations";
 import "./InsightsPage.css";
-import imgReduzir from "../assets/reduzir.png";
-import imgControlar from "../assets/controlar.png";
-import imgParabens from "../assets/parabens.png";
 
 function InsightsPage() {
   const { transacoes } = dados;
@@ -73,29 +71,8 @@ function InsightsPage() {
   ];
 
   // DADOS PROVISÓRIOS — substituir quando calculations.js definitivo for entregue
-  const recomendacoes = [
-    {
-      imagem: imgReduzir,
-      titulo: "Reduzir Delivery!",
-      descricao: "Alimentação está maior que 40% dos seus gastos.",
-      sugerido: "Preparar mais refeições em casa.",
-      valor: "R$ 200,00",
-    },
-    {
-      imagem: imgControlar,
-      titulo: "Controlar Lazer!",
-      descricao: "Lazer aumentou 15% em relação a março.",
-      sugerido: "Busque sugestões gratuitas ou mais em conta.",
-      valor: "R$ 100,00",
-    },
-    {
-      imagem: imgParabens,
-      titulo: "Parabéns!",
-      descricao: "Gastos com transporte reduziram 5%.",
-      dica: "Continue monitorando.",
-      valor: "R$ 50,00",
-    },
-  ];
+// REMOVA o array hardcoded e coloque:
+const recomendacoes = gerarRecomendacoes(porCategoria, totalGastos, dados.mesAnterior, transacoes);
 
   return (
     <div className="insights-page">

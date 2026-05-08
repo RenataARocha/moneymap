@@ -67,7 +67,6 @@ export const deleteTransacao = async (id) => {
   if (!response.ok) {
       throw new Error('Failed to delete transacao');
     }
-    return await response.json();
   }
   catch(error){
     console.error('Error fetching transacao:', error);
