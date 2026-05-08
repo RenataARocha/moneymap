@@ -2,6 +2,7 @@ import { useState } from "react";
 import dados from "../data/gastos.json"; // PROVISÓRIO
 import { calcularPorCategoria, formatarMoeda } from "../utils/calculations"; // PROVISÓRIO
 import "./Metas.css";
+import { motion } from "framer-motion";
 
 const iconesPorCategoria = {
   Alimentação: "🥗",
@@ -89,7 +90,16 @@ function Metas() {
 
   return (
     <div className="metas">
-      <div className="metas__topo">
+      <motion.div
+        className="metas__topo"
+        initial={{ opacity: 0, y: -20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{
+          duration: 0.5,
+          ease: "easeOut",
+        }}
+      >
         <div>
           <h2 className="metas__titulo">Metas</h2>
           <p className="metas__subtitulo">
@@ -97,10 +107,22 @@ function Metas() {
           </p>
         </div>
         {salvo && <span className="metas__salvo">✅ Meta salva!</span>}
-      </div>
+      </motion.div>
 
       {/* ─── Card de Investimento ─── */}
-      <div className={`metas__invest-card metas__invest-card--${statusInvest}`}>
+      <motion.div
+        className={`metas__invest-card metas__invest-card--${statusInvest}`}
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{
+          duration: 0.7,
+          ease: "easeOut",
+        }}
+        whileHover={{
+          y: -4,
+        }}
+      >
         <div className="metas__invest-top">
           <div className="metas__invest-left">
             <div className="metas__invest-icone">📈</div>
@@ -182,7 +204,7 @@ function Metas() {
             </span>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* ─── Lista de categorias ─── */}
       <div className="metas__lista">
@@ -201,7 +223,21 @@ function Metas() {
                 : "ok";
 
           return (
-            <div key={cat} className={`metas__card metas__card--${status}`}>
+            <motion.div
+              key={cat}
+              className={`metas__card metas__card--${status}`}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{
+                duration: 0.6,
+                delay: Object.keys(porCategoria).indexOf(cat) * 0.08,
+                ease: "easeOut",
+              }}
+              whileHover={{
+                y: -5,
+              }}
+            >
               <div className="metas__card-topo">
                 <div className="metas__card-info">
                   <div className="metas__icone">
@@ -256,9 +292,15 @@ function Metas() {
               {limite > 0 && (
                 <div className="metas__progresso-wrap">
                   <div className="metas__progresso">
-                    <div
-                      className={`metas__progresso-fill metas__progresso-fill--${status}`}
-                      style={{ width: `${percentualMeta}%` }}
+                    <motion.div
+                      className={`metas__progresso-fill metas__progresso-fill--${statusInvest}`}
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${progressoInvest}%` }}
+                      viewport={{ once: true }}
+                      transition={{
+                        duration: 1,
+                        ease: "easeOut",
+                      }}
                     />
                   </div>
                   <span className={`metas__pct metas__pct--${status}`}>
@@ -268,7 +310,7 @@ function Metas() {
                   </span>
                 </div>
               )}
-            </div>
+            </motion.div>
           );
         })}
       </div>

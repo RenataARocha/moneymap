@@ -10,6 +10,7 @@ import "./InsightsPage.css";
 import imgReduzir from "../assets/reduzir.png";
 import imgControlar from "../assets/controlar.png";
 import imgParabens from "../assets/parabens.png";
+import { motion } from "framer-motion";
 
 function InsightsPage() {
   const { transacoes } = dados;
@@ -99,7 +100,16 @@ function InsightsPage() {
 
   return (
     <div className="insights-page">
-      <div className="insights-page__topo">
+      <motion.div
+        className="insights-page__topo"
+        initial={{ opacity: 0, y: -20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{
+          duration: 0.5,
+          ease: "easeOut",
+        }}
+      >
         <h2 className="insights-page__titulo">Insights e Recomendações</h2>
         <select
           className="insights-page__select"
@@ -112,18 +122,32 @@ function InsightsPage() {
           <option value="abril">Mês: Abril 2026</option>
           <option value="maio">Mês: Maio 2026</option>
         </select>
-      </div>
+      </motion.div>
 
       <div className="insights-page__secao">
         <h3 className="insights-page__secao-titulo">Insights Financeiros</h3>
         <div className="insights-page__financeiros">
           {insightsFinanceiros.map((item, i) => (
-            <div key={i} className="insights-page__financeiro-card">
+            <motion.div
+              key={i}
+              className="insights-page__financeiro-card"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{
+                duration: 0.6,
+                delay: i * 0.12,
+                ease: "easeOut",
+              }}
+              whileHover={{
+                y: -5,
+              }}
+            >
               <span className="insights-page__financeiro-icone">
                 {item.icone}
               </span>
               <p className="insights-page__financeiro-texto">{item.texto}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
@@ -132,7 +156,22 @@ function InsightsPage() {
         <h3 className="insights-page__secao-titulo">Recomendações Práticas</h3>
         <div className="insights-page__recomendacoes">
           {recomendacoes.map((r, i) => (
-            <div key={i} className="insights-page__rec-card">
+            <motion.div
+              key={i}
+              className="insights-page__rec-card"
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{
+                duration: 0.7,
+                delay: i * 0.15,
+                ease: "easeOut",
+              }}
+              whileHover={{
+                y: -6,
+                scale: 1.01,
+              }}
+            >
               <div className="insights-page__rec-topo">
                 <img
                   src={r.imagem}
@@ -159,7 +198,7 @@ function InsightsPage() {
                   Possível economia: <strong>{r.valor}</strong>
                 </p>
               )}
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

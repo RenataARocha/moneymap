@@ -9,9 +9,8 @@
     color: var(--text-primary);
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    margin-bottom: 0.875rem;
     font-weight: 600;
-    padding-bottom: 2.5rem;
+    margin-bottom: 1.5rem;
 }
 
 .transaction-list__tabela {
@@ -22,16 +21,17 @@
 
 .transaction-list__tabela thead th {
     text-align: left;
-    padding: 0 0.75rem 0.625rem 0;
+    padding: 0 0.75rem 0.625rem 1rem;
     font-size: var(--fs-base);
     color: var(--color-optional-3);
-    font-weight: 500;
+    font-weight: 600;
     border-bottom: 1px solid var(--border);
 }
 
 .transaction-list__tabela tbody tr {
     border-bottom: 1px solid var(--border);
     transition: background var(--transition);
+    font-weight: 600;
 }
 
 .transaction-list__tabela tbody tr:last-child {
@@ -43,9 +43,16 @@
 }
 
 .transaction-list__tabela tbody td {
-    padding: 0.625rem 0.75rem 0.625rem 0;
+    padding: 0.3rem 0.75rem 0.625rem 1rem;
     color: var(--text-secondary);
     vertical-align: middle;
+    font-weight: 600;
+}
+
+.transaction-list__valor {
+    font-weight: 700;
+    text-align: right;
+    white-space: nowrap;
 }
 
 .transaction-list__data {
@@ -84,6 +91,7 @@
 
 .transaction-list__valor.saida {
     color: var(--text-secondary);
+    font-weight: 600;
 }
 
 .transaction-list__paginacao {
@@ -128,4 +136,15 @@
     color: var(--text-muted);
     min-width: 50px;
     text-align: center;
+}
+
+.transaction-list__tabela thead th:last-child {
+    text-align: right;
+    padding-right: 7rem;
+    font-weight: 600;
+}
+
+.transaction-list__tabela tbody td:last-child {
+    padding-right: 7rem;
+    font-weight: 600;
 }
