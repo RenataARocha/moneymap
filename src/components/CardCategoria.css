@@ -32,8 +32,7 @@
 
 .card-categoria__label {
     font-size: var(--fs-sm);
-    color: #FFFFFF;
-    /* Título agora Branco */
+    color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.08em;
 }
@@ -41,7 +40,7 @@
 .card-categoria__nome {
     font-size: var(--fs-md);
     font-weight: 700;
-    color: var(--primary-light);
+    color: var(--text-primary);
     /* Nome da categoria agora Verde */
     font-family: 'Quicksand', sans-serif;
 }
