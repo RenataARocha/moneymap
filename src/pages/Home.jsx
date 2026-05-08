@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-
-// LÓGICA PROVISÓRIA — apagar depois que a menina de lógica entregar o calculations.js
 import {
   calcularTotalGastos,
+  calcularTotalEntradas,
   calcularPorCategoria,
   maiorCategoria,
   calcularVariacaoMensal,
@@ -12,7 +11,6 @@ import {
   ultimas5Transacoes,
   formatarMoeda,
 } from "../utils/calculations";
-
 import { getUsuario, getTransacoes, getMesAnterior } from "../services/api";
 import CardResumo from "../components/CardResumo";
 import CardCategoria from "../components/CardCategoria";
@@ -30,18 +28,23 @@ function Home() {
   const [mesAnterior, setMesAnterior] = useState(null);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
+  const [mesSelecionado, setMesSelecionado] = useState("05");
+  const [percentualInvestimento] = useState(10);
 
   useEffect(() => {
     const carregarDados = async () => {
       try {
         setCarregando(true);
+
         const [usuarioData, transacoesData, mesAnteriorData] =
           await Promise.all([getUsuario(), getTransacoes(), getMesAnterior()]);
+
         setUsuario(usuarioData);
         setTransacoes(transacoesData);
         setMesAnterior(mesAnteriorData);
       } catch (err) {
         console.log(err);
+
         setErro(
           "Não foi possível carregar os dados. Tente novamente mais tarde.",
         );
@@ -65,41 +68,87 @@ function Home() {
     return <div className="home">Carregando...</div>;
   }
 
-  const totalGastos = calcularTotalGastos(transacoes);
-  const porCategoria = calcularPorCategoria(transacoes);
+  const transacoesFiltradas = transacoes.filter(
+    (t) => t.data.split("-")[1] === mesSelecionado,
+  );
+
+  const totalGastos = calcularTotalGastos(transacoesFiltradas);
+
+  const totalEntradas = calcularTotalEntradas(transacoesFiltradas);
+
+  const valorInvestimento = (totalEntradas * percentualInvestimento) / 100;
+
+  const porCategoria = calcularPorCategoria(transacoesFiltradas);
+
   const [catNome] = maiorCategoria(porCategoria);
+
   const porcentagens = calcularPorcentagens(porCategoria, totalGastos);
+
   const variacaoGastos = calcularVariacaoMensal(
     totalGastos,
     mesAnterior.totalGastos,
   );
-  const padroes = detectarPadroes(transacoes, mesAnterior);
+
+  const padroes = detectarPadroes(transacoesFiltradas, mesAnterior);
+
   const recomendacoes = gerarRecomendacoes(
     porCategoria,
     totalGastos,
     mesAnterior,
   );
-  const ultimas = ultimas5Transacoes(transacoes);
+
+  const ultimas = ultimas5Transacoes(transacoesFiltradas);
 
   return (
     <div className="home">
+      <div className="home__filtro">
+        <select
+          className="home__select"
+          value={mesSelecionado}
+          onChange={(e) => setMesSelecionado(e.target.value)}
+        >
+          <option value="01">Janeiro 2026</option>
+          <option value="02">Fevereiro 2026</option>
+          <option value="03">Março 2026</option>
+          <option value="04">Abril 2026</option>
+          <option value="05">Maio 2026</option>
+          <option value="06">Junho 2026</option>
+          <option value="07">Julho 2026</option>
+          <option value="08">Agosto 2026</option>
+          <option value="09">Setembro 2026</option>
+          <option value="10">Outubro 2026</option>
+          <option value="11">Novembro 2026</option>
+          <option value="12">Dezembro 2026</option>
+        </select>
+      </div>
+
       <div className="home__cards-topo">
         <CardResumo
-          icone={imgSaldo} // Variável importada
-          label="Saldo Atual"
-          valor={formatarMoeda(usuario.saldoAtual)}
+          icone={imgSaldo}
+          label="Receita do Mês"
+          valor={formatarMoeda(totalEntradas)}
         />
+
         <CardResumo
-          icone={imgGasto} // Variável importada
+          icone={imgGasto}
           label="Gasto do Mês"
           valor={formatarMoeda(totalGastos)}
           variacao={variacaoGastos}
         />
+
         <CardCategoria
           categoria={catNome}
           valor={porCategoria[catNome]}
           percentual={porcentagens[catNome]}
-          iconePadrao={imgCategoria} // Passando a imagem padrão se quiser usar
+          iconePadrao={imgCategoria}
+        />
+
+        <CardResumo
+          icone={imgSaldo}
+          label="Investimento do Mês"
+          valor={`${percentualInvestimento}% • ${formatarMoeda(
+            valorInvestimento,
+          )}`}
         />
       </div>
 
@@ -108,8 +157,10 @@ function Home() {
           <h3 className="home__secao-titulo">
             Distribuição de Consumo por Categorias (%)
           </h3>
+
           <Chart porCategoria={porCategoria} />
         </div>
+
         <Insights padroes={padroes} recomendacoes={recomendacoes} />
       </div>
 
