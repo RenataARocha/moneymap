@@ -19,8 +19,8 @@
 }
 
 .insights__titulo {
-    font-size: var(--fs-sm);
-    color: var(--text-muted);
+    font-size: var(--fs-base);
+    color: var(--text-primary);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     margin-bottom: 1rem;
@@ -38,7 +38,7 @@
 
 /* O card verde da primeira imagem */
 .insights__item {
-    background-color: var(--primary);
+    background-color: var(--color-optional);
     /* Verde escuro translúcido */
     border-radius: 12px;
     /* Bordas arredondadas */
@@ -87,11 +87,11 @@
 .insights__texto {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 10px;
 }
 
 .insights__texto strong {
-    font-size: var(--fs-sm);
+    font-size: var(--fs-base);
     font-weight: 600;
     color: var(--text-primary);
 
@@ -99,7 +99,7 @@
 
 .insights__texto span {
     font-size: var(--fs-sm);
-    color: var(--text-muted);
+    color: var(--text-primary);
     line-height: 1;
 }
 

@@ -64,9 +64,10 @@
 
 .card-resumo__label {
     font-size: var(--fs-sm);
-    color: var(--text-muted);
+    color: var(--color-optional-2);
     text-transform: uppercase;
     letter-spacing: 0.08em;
+    font-weight: 700;
 }
 
 .card-resumo__valor {
@@ -85,7 +86,7 @@
 }
 
 .card-resumo__variacao.positivo {
-    color: var(--primary-light);
+    color: var(--color-optional-3);
 }
 
 .card-resumo__variacao.negativo {

@@ -59,12 +59,13 @@
 }
 
 .home__secao-titulo {
-    font-size: var(--fs-sm);
+    font-size: var(--fs-base);
     color: var(--text-primary);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     margin-bottom: 1rem;
     font-weight: 600;
+    padding-bottom: 2rem;
 }
 
 .home__filtro {
