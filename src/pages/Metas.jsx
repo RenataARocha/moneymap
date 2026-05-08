@@ -210,8 +210,11 @@ function Metas() {
                   <div>
                     <span className="metas__cat-nome">{cat}</span>
                     <span className="metas__cat-gasto">
-                      {percentualAtual.toFixed(1)}% do total —{" "}
                       {formatarMoeda(gasto)}
+                    </span>
+
+                    <span className="metas__cat-percentual">
+                      {percentualAtual.toFixed(1)}% do total
                     </span>
                   </div>
                 </div>
@@ -259,9 +262,9 @@ function Metas() {
                     />
                   </div>
                   <span className={`metas__pct metas__pct--${status}`}>
-                    {percentualAtual.toFixed(1)}% de {limite}% definido
-                    {status === "danger" && " ⚠️ Limite atingido!"}
-                    {status === "warning" && " ⚠️ Atenção!"}
+                    {percentualAtual.toFixed(1)}% usado
+                    {status === "danger" && "Limite atingido"}
+                    {status === "warning" && "Atenção ao limite"}
                   </span>
                 </div>
               )}
