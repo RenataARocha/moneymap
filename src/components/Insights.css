@@ -100,8 +100,7 @@
 .insights__texto span {
     font-size: var(--fs-sm);
     color: var(--text-muted);
-    line-height: 1.4;
-
+    line-height: 1;
 }
 
 .insights__rec {
@@ -112,10 +111,7 @@
     border-bottom: 1px solid var(--border);
 }
 
-.insights__rec:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-}
+
 
 .insights__rec--destaque {
     background: var(--accent-dim);
@@ -123,6 +119,8 @@
     padding: 0.75rem;
     border: 1px solid var(--accent);
     margin-bottom: 0.5rem;
+
+    overflow: hidden;
 }
 
 .insights__rec-icone {
