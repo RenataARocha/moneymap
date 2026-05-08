@@ -104,12 +104,13 @@
 }
 
 .analise__secao-titulo {
-    font-size: var(--fs-sm);
-    color: var(--text-muted);
+    font-size: var(--fs-base);
+    color: var(--text-primary);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     margin-bottom: 0.875rem;
     font-weight: 600;
+    padding-bottom: 1rem;
 }
 
 .analise__resumo-card {
@@ -122,8 +123,8 @@
 }
 
 .analise__resumo-mes {
-    font-size: var(--fs-sm);
-    color: var(--text-muted);
+    font-size: var(--fs-base);
+    color: var(--text-primary);
     margin-top: -0.5rem;
 }
 
@@ -136,27 +137,27 @@
 }
 
 .analise__resumo-label {
-    font-size: var(--fs-sm);
-    color: var(--text-muted);
+    font-size: var(--fs-base);
+    color: var(--color-optional-2);
 }
 
 .analise__resumo-valor--destaque {
     font-size: var(--fs-lg);
     font-weight: 700;
-    color: var(--accent);
+    color: var(--color-optional-3);
     font-family: 'Quicksand', sans-serif;
 }
 
 .analise__resumo-categoria {
-    font-size: var(--fs-sm);
+    font-size: var(--fs-md);
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--color-optional-3);
 }
 
 .analise__resumo-economia {
     font-size: var(--fs-md);
     font-weight: 700;
-    color: var(--accent);
+    color: var(--color-optional-3);
     font-family: 'Quicksand', sans-serif;
 }
 
@@ -180,7 +181,7 @@
 .analise__tabela th {
     text-align: left;
     padding: 0.5rem 0.75rem;
-    color: var(--accent);
+    color: var(--color-optional-3);
     font-weight: 600;
     font-size: var(--fs-sm);
 }
