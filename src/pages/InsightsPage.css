@@ -38,10 +38,11 @@
 }
 
 .insights-page__secao-titulo {
-    font-size: var(--fs-sm);
+    font-size: var(--fs-base);
     color: var(--text-primary);
     font-weight: 700;
-    margin-bottom: 1rem;
+    padding-bottom: 1.5rem;
+    text-transform: uppercase;
 }
 
 .insights-page__financeiros {
@@ -70,13 +71,13 @@
 }
 
 .insights-page__financeiro-texto {
-    font-size: var(--fs-sm);
-    color: var(--text-muted);
+    font-size: var(--fs-base);
+    color: var(--color-optional-4);
     line-height: 1.5;
 }
 
 .insights-page__financeiro-texto strong {
-    color: var(--text-primary);
+    color: var(--text-sidebar-icon);
     font-weight: 600;
 }
 
@@ -103,43 +104,48 @@
 .insights-page__rec-topo {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
-    margin-bottom: 0.25rem;
+    margin-bottom: 1.5rem;
 }
 
 .insights-page__rec-img {
-    width: 52px;
-    height: 52px;
+    width: 80px;
+    height: 80px;
     object-fit: contain;
     flex-shrink: 0;
 }
 
 .insights-page__rec-titulo {
-    font-size: var(--fs-sm);
+    font-size: var(--fs-md);
     font-weight: 700;
-    color: var(--accent);
+    color: var(--color-optional-3);
 }
 
 .insights-page__rec-descricao {
-    font-size: var(--fs-sm);
-    color: var(--text-muted);
+    font-size: var(--fs-base);
+    color: var(--text-primary);
     line-height: 1.5;
+    text-align: center;
 }
 
 .insights-page__rec-sugerido {
-    font-size: var(--fs-sm);
-    color: var(--text-muted);
+    font-size: var(--fs-base);
+    color: var(--text-primary);
+    text-align: center;
 }
 
 .insights-page__rec-sugerido span {
-    color: var(--primary-light);
+    color: var(--color-optional-2);
     font-weight: 600;
 }
 
 .insights-page__rec-economia {
-    font-size: var(--fs-sm);
-    color: var(--accent);
+    font-size: var(--fs-base);
+    color: var(--color-optional-2);
     margin-top: auto;
+    text-align: center;
+    
 }
 
 .insights-page__rec-economia strong {
