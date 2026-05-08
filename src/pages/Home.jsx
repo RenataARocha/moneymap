@@ -20,6 +20,7 @@ import TransactionList from "../components/TransactionList";
 import imgSaldo from "../assets/saldo.png";
 import imgGasto from "../assets/gasto.png";
 import imgCategoria from "../assets/categoria.png";
+import imgInvestimento from "../assets/investimento.png";
 import "./Home.css";
 
 function Home() {
@@ -144,7 +145,7 @@ function Home() {
         />
 
         <CardResumo
-          icone={imgSaldo}
+          icone={imgInvestimento}
           label="Investimento do Mês"
           valor={`${percentualInvestimento}% • ${formatarMoeda(
             valorInvestimento,
