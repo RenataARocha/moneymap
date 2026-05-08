@@ -32,7 +32,8 @@
     --text-sidebar-icon: #FFFFFF;
     --text-sidebar-hover: #90CFCB;
     --color-optional:#1A5A5A;
-    --color-optional-2:#FFFFFF;
+    --color-optional-2:#589D99;
+    --color-optional-3:#D7B06B;
     --border: rgba(255, 255, 255, 0.08);
     --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
@@ -58,7 +59,8 @@
     --text-sidebar-icon: #1A5A5A;
     --text-sidebar-hover: #90CFCB;
     --color-optional:#589D99;
-    --color-optional-2:#000000;
+    --color-optional-2:#1A5A5A;
+    --color-optional-3:#000000;
     --border: rgba(0, 0, 0, 0.08);
     --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }

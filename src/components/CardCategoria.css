@@ -32,9 +32,10 @@
 
 .card-categoria__label {
     font-size: var(--fs-sm);
-    color: var(--text-muted);
+    color: var(--color-optional-2);
     text-transform: uppercase;
     letter-spacing: 0.08em;
+    font-weight: 700;
 }
 
 .card-categoria__nome {
@@ -47,5 +48,5 @@
 
 .card-categoria__sub {
     font-size: var(--fs-sm);
-    color: var(--text-secondary);
+    color: var(--color-optional-3);
 }
