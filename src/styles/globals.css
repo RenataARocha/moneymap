@@ -28,9 +28,9 @@
     --text-primary: #FFFFFF;
     --text-secondary: #90CFCB;
     --text-muted: #589D99;
-    --text-sidebar:#FFFFFF;
-    --text-sidebar-icon:#FFFFFF;
-    --text-sidebar-hover:#90CFCB;
+    --text-sidebar: #FFFFFF;
+    --text-sidebar-icon: #FFFFFF;
+    --text-sidebar-hover: #90CFCB;
     --border: rgba(255, 255, 255, 0.08);
     --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
@@ -52,9 +52,9 @@
     --text-primary: #000000;
     --text-secondary: #1A5A5A;
     --text-muted: #589D99;
-    --text-sidebar:#FFFFFF;
-    --text-sidebar-icon:#1A5A5A;
-    --text-sidebar-hover:#90CFCB;
+    --text-sidebar: #FFFFFF;
+    --text-sidebar-icon: #1A5A5A;
+    --text-sidebar-hover: #90CFCB;
     --border: rgba(0, 0, 0, 0.08);
     --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
@@ -106,45 +106,6 @@ h3 {
     font-size: var(--fs-md);
 }
 
-p,
-span,
-a,
-button,
-input {
-    font-size: var(--fs-base);
-}
-
-small {
-    font-size: var(--fs-sm);
-}
-
-/* ─── ELEMENTOS BASE ────────────────────────────────── */
-a {
-    text-decoration: none;
-    color: inherit;
-    transition: color var(--transition);
-}
-
-a:hover {
-    color: var(--primary-light);
-}
-
-button {
-    cursor: pointer;
-    border: none;
-    background: none;
-    font-family: inherit;
-    transition: all var(--transition);
-}
-
-input {
-    font-family: inherit;
-    color: inherit;
-}
-
-input:focus {
-    outline: none;
-}
 
 /* ─── SCROLLBAR ─────────────────────────────────────── */
 ::-webkit-scrollbar {
@@ -207,28 +168,6 @@ input:focus {
     z-index: 999;
 }
 
-/* ─── BOTÕES GLOBAIS ────────────────────────────────── */
-.btn-primary {
-    background: var(--primary);
-    color: #fff;
-    padding: 0.7rem 1.2rem;
-    border-radius: var(--radius);
-}
-
-.btn-primary:hover {
-    background: var(--primary-light);
-}
-
-.btn-accent {
-    background: var(--accent);
-    color: #000;
-    padding: 0.7rem 1.2rem;
-    border-radius: var(--radius);
-}
-
-.btn-accent:hover {
-    background: var(--accent-light);
-}
 
 /* ─── RESPONSIVO GLOBAL ─────────────────────────────── */
 @media (max-width: 768px) {
