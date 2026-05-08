@@ -1,6 +1,4 @@
-// DADOS PROVISÓRIOS — apagar depois que a menina de dados entregar o gastos.json
-import dados from "../data/gastos.json";
-import "./Home.css";
+import { useEffect, useState } from "react";
 
 // LÓGICA PROVISÓRIA — apagar depois que a menina de lógica entregar o calculations.js
 import {
@@ -15,6 +13,7 @@ import {
   formatarMoeda,
 } from "../utils/calculations";
 
+import { getUsuario, getTransacoes, getMesAnterior } from "../services/api";
 import CardResumo from "../components/CardResumo";
 import CardCategoria from "../components/CardCategoria";
 import Chart from "../components/Chart";
@@ -23,9 +22,48 @@ import TransactionList from "../components/TransactionList";
 import imgSaldo from "../assets/saldo.png";
 import imgGasto from "../assets/gasto.png";
 import imgCategoria from "../assets/categoria.png";
+import "./Home.css";
 
 function Home() {
-  const { usuario, transacoes, mesAnterior } = dados;
+  const [usuario, setUsuario] = useState(null);
+  const [transacoes, setTransacoes] = useState([]);
+  const [mesAnterior, setMesAnterior] = useState(null);
+  const [carregando, setCarregando] = useState(true);
+  const [erro, setErro] = useState("");
+
+  useEffect(() => {
+    const carregarDados = async () => {
+      try {
+        setCarregando(true);
+        const [usuarioData, transacoesData, mesAnteriorData] =
+          await Promise.all([getUsuario(), getTransacoes(), getMesAnterior()]);
+        setUsuario(usuarioData);
+        setTransacoes(transacoesData);
+        setMesAnterior(mesAnteriorData);
+      } catch (err) {
+        console.log(err);
+        setErro(
+          "Não foi possível carregar os dados. Tente novamente mais tarde.",
+        );
+      } finally {
+        setCarregando(false);
+      }
+    };
+
+    carregarDados();
+  }, []);
+
+  if (carregando) {
+    return <div className="home">Carregando dados...</div>;
+  }
+
+  if (erro) {
+    return <div className="home">{erro}</div>;
+  }
+
+  if (!usuario || !mesAnterior) {
+    return <div className="home">Carregando...</div>;
+  }
 
   const totalGastos = calcularTotalGastos(transacoes);
   const porCategoria = calcularPorCategoria(transacoes);

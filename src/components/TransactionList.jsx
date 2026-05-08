@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "./TransactionList.css";
 
 const iconesPorCategoria = {
@@ -10,7 +11,20 @@ const iconesPorCategoria = {
   Outros: "📦",
 };
 
+const ITENS_POR_PAGINA = 5;
+
 function TransactionList({ transacoes }) {
+  const [paginaAtual, setPaginaAtual] = useState(1);
+
+  const totalPaginas = Math.ceil(transacoes.length / ITENS_POR_PAGINA);
+
+  const inicio = (paginaAtual - 1) * ITENS_POR_PAGINA;
+
+  const transacoesPaginadas = transacoes.slice(
+    inicio,
+    inicio + ITENS_POR_PAGINA,
+  );
+
   return (
     <div className="transaction-list">
       <h3 className="transaction-list__titulo">Últimas Transações</h3>
@@ -24,7 +38,7 @@ function TransactionList({ transacoes }) {
           </tr>
         </thead>
         <tbody>
-          {transacoes.map((t) => (
+          {transacoesPaginadas.map((t) => (
             <tr key={t.id}>
               <td className="transaction-list__data">
                 {new Date(t.data + "T00:00:00").toLocaleDateString("pt-BR")}
@@ -48,6 +62,28 @@ function TransactionList({ transacoes }) {
           ))}
         </tbody>
       </table>
+
+      <div className="transaction-list__paginacao">
+        <button
+          className="transaction-list__pag-btn"
+          onClick={() => setPaginaAtual((p) => Math.max(p - 1, 1))}
+          disabled={paginaAtual === 1}
+        >
+          ‹
+        </button>
+
+        <span className="transaction-list__pag-info">
+          {paginaAtual} de {totalPaginas}
+        </span>
+
+        <button
+          className="transaction-list__pag-btn"
+          onClick={() => setPaginaAtual((p) => Math.min(p + 1, totalPaginas))}
+          disabled={paginaAtual === totalPaginas}
+        >
+          ›
+        </button>
+      </div>
     </div>
   );
 }

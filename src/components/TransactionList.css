@@ -1,6 +1,5 @@
 .transaction-list {
     background: var(--bg-card);
-    border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 1rem;
 }
@@ -49,33 +48,83 @@
 }
 
 .transaction-list__data {
-    color: var(--text-muted) !important;
+    color: var(--text-muted);
     white-space: nowrap;
 }
 
 .transaction-list__desc {
-    color: var(--text-primary) !important;
+    color: var(--text-primary);
 }
 
 .transaction-list__badge {
-    background: var(--accent-dim);
-    color: var(--accent);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+
+    background: var(--bg-hover);
+    color: var(--text-secondary);
+
     font-size: var(--fs-sm);
     padding: 3px 8px;
     border-radius: 20px;
+
     white-space: nowrap;
 }
 
 .transaction-list__valor {
-    font-weight: 600 !important;
+    font-weight: 600;
     text-align: right;
     white-space: nowrap;
 }
 
 .transaction-list__valor.entrada {
-    color: var(--success) !important;
+    color: var(--success);
 }
 
 .transaction-list__valor.saida {
-    color: var(--danger) !important;
+    color: var(--text-secondary);
+}
+
+.transaction-list__paginacao {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+}
+
+.transaction-list__pag-btn {
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    border-radius: 8px;
+
+    background: var(--bg-hover);
+    color: var(--text-primary);
+
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.transaction-list__pag-btn:hover:not(:disabled) {
+    background: var(--primary-light);
+    color: #fff;
+}
+
+.transaction-list__pag-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.transaction-list__pag-info {
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+    min-width: 50px;
+    text-align: center;
 }
