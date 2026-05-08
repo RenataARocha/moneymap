@@ -16,10 +16,13 @@ import Transacoes from "./pages/Transacoes";
 import InsightsPage from "./pages/InsightsPage";
 import Metas from "./pages/Metas";
 import Perfil from "./pages/Perfil";
+import ModalTransacao from "./components/ModalTransacao";
 import "./styles/globals.css";
 
 function LayoutComSidebar({ children }) {
   const [sidebarAberta, setSidebarAberta] = useState(false);
+  const [modalAberto, setModalAberto] = useState(false);
+  const [tipoModal, setTipoModal] = useState("saida");
   const navigate = useNavigate();
 
   function handleLogout() {
@@ -49,9 +52,26 @@ function LayoutComSidebar({ children }) {
       />
 
       <div className="layout__main">
-        <Header nomeUsuario="Maria Silva" />
+        <Header
+          nomeUsuario="Maria Silva"
+          onAbrirModal={(tipo = "saida") => {
+            setTipoModal(tipo);
+            setModalAberto(true);
+          }}
+        />
         <main className="layout__content">{children}</main>
       </div>
+
+      {modalAberto && (
+        <ModalTransacao
+          tipo={tipoModal}
+          onAdicionar={() => {
+            setModalAberto(false);
+            navigate("/transacoes");
+          }}
+          onFechar={() => setModalAberto(false)}
+        />
+      )}
     </div>
   );
 }
