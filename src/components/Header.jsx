@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import ThemeToggle from "./ThemeToggle";
 import "./Header.css";
 
-function Header({ nomeUsuario }) {
+function Header({ nomeUsuario, onAbrirModal }) {
   const navigate = useNavigate();
 
   const primeiroNome = nomeUsuario ? nomeUsuario.split(" ")[0] : "Usuário";
@@ -22,6 +22,18 @@ function Header({ nomeUsuario }) {
       </div>
 
       <div className="header__acoes">
+        <button
+          className="header__btn-adicionar"
+          onClick={() => onAbrirModal("saida")}
+        >
+          + Despesa
+        </button>
+        <button
+          className="header__btn-receita"
+          onClick={() => onAbrirModal("entrada")}
+        >
+          + Receita
+        </button>
         <ThemeToggle />
         <div
           className="header__avatar"
