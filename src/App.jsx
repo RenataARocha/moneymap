@@ -19,6 +19,7 @@ import Metas from "./pages/Metas";
 import Perfil from "./pages/Perfil";
 import ModalTransacao from "./components/ModalTransacao";
 import "./styles/globals.css";
+import { TransacoesProvider } from "./context/TransacoesContext";
 
 function LayoutComSidebar() {
   // ← sem {children}
@@ -81,6 +82,7 @@ function LayoutComSidebar() {
 function App() {
   return (
     <ThemeProvider>
+      <TransacoesProvider> 
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Navigate to="/login" replace />} />
@@ -97,6 +99,7 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
+      </TransacoesProvider>
     </ThemeProvider>
   );
 }

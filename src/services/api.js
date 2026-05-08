@@ -58,3 +58,20 @@ export const postTransacao = async (transacao) => {
     throw error;
   }
 };
+
+export const deleteTransacao = async (id) => {
+  try{
+  const response = await fetch(`${API_BASE_URL}/transacoes/${id}`, {
+    method: "DELETE",
+  });
+  if (!response.ok) {
+      throw new Error('Failed to delete transacao');
+    }
+    return await response.json();
+  }
+  catch(error){
+    console.error('Error fetching transacao:', error);
+    throw error;
+  }
+  
+};

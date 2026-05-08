@@ -1,5 +1,7 @@
 import { useState } from "react";
 import "./ModalTransacao.css";
+import { postTransacao } from "../services/api";
+import { useTransacoes } from "../context/TransacoesContext";
 
 const iconesPorCategoria = {
   Alimentação: "🥗",
@@ -12,6 +14,7 @@ const iconesPorCategoria = {
 };
 
 function ModalTransacao({ onAdicionar, onFechar, tipo = "saida" }) {
+  const { recarregar } = useTransacoes();
   const [novaTransacao, setNovaTransacao] = useState({
     valor: "",
     descricao: "",
@@ -19,7 +22,7 @@ function ModalTransacao({ onAdicionar, onFechar, tipo = "saida" }) {
     categoria: "",
   });
 
-  function handleAdicionar() {
+  async function handleAdicionar() {
     if (!novaTransacao.valor || !novaTransacao.descricao || !novaTransacao.data)
       return;
     if (tipo === "saida" && !novaTransacao.categoria) return;
@@ -35,6 +38,13 @@ function ModalTransacao({ onAdicionar, onFechar, tipo = "saida" }) {
     };
 
     onAdicionar(nova);
+
+    try {
+      await postTransacao(nova);
+      await recarregar();
+    } catch (error) {
+      console.error("Erro ao criar transação:", error);
+    }
     setNovaTransacao({ valor: "", descricao: "", data: "", categoria: "" });
     onFechar();
   }
