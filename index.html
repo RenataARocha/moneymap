@@ -1,11 +1,35 @@
 <!doctype html>
-<html lang="pt-br" data-theme="dark">
+<html lang="pt-br">
 
 <head>
+  <script>
+    (function () {
+      const theme = localStorage.getItem("moneymap-theme") || "dark";
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+
+  <style>
+    :root {
+      background-color: #0D1017;
+      /* dark default */
+    }
+
+    [data-theme="light"] {
+      background-color: #AFE2DB;
+    }
+
+    [data-theme="dark"] {
+      background-color: #0D1017;
+    }
+  </style>
+
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>moneymap</title>
+
+
 </head>
 
 <body>
@@ -25,6 +49,7 @@
     new window.VLibras.Widget('https://vlibras.gov.br/app');
   </script>
   <!-- Vlibras fim -->
+
   <!-- Widgets de acessibilidade começo-->
   <script>
     // Configure before loading widget
@@ -38,7 +63,7 @@
       widgetPosition: {
         side: 'right',
         right: '5px',
-        bottom: '40%'
+        bottom: '37%'
       },
       // Aqui você controla o botão
       button: {

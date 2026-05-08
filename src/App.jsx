@@ -4,6 +4,7 @@ import {
   Route,
   Navigate,
   useNavigate,
+  Outlet,
 } from "react-router-dom";
 import { useState } from "react";
 import { ThemeProvider } from "./context/ThemeContext";
@@ -19,7 +20,8 @@ import Perfil from "./pages/Perfil";
 import ModalTransacao from "./components/ModalTransacao";
 import "./styles/globals.css";
 
-function LayoutComSidebar({ children }) {
+function LayoutComSidebar() {
+  // ← sem {children}
   const [sidebarAberta, setSidebarAberta] = useState(false);
   const [modalAberto, setModalAberto] = useState(false);
   const [tipoModal, setTipoModal] = useState("saida");
@@ -31,7 +33,6 @@ function LayoutComSidebar({ children }) {
 
   return (
     <div className="layout">
-      {/* Botão hamburguer para mobile */}
       <button
         className="menu-toggle"
         onClick={() => setSidebarAberta(true)}
@@ -40,7 +41,6 @@ function LayoutComSidebar({ children }) {
         ☰
       </button>
 
-      {/* Overlay para fechar sidebar no mobile */}
       {sidebarAberta && (
         <div className="overlay" onClick={() => setSidebarAberta(false)} />
       )}
@@ -59,7 +59,9 @@ function LayoutComSidebar({ children }) {
             setModalAberto(true);
           }}
         />
-        <main className="layout__content">{children}</main>
+        <main className="layout__content">
+          <Outlet /> {/* ← no lugar de {children} */}
+        </main>
       </div>
 
       {modalAberto && (
@@ -83,54 +85,16 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<Login />} />
-          <Route
-            path="/dashboard"
-            element={
-              <LayoutComSidebar>
-                <Home />
-              </LayoutComSidebar>
-            }
-          />
-          <Route
-            path="/analise"
-            element={
-              <LayoutComSidebar>
-                <AnaliseGastos />
-              </LayoutComSidebar>
-            }
-          />
-          <Route
-            path="/transacoes"
-            element={
-              <LayoutComSidebar>
-                <Transacoes />
-              </LayoutComSidebar>
-            }
-          />
-          <Route
-            path="/insights"
-            element={
-              <LayoutComSidebar>
-                <InsightsPage />
-              </LayoutComSidebar>
-            }
-          />
-          <Route
-            path="/metas"
-            element={
-              <LayoutComSidebar>
-                <Metas />
-              </LayoutComSidebar>
-            }
-          />
-          <Route
-            path="/perfil"
-            element={
-              <LayoutComSidebar>
-                <Perfil />
-              </LayoutComSidebar>
-            }
-          />
+
+          {/* Um único layout que persiste entre as rotas filhas */}
+          <Route element={<LayoutComSidebar />}>
+            <Route path="/dashboard" element={<Home />} />
+            <Route path="/analise" element={<AnaliseGastos />} />
+            <Route path="/transacoes" element={<Transacoes />} />
+            <Route path="/insights" element={<InsightsPage />} />
+            <Route path="/metas" element={<Metas />} />
+            <Route path="/perfil" element={<Perfil />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

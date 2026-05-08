@@ -276,6 +276,12 @@
     text-align: center;
 }
 
+.analise__grafico-card,
+.analise__resumo-card,
+.analise__tabela-card {
+    will-change: transform, opacity;
+}
+
 
 @media (max-width: 768px) {
     .analise__meio {

@@ -19,6 +19,7 @@ import {
   Cell,
   CartesianGrid,
 } from "recharts";
+import { motion } from "framer-motion";
 
 import "./AnaliseGastos.css";
 
@@ -95,7 +96,15 @@ function AnaliseGastos() {
 
   return (
     <div className="analise">
-      <div className="analise__topo">
+      <motion.div
+        className="analise__topo"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{
+          duration: 0.5,
+          ease: "easeOut",
+        }}
+      >
         <h2 className="analise__titulo">Análise de Gastos</h2>
         <div className="analise__controles">
           <div className="analise__toggle">
@@ -120,10 +129,19 @@ function AnaliseGastos() {
             <option value="maio">Mês: Maio 2026</option>
           </select>
         </div>
-      </div>
+      </motion.div>
 
       <div className="analise__meio">
-        <div className="analise__grafico-card">
+        <motion.div
+          className="analise__grafico-card"
+          initial={{ opacity: 0, x: -40 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{
+            duration: 0.7,
+            ease: "easeOut",
+          }}
+        >
           <h3 className="analise__secao-titulo">
             Evolução dos Gastos R$ — Maio 2026
           </h3>
@@ -179,6 +197,7 @@ function AnaliseGastos() {
                 <Bar
                   dataKey="valor"
                   radius={[6, 6, 0, 0]}
+                  animationDuration={1200}
                   label={{
                     position: "top",
                     fill: "var(--text-muted)",
@@ -211,6 +230,7 @@ function AnaliseGastos() {
                 <Line
                   type="monotone"
                   dataKey="valor"
+                  animationDuration={1200}
                   stroke="var(--primary-light)"
                   strokeWidth={2}
                   dot={{ fill: "var(--accent)", r: 4 }}
@@ -219,9 +239,21 @@ function AnaliseGastos() {
               </LineChart>
             )}
           </ResponsiveContainer>
-        </div>
+        </motion.div>
 
-        <div className="analise__resumo-card">
+        <motion.div
+          className="analise__resumo-card"
+          initial={{ opacity: 0, x: 40 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{
+            duration: 0.7,
+            ease: "easeOut",
+          }}
+          whileHover={{
+            y: -4,
+          }}
+        >
           <h3 className="analise__secao-titulo">Resumo do Mês</h3>
           <p className="analise__resumo-mes">Maio 2026</p>
 
@@ -245,10 +277,19 @@ function AnaliseGastos() {
               {economiaPotencial}
             </span>
           </div>
-        </div>
+        </motion.div>
       </div>
 
-      <div className="analise__tabela-card">
+      <motion.div
+        className="analise__tabela-card"
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{
+          duration: 0.8,
+          ease: "easeOut",
+        }}
+      >
         <h3 className="analise__secao-titulo">Lista de Gastos de Maio 2026</h3>
         <table className="analise__tabela">
           <thead>
@@ -300,7 +341,7 @@ function AnaliseGastos() {
             ›
           </button>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
