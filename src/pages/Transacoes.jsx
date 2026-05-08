@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./Transacoes.css";
 import { useTransacoes } from "../context/TransacoesContext";
+import { deleteTransacao } from "../services/api";
 
 const iconesPorCategoria = {
   Alimentação: "🥗",
@@ -35,16 +36,21 @@ function Transacoes() {
   const inicio = (paginaAtual - 1) * ITENS_POR_PAGINA;
   const paginadas = filtradas.slice(inicio, inicio + ITENS_POR_PAGINA);
 
-  function handleDeletar() {
+  async function handleDeletar(id) {
     const confirmar = window.confirm(
       "Tem certeza que deseja excluir esta transação?",
     );
 
     if (!confirmar) return;
 
-    recarregar();
-
+    try {
+    await deleteTransacao(id); // ✅ deleta do banco
+    await recarregar();        // ✅ atualiza a lista
     setMensagem("Transação excluída com sucesso!");
+  } catch (err) {
+    console.error(err);
+    setMensagem("Erro ao excluir transação.");
+  }
 
     setTimeout(() => {
       setMensagem("");
