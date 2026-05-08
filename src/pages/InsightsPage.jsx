@@ -23,12 +23,22 @@ function InsightsPage() {
     .filter((t) => t.tipo === "saida")
     .reduce((maior, t) => (t.valor > maior.valor ? t : maior), transacoes[0]);
 
+  const totalReceita = transacoes
+    .filter((t) => t.tipo === "entrada")
+    .reduce((acc, t) => acc + t.valor, 0);
+
+  const pctMaiorCat =
+    totalGastos > 0
+      ? ((porCategoria[maiorCat] / totalGastos) * 100).toFixed(1)
+      : 0;
+
   const insightsFinanceiros = [
     {
       icone: "📈",
       texto: (
         <>
-          Você gastou mais em <strong>{maiorCat}</strong>
+          Você gastou mais em <strong>{maiorCat}</strong> —{" "}
+          <strong>{pctMaiorCat}%</strong> do total
         </>
       ),
     },
@@ -36,7 +46,8 @@ function InsightsPage() {
       icone: "🏆",
       texto: (
         <>
-          Categoria dominante <strong>{maiorCat}</strong>
+          Categoria dominante <strong>{maiorCat}</strong> com{" "}
+          <strong>{formatarMoeda(porCategoria[maiorCat] || 0)}</strong>
         </>
       ),
     },
@@ -44,16 +55,18 @@ function InsightsPage() {
       icone: "💸",
       texto: (
         <>
-          Maior transação única{" "}
-          <strong>{formatarMoeda(maiorTransacao?.valor || 0)}</strong>
+          Maior transação:{" "}
+          <strong>{formatarMoeda(maiorTransacao?.valor || 0)}</strong> em{" "}
+          <strong>{maiorTransacao?.categoria}</strong>
         </>
       ),
     },
     {
-      icone: "📊",
+      icone: "💰",
       texto: (
         <>
-          Gasto total maio: <strong>{formatarMoeda(totalGastos)}</strong>
+          Receita do mês: <strong>{formatarMoeda(totalReceita)}</strong> —
+          Saldo: <strong>{formatarMoeda(totalReceita - totalGastos)}</strong>
         </>
       ),
     },
