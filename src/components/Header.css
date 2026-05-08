@@ -60,3 +60,36 @@
     cursor: pointer;
     user-select: none;
 }
+
+.header__btn-adicionar {
+    background: var(--primary-light);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    padding: 0.5rem 1rem;
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.header__btn-adicionar:hover {
+    background: var(--primary);
+}
+
+
+.header__btn-receita {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.header__btn-receita:hover {
+    background: var(--primary-light);
+}
