@@ -19,11 +19,12 @@
     font-weight: 700;
     color: var(--text-primary);
     font-family: 'Quicksand', sans-serif;
+    padding-bottom: 1.5rem;
 }
 
 .metas__subtitulo {
-    font-size: var(--fs-sm);
-    color: var(--text-muted);
+    font-size: var(--fs-base);
+    color: var(--color-optional-4);
     margin-top: 2px;
 }
 
@@ -60,7 +61,7 @@
 .metas__card:hover {
     transform: translateY(-2px);
     border-color: rgba(120, 255, 214, 0.15);
-    background: rgba(19, 31, 51, 0.95);
+    background: var(--bg-hover);
 }
 
 .metas__card--warning {
@@ -98,9 +99,10 @@
 
 .metas__cat-nome {
     display: block;
-    font-size: var(--fs-sm);
+    font-size: var(--fs-base);
     font-weight: 600;
     color: var(--text-primary);
+    text-transform: uppercase;
 }
 
 .metas__cat-gasto {
@@ -113,8 +115,8 @@
 
 .metas__cat-percentual {
     display: block;
-    font-size: 0.75rem;
-    color: var(--text-muted);
+    font-size: var(--fs-sm);
+    color: var(--color-optional-3);
     margin-top: 2px;
 }
 
@@ -132,7 +134,8 @@
 }
 
 .metas__limite-valor {
-    font-size: var(--fs-sm);
+    font-size: var(--fs-lg);
+    font-weight: 600;
     color: var(--text-secondary);
     white-space: nowrap;
 }
@@ -209,7 +212,7 @@
 }
 
 .metas__progresso-fill--warning {
-    background: #f59e0b;
+    background: var(--warning);
 }
 
 .metas__progresso-fill--danger {
@@ -223,10 +226,11 @@
 
 .metas__pct--ok {
     color: var(--success);
+    color: var(--color-optional-4);
 }
 
 .metas__pct--warning {
-    color: #f59e0b;
+    color: var(--warning);
 }
 
 .metas__pct--danger {
@@ -262,6 +266,7 @@
     justify-content: space-between;
     gap: 1rem;
     flex-wrap: wrap;
+    padding-bottom: 1.5rem;
 }
 
 .metas__invest-left {
@@ -284,16 +289,17 @@
 
 .metas__invest-titulo {
     display: block;
-    font-size: var(--fs-sm);
+    font-size: var(--fs-base);
     font-weight: 700;
     color: var(--text-primary);
     font-family: 'Quicksand', sans-serif;
+    text-transform: uppercase;
 }
 
 .metas__invest-sub {
     display: block;
-    font-size: var(--fs-sm);
-    color: var(--text-muted);
+    font-size: var(--fs-base);
+    color: var(--color-optional-2);
     margin-top: 2px;
 }
 
@@ -308,9 +314,9 @@
 }
 
 .metas__invest-pct {
-    font-size: var(--fs-lg);
+    font-size: var(--fs-xl);
     font-weight: 700;
-    color: var(--accent);
+    color: var(--color-optional-5);
     font-family: 'Quicksand', sans-serif;
 }
 
@@ -340,10 +346,11 @@
 }
 
 .metas__invest-item-label {
-    font-size: var(--fs-sm);
-    color: var(--text-muted);
+    font-size: var(--fs-base);
+    color: var(--color-optional-2);
     text-transform: uppercase;
     letter-spacing: .5px;
+    font-weight: 600;
 }
 
 .metas__invest-item-valor {

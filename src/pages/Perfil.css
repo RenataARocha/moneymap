@@ -11,7 +11,7 @@
 .perfil__topo {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
 }
 
 .perfil__titulo {
@@ -19,11 +19,13 @@
     font-weight: 700;
     color: var(--text-primary);
     font-family: 'Quicksand', sans-serif;
+    text-align: center;
+    padding-top: 2rem;
 }
 
 .perfil__subtitulo {
-    font-size: var(--fs-sm);
-    color: var(--text-muted);
+    font-size: var(--fs-base);
+    color: var(--color-optional-2);
     margin-top: 2px;
 }
 
@@ -60,7 +62,7 @@
 
 .perfil__avatar-label {
     font-size: var(--fs-sm);
-    color: var(--text-muted);
+    color: var(--color-optional-4);
 }
 
 .perfil__avatares {
@@ -108,8 +110,8 @@
 }
 
 .perfil__label {
-    font-size: var(--fs-sm);
-    color: var(--text-muted);
+    font-size: var(--fs-base);
+    color: var(--color-optional-2);
     font-weight: 500;
 }
 
@@ -119,7 +121,7 @@
     border: 1px solid var(--bg-card);
     border-radius: 8px;
     padding: 0.65rem 0.75rem;
-    font-size: var(--fs-sm);
+    font-size: var(--fs-base);
     color: var(--text-primary);
     outline: none;
     transition: border var(--transition);
@@ -145,7 +147,7 @@
     border: none;
     border-radius: 8px;
     padding: 0.75rem;
-    font-size: var(--fs-sm);
+    font-size: var(--fs-base);
     font-weight: 700;
     cursor: pointer;
     transition: all var(--transition);
@@ -162,7 +164,7 @@
     border: 1px solid var(--danger);
     border-radius: 8px;
     padding: 0.75rem;
-    font-size: var(--fs-sm);
+    font-size: var(--fs-base);
     font-weight: 600;
     cursor: pointer;
     transition: all var(--transition);
