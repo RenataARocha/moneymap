@@ -5,12 +5,13 @@
 }
 
 .transaction-list__titulo {
-    font-size: var(--fs-sm);
-    color: var(--text-muted);
+    font-size: var(--fs-base);
+    color: var(text-primary);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     margin-bottom: 0.875rem;
     font-weight: 600;
+    padding-bottom: 2.5rem;
 }
 
 .transaction-list__tabela {
@@ -22,8 +23,8 @@
 .transaction-list__tabela thead th {
     text-align: left;
     padding: 0 0.75rem 0.625rem 0;
-    font-size: var(--fs-sm);
-    color: var(--text-muted);
+    font-size: var(--fs-base);
+    color: var(--color-optional-3);
     font-weight: 500;
     border-bottom: 1px solid var(--border);
 }
