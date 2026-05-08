@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import "./Insights.css";
 
 const iconesPadrao = {
@@ -9,12 +10,27 @@ const iconesPadrao = {
 
 function Insights({ padroes, recomendacoes }) {
   return (
-    <div className="insights">
+    <motion.div
+      className="insights"
+      initial={{ opacity: 0, x: 40 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{
+        duration: 0.7,
+        ease: "easeOut",
+      }}
+    >
       <div className="insights__secao">
         <h3 className="insights__titulo">Padrões Detectados</h3>
         <div className="insights__lista">
           {padroes.map((p, i) => (
-            <div key={i} className="insights__item">
+            <motion.div
+              key={i}
+              className="insights__item"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: i * 0.1 }}
+            >
               <div className={`insights__icone insights__icone--${p.tipo}`}>
                 {iconesPadrao[p.tipo] || "📊"}
               </div>
@@ -22,7 +38,7 @@ function Insights({ padroes, recomendacoes }) {
                 <strong>{p.mensagem}</strong>
                 <span>{p.detalhe}</span>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
@@ -47,7 +63,7 @@ function Insights({ padroes, recomendacoes }) {
           ))}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

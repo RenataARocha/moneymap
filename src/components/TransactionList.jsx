@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
 import "./TransactionList.css";
 
 const iconesPorCategoria = {
@@ -26,7 +27,16 @@ function TransactionList({ transacoes }) {
   );
 
   return (
-    <div className="transaction-list">
+    <motion.div
+      className="transaction-list"
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{
+        duration: 0.8,
+        ease: "easeOut",
+      }}
+    >
       <h3 className="transaction-list__titulo">Últimas Transações</h3>
       <table className="transaction-list__tabela">
         <thead>
@@ -84,7 +94,7 @@ function TransactionList({ transacoes }) {
           ›
         </button>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

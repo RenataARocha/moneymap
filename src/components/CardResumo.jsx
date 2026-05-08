@@ -1,10 +1,24 @@
+import { motion } from "framer-motion";
 import "./CardResumo.css";
 
 function CardResumo({ icone, label, valor, variacao, tipo }) {
   const positivo = variacao >= 0;
 
   return (
-    <div className={`card-resumo ${tipo === "destaque" ? "destaque" : ""}`}>
+    <motion.div
+      className={`card-resumo ${tipo === "destaque" ? "destaque" : ""}`}
+      initial={{ opacity: 0, x: -30 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{
+        duration: 0.6,
+        ease: "easeOut",
+      }}
+      whileHover={{
+        y: -5,
+        scale: 1.02,
+      }}
+    >
       {/* Alterado de {icone} para <img> */}
       <div className="card-resumo__icone">
         <img
@@ -26,7 +40,7 @@ function CardResumo({ icone, label, valor, variacao, tipo }) {
           </span>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }
 

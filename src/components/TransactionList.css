@@ -6,7 +6,7 @@
 
 .transaction-list__titulo {
     font-size: var(--fs-base);
-    color: var(text-primary);
+    color: var(--text-primary);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     margin-bottom: 0.875rem;

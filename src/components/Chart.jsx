@@ -1,4 +1,5 @@
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
+import { motion } from "framer-motion";
 import "./Chart.css";
 
 const CORES = ["#1A5A5A", "#589D99", "#90CFCB", "#D7B06B", "#F1D39F"];
@@ -12,7 +13,16 @@ function Chart({ porCategoria }) {
   const total = dados.reduce((acc, d) => acc + d.valor, 0);
 
   return (
-    <div className="chart">
+    <motion.div
+      className="chart"
+      initial={{ opacity: 0, scale: 0.95 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{
+        duration: 0.8,
+        ease: "easeOut",
+      }}
+    >
       <div className="chart__wrap">
         <div className="chart__donut">
           <PieChart width={240} height={240}>
@@ -63,7 +73,7 @@ function Chart({ porCategoria }) {
           })}
         </ul>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

@@ -21,6 +21,7 @@ import imgSaldo from "../assets/saldo.png";
 import imgGasto from "../assets/gasto.png";
 import imgCategoria from "../assets/categoria.png";
 import imgInvestimento from "../assets/investimento.png";
+import { motion } from "framer-motion";
 import "./Home.css";
 
 function Home() {
@@ -58,7 +59,14 @@ function Home() {
   }, []);
 
   if (carregando) {
-    return <div className="home">Carregando dados...</div>;
+    return (
+      <div className="home-loading">
+        <div className="home-loading__logo">
+          <div className="home-loading__spinner"></div>
+          <span>Carregando dashboard...</span>
+        </div>
+      </div>
+    );
   }
 
   if (erro) {
@@ -123,7 +131,12 @@ function Home() {
         </select>
       </div>
 
-      <div className="home__cards-topo">
+      <motion.div
+        className="home__cards-topo"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
         <CardResumo
           icone={imgSaldo}
           label="Receita do Mês"
@@ -151,16 +164,25 @@ function Home() {
             valorInvestimento,
           )}`}
         />
-      </div>
+      </motion.div>
 
       <div className="home__meio">
-        <div className="home__chart-card">
+        <motion.div
+          className="home__chart-card"
+          initial={{ opacity: 0, x: -40 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{
+            duration: 0.7,
+            ease: "easeOut",
+          }}
+        >
           <h3 className="home__secao-titulo">
             Distribuição de Consumo por Categorias (%)
           </h3>
 
           <Chart porCategoria={porCategoria} />
-        </div>
+        </motion.div>
 
         <Insights padroes={padroes} recomendacoes={recomendacoes} />
       </div>

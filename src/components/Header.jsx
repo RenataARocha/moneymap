@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import ThemeToggle from "./ThemeToggle";
+import { motion } from "framer-motion";
 import "./Header.css";
 
 function Header({ nomeUsuario, onAbrirModal }) {
@@ -15,7 +16,15 @@ function Header({ nomeUsuario, onAbrirModal }) {
     : "U";
 
   return (
-    <header className="header">
+    <motion.header
+      className="header"
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: 0.6,
+        ease: "easeOut",
+      }}
+    >
       <div className="header__saudacao">
         <h1 className="header__titulo">Olá, {primeiroNome}! 👋</h1>
         <p className="header__subtitulo">Resumo de consumo — Maio 2026</p>
@@ -43,7 +52,7 @@ function Header({ nomeUsuario, onAbrirModal }) {
           {iniciais}
         </div>
       </div>
-    </header>
+    </motion.header>
   );
 }
 
