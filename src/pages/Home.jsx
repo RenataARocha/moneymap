@@ -14,7 +14,6 @@ import {
 } from "../utils/calculations";
 
 import { getUsuario, getTransacoes, getMesAnterior } from "../services/api";
-import Header from "../components/Header";
 import CardResumo from "../components/CardResumo";
 import CardCategoria from "../components/CardCategoria";
 import Chart from "../components/Chart";
@@ -41,7 +40,8 @@ function Home() {
         setUsuario(usuarioData);
         setTransacoes(transacoesData);
         setMesAnterior(mesAnteriorData);
-      } catch (error) {
+      } catch (err) {
+        console.log(err);
         setErro(
           "Não foi possível carregar os dados. Tente novamente mais tarde.",
         );
