@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { getTransacoes } from "../services/api";
+import { useState } from "react";
 import "./Transacoes.css";
+import { useTransacoes } from "../context/TransacoesContext";
 
 const iconesPorCategoria = {
   Alimentação: "🥗",
@@ -15,29 +15,13 @@ const iconesPorCategoria = {
 const ITENS_POR_PAGINA = 7;
 
 function Transacoes() {
-  const [transacoes, setTransacoes] = useState([]);
+
   const [filtroTipo, setFiltroTipo] = useState("saida");
   const [mesSelecionado, setMesSelecionado] = useState("maio");
   const [paginaAtual, setPaginaAtual] = useState(1);
-  const [carregando, setCarregando] = useState(true);
-  const [erro, setErro] = useState("");
   const [mensagem, setMensagem] = useState("");
+  const { transacoes, carregando, recarregar, erro  } = useTransacoes();
 
-  useEffect(() => {
-    const carregarTransacoes = async () => {
-      try {
-        setCarregando(true);
-        const transacoesData = await getTransacoes();
-        setTransacoes(transacoesData);
-      } catch (err) {
-        console.error(err);
-        setErro("Não foi possível carregar as transações.");
-      } finally {
-        setCarregando(false);
-      }
-    };
-    carregarTransacoes();
-  }, []);
 
   if (carregando)
     return <div className="transacoes">Carregando transações...</div>;
@@ -51,14 +35,14 @@ function Transacoes() {
   const inicio = (paginaAtual - 1) * ITENS_POR_PAGINA;
   const paginadas = filtradas.slice(inicio, inicio + ITENS_POR_PAGINA);
 
-  function handleDeletar(id) {
+  function handleDeletar() {
     const confirmar = window.confirm(
       "Tem certeza que deseja excluir esta transação?",
     );
 
     if (!confirmar) return;
 
-    setTransacoes((prev) => prev.filter((t) => t.id !== id));
+    recarregar();
 
     setMensagem("Transação excluída com sucesso!");
 
