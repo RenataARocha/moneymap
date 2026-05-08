@@ -68,6 +68,9 @@
     flex-shrink: 0;
 }
 
+.insights__icone--alta {
+    background: var(--accent-dim);
+}
 
 .insights__icone--baixa {
     background: rgba(26, 90, 90, 0.15);
