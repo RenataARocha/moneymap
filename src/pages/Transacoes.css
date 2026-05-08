@@ -70,10 +70,11 @@
 }
 
 .transacoes__card-titulo {
-    font-size: var(--fs-sm);
+    font-size: var(--fs-base);
     font-weight: 700;
+    text-transform: uppercase;
     color: var(--text-primary);
-    margin-bottom: 1rem;
+    padding-bottom: 3.5rem;
 }
 
 .transacoes__tabela {
@@ -85,8 +86,8 @@
 .transacoes__tabela thead th {
     text-align: left;
     padding: 0 1rem 0.75rem 0;
-    font-size: var(--fs-sm);
-    color: var(--accent);
+    font-size: var(--fs-base);
+    color: var(--color-optional-3);
     font-weight: 600;
     border-bottom: 1px solid var(--border);
 }
