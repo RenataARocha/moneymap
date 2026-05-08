@@ -19,17 +19,9 @@ function Transacoes() {
   const [filtroTipo, setFiltroTipo] = useState("saida");
   const [mesSelecionado, setMesSelecionado] = useState("maio");
   const [paginaAtual, setPaginaAtual] = useState(1);
-  const [modalAberto, setModalAberto] = useState(false);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
   const [mensagem, setMensagem] = useState("");
-
-  const [novaTransacao, setNovaTransacao] = useState({
-    valor: "",
-    descricao: "",
-    data: "",
-    categoria: "",
-  });
 
   useEffect(() => {
     const carregarTransacoes = async () => {
@@ -73,43 +65,6 @@ function Transacoes() {
     setTimeout(() => {
       setMensagem("");
     }, 3000);
-  }
-
-  function handleAdicionar() {
-    if (
-      !novaTransacao.valor ||
-      !novaTransacao.descricao ||
-      !novaTransacao.data ||
-      !novaTransacao.categoria
-    )
-      return;
-
-    const nova = {
-      id: Date.now(),
-      valor: parseFloat(novaTransacao.valor),
-      descricao: novaTransacao.descricao,
-      data: novaTransacao.data,
-      categoria: novaTransacao.categoria,
-      tipo: "saida",
-      metodoPagamento: "outros",
-    };
-
-    setTransacoes((prev) => [...prev, nova]);
-
-    setMensagem("Transação adicionada com sucesso!");
-
-    setTimeout(() => {
-      setMensagem("");
-    }, 3000);
-
-    setNovaTransacao({
-      valor: "",
-      descricao: "",
-      data: "",
-      categoria: "",
-    });
-
-    setModalAberto(false);
   }
 
   return (
@@ -227,88 +182,6 @@ function Transacoes() {
           </button>
         </div>
       </div>
-
-      <div className="transacoes__rodape">
-        <button
-          className="transacoes__btn-adicionar"
-          onClick={() => setModalAberto(true)}
-        >
-          ADICIONAR NOVA TRANSAÇÃO
-        </button>
-      </div>
-
-      {modalAberto && (
-        <div className="transacoes__modal-overlay">
-          <div className="transacoes__modal">
-            <button
-              className="transacoes__modal-fechar"
-              onClick={() => setModalAberto(false)}
-            >
-              ✕
-            </button>
-            <h3 className="transacoes__modal-titulo">Adicionar Transação</h3>
-            <p className="transacoes__modal-subtitulo">Gastos/Despesa/Saída</p>
-
-            <div className="transacoes__modal-campos">
-              <input
-                className="transacoes__modal-input"
-                type="number"
-                placeholder="Valor R$"
-                value={novaTransacao.valor}
-                onChange={(e) =>
-                  setNovaTransacao((p) => ({ ...p, valor: e.target.value }))
-                }
-              />
-              <textarea
-                className="transacoes__modal-textarea"
-                placeholder="Descrição"
-                value={novaTransacao.descricao}
-                onChange={(e) =>
-                  setNovaTransacao((p) => ({ ...p, descricao: e.target.value }))
-                }
-              />
-              <input
-                className="transacoes__modal-input"
-                type="date"
-                placeholder="Selecione uma data"
-                value={novaTransacao.data}
-                onChange={(e) =>
-                  setNovaTransacao((p) => ({ ...p, data: e.target.value }))
-                }
-              />
-              <select
-                className="transacoes__modal-select"
-                value={novaTransacao.categoria}
-                onChange={(e) =>
-                  setNovaTransacao((p) => ({ ...p, categoria: e.target.value }))
-                }
-              >
-                <option value="">Selecione uma Categoria</option>
-                {Object.keys(iconesPorCategoria).map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="transacoes__modal-botoes">
-              <button
-                className="transacoes__modal-btn transacoes__modal-btn--adicionar"
-                onClick={handleAdicionar}
-              >
-                ADICIONAR
-              </button>
-              <button
-                className="transacoes__modal-btn transacoes__modal-btn--cancelar"
-                onClick={() => setModalAberto(false)}
-              >
-                CANCELAR
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
