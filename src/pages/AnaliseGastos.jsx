@@ -19,6 +19,7 @@ import {
   Cell,
   CartesianGrid,
 } from "recharts";
+
 import "./AnaliseGastos.css";
 
 const CORES = ["#1A5A5A", "#589D99", "#90CFCB", "#D7B06B", "#F1D39F"];
@@ -44,9 +45,25 @@ const TooltipCustom = ({ active, payload, label }) => {
   );
 };
 
+const ITENS_POR_PAGINA = 5;
+
 function AnaliseGastos() {
   const { transacoes, mesAnterior } = dados;
   const [tipoGrafico, setTipoGrafico] = useState("barra");
+  const [paginaAtual, setPaginaAtual] = useState(1);
+
+  const transacoesOrdenadas = [...transacoes]
+    .filter((t) => t.tipo === "saida")
+    .sort((a, b) => new Date(b.data) - new Date(a.data));
+
+  const totalPaginas = Math.ceil(transacoesOrdenadas.length / ITENS_POR_PAGINA);
+
+  const inicio = (paginaAtual - 1) * ITENS_POR_PAGINA;
+
+  const transacoesPaginadas = transacoesOrdenadas.slice(
+    inicio,
+    inicio + ITENS_POR_PAGINA,
+  );
 
   const totalGastos = calcularTotalGastos(transacoes);
   const porCategoria = calcularPorCategoria(transacoes);
@@ -61,10 +78,6 @@ function AnaliseGastos() {
   const dadosGrafico = Object.entries(porCategoria)
     .map(([nome, valor]) => ({ nome, valor: parseFloat(valor.toFixed(2)) }))
     .sort((a, b) => b.valor - a.valor);
-
-  const transacoesOrdenadas = [...transacoes]
-    .filter((t) => t.tipo === "saida")
-    .sort((a, b) => new Date(b.data) - new Date(a.data));
 
   const eixoX = {
     dataKey: "nome",
@@ -247,7 +260,7 @@ function AnaliseGastos() {
             </tr>
           </thead>
           <tbody>
-            {transacoesOrdenadas.map((t) => (
+            {transacoesPaginadas.map((t) => (
               <tr key={t.id}>
                 <td>
                   {new Date(t.data + "T00:00:00").toLocaleDateString("pt-BR")}
@@ -265,6 +278,28 @@ function AnaliseGastos() {
             ))}
           </tbody>
         </table>
+
+        <div className="analise__paginacao">
+          <button
+            className="analise__pag-btn"
+            onClick={() => setPaginaAtual((p) => Math.max(p - 1, 1))}
+            disabled={paginaAtual === 1}
+          >
+            ‹
+          </button>
+
+          <span className="analise__pag-info">
+            {paginaAtual} de {totalPaginas}
+          </span>
+
+          <button
+            className="analise__pag-btn"
+            onClick={() => setPaginaAtual((p) => Math.min(p + 1, totalPaginas))}
+            disabled={paginaAtual === totalPaginas}
+          >
+            ›
+          </button>
+        </div>
       </div>
     </div>
   );

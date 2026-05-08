@@ -165,9 +165,7 @@
     background: var(--bg-card);
     border-radius: var(--radius);
     padding: 1rem;
-    max-height: 400px;
-    overflow-y: auto;
-    overflow-x: auto;
+
 }
 
 .analise__tabela {
@@ -190,7 +188,7 @@
 
 .analise__tabela td {
     padding: 0.65rem 0.75rem;
-    color: var(--text-primary);
+    color: var(--text-secondary);
     border-bottom: 1px solid var(--border);
 }
 
@@ -233,6 +231,51 @@
     color: #589D99;
     font-size: 0.875rem;
 }
+
+.analise__paginacao {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+}
+
+.analise__pag-btn {
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    border-radius: 8px;
+
+    background: var(--bg-hover);
+    color: var(--text-primary);
+
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.analise__pag-btn:hover:not(:disabled) {
+    background: var(--primary-light);
+    color: #fff;
+}
+
+.analise__pag-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.analise__pag-info {
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+    min-width: 50px;
+    text-align: center;
+}
+
 
 @media (max-width: 768px) {
     .analise__meio {
