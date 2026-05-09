@@ -98,7 +98,7 @@
 }
 
 .insights-page__rec-card:hover {
-    background: var(--bg-secondary);
+    background: var(--color-optional-hover-2);
 }
 
 .insights-page__rec-topo {

@@ -38,6 +38,7 @@
     --color-optional-5: #D7B06B;
     --warning: #eca833;
     --color-optional-hover:#164e4e;
+    --color-optional-hover-2:#121824;
     --border: rgba(255, 255, 255, 0.08);
     --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
@@ -69,6 +70,7 @@
     --color-optional-5: #1A5A5A;
     --warning: #da7912;
     --color-optional-hover:#4c908d;
+    --color-optional-hover-2:#b7ebe8;
     --border: rgba(0, 0, 0, 0.08);
     --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
