@@ -93,7 +93,7 @@
     align-items: center;
     gap: 6px;
     font-size: var(--fs-sm);
-    color: var(--text-muted);
+    color: var(--color-optional-4);
 }
 
 .analise__legenda-cor {
@@ -183,7 +183,7 @@
     padding: 0.5rem 0.75rem;
     color: var(--color-optional-3);
     font-weight: 600;
-    font-size: var(--fs-sm);
+    font-size: var(--fs-base);
 }
 
 .analise__tabela td {
