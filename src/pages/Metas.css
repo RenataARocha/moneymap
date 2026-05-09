@@ -362,12 +362,59 @@
 
 
 @media (max-width: 768px) {
-    .metas__lista {
-        grid-template-columns: 1fr;
+    .metas {
+        padding: 1rem;
+        gap: 1rem;
     }
 
     .metas__topo {
         flex-direction: column;
         align-items: flex-start;
+    }
+
+    .metas__lista {
+        grid-template-columns: 1fr;
+    }
+
+    .metas__card {
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .metas__card-topo {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .metas__card-limite {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .metas__limite-valor {
+        font-size: var(--fs-md);
+    }
+
+    .metas__input {
+        width: 100%;
+    }
+
+    .metas__invest-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .metas__invest-right {
+        width: 100%;
+    }
+
+    .metas__invest-resumo {
+        grid-template-columns: 1fr;
+    }
+
+    .metas__invest-pct {
+        font-size: var(--fs-lg);
     }
 }

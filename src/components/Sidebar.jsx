@@ -8,7 +8,6 @@ import {
   User,
   LogOut,
 } from "lucide-react";
-import { motion } from "framer-motion";
 import "./Sidebar.css";
 
 const navItems = [
@@ -22,15 +21,7 @@ const navItems = [
 
 function Sidebar({ aberta, fechar, onLogout }) {
   return (
-    <motion.aside
-      className={`sidebar ${aberta ? "sidebar--open" : ""}`}
-      initial={{ opacity: 0, x: -40 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{
-        duration: 0.6,
-        ease: "easeOut",
-      }}
-    >
+    <aside className={`sidebar ${aberta ? "sidebar--open" : ""}`}>
       <div className="sidebar__logo">
         <span className="sidebar__logo-money">Money</span>
         <span className="sidebar__logo-map">Map</span>
@@ -63,7 +54,7 @@ function Sidebar({ aberta, fechar, onLogout }) {
           <span>Sair</span>
         </button>
       </div>
-    </motion.aside>
+    </aside>
   );
 }
 

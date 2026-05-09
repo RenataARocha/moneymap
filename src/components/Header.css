@@ -93,3 +93,49 @@
 .header__btn-receita:hover {
     background: var(--primary-light);
 }
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.25rem;
+
+        padding:
+            4.5rem 1rem 0 1rem;
+    }
+
+    .header__saudacao {
+        width: 100%;
+    }
+
+    .header__titulo {
+        font-size: 1.5rem;
+        line-height: 1.2;
+    }
+
+    .header__subtitulo {
+        font-size: 0.9rem;
+        margin-top: 4px;
+    }
+
+    .header__acoes {
+        width: 100%;
+
+        display: grid;
+        grid-template-columns: 1fr 1fr auto auto;
+        gap: 0.75rem;
+    }
+
+    .header__btn-adicionar,
+    .header__btn-receita {
+        width: 100%;
+        justify-content: center;
+
+        padding: 0.75rem 0.5rem;
+        font-size: 0.85rem;
+    }
+
+    .header__avatar {
+        flex-shrink: 0;
+    }
+}

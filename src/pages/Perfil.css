@@ -175,11 +175,56 @@
 }
 
 @media (max-width: 768px) {
+    .perfil {
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .perfil__card {
+        padding: 1.25rem;
+        gap: 1rem;
+    }
+
+    .perfil__titulo {
+        padding-top: 1rem;
+        font-size: var(--fs-lg);
+    }
+
+    .perfil__avatar-atual {
+        width: 72px;
+        height: 72px;
+        font-size: 2rem;
+    }
+
+    .perfil__avatares {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .perfil__avatar-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1.1rem;
+    }
+
     .perfil__campos {
         grid-template-columns: 1fr;
+        gap: 0.75rem;
     }
 
     .perfil__acoes {
         grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+
+    .perfil__salvar,
+    .perfil__sair {
+        width: 100%;
+    }
+
+    .perfil__input,
+    .perfil__select {
+        font-size: 0.95rem;
+        padding: 0.6rem;
     }
 }

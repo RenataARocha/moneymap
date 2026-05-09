@@ -148,3 +148,56 @@
     padding-right: 7rem;
     font-weight: 600;
 }
+
+@media (max-width: 768px) {
+    .transaction-list {
+        padding: 0.875rem;
+        overflow: hidden;
+    }
+
+    .transaction-list__titulo {
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+
+    .transaction-list__tabela {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .transaction-list__tabela thead th {
+        font-size: 0.85rem;
+        padding: 0 0.5rem 0.75rem 0;
+    }
+
+    .transaction-list__tabela tbody td {
+        padding: 0.75rem 0.5rem 0.75rem 0;
+        font-size: 0.82rem;
+    }
+
+    .transaction-list__tabela thead th:last-child,
+    .transaction-list__tabela tbody td:last-child {
+        padding-right: 0;
+    }
+
+    .transaction-list__badge {
+        font-size: 0.75rem;
+        padding: 2px 6px;
+    }
+
+    .transaction-list__valor {
+        font-size: 0.82rem;
+    }
+
+    .transaction-list__pag-btn {
+        width: 30px;
+        height: 30px;
+    }
+
+    .transaction-list__pag-info {
+        font-size: 0.8rem;
+    }
+}

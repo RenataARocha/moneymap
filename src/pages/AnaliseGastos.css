@@ -292,4 +292,62 @@
         flex-direction: column;
         align-items: flex-start;
     }
+
+    .analise__controles {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .analise__toggle {
+        width: 100%;
+    }
+
+    .analise__toggle-btn {
+        flex: 1;
+        text-align: center;
+    }
+
+    .analise__select {
+        width: 100%;
+    }
+
+    .analise__grafico-card,
+    .analise__resumo-card,
+    .analise__tabela-card {
+        padding: 0.875rem;
+    }
+
+    .analise__legenda {
+        justify-content: flex-start;
+    }
+
+    .analise__tabela-card {
+        overflow-x: auto;
+    }
+
+    .analise__tabela {
+        min-width: 600px;
+    }
+
+    .analise__tabela th,
+    .analise__tabela td {
+        padding: 0.6rem;
+        font-size: 0.82rem;
+        white-space: nowrap;
+    }
+
+    .analise__badge {
+        font-size: 0.75rem;
+        padding: 2px 8px;
+    }
+
+    .analise__resumo-valor--destaque {
+        font-size: 1.4rem;
+    }
+
+    .analise__resumo-categoria,
+    .analise__resumo-economia {
+        font-size: 1rem;
+    }
 }
