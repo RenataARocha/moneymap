@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Perfil.css";
+import { motion } from "framer-motion";
 
 const avatares = [
   { id: "neutro", emoji: "🧑" },
@@ -38,32 +39,72 @@ function Perfil() {
 
   return (
     <div className="perfil">
-      <div className="perfil__topo">
+      <motion.div
+        className="perfil__topo"
+        initial={{ opacity: 0, y: -20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{
+          duration: 0.5,
+          ease: "easeOut",
+        }}
+      >
         <div>
           <h2 className="perfil__titulo">Perfil</h2>
           <p className="perfil__subtitulo">Personalize sua experiência</p>
         </div>
-      </div>
+      </motion.div>
 
-      <div className="perfil__card">
+      <motion.div
+        className="perfil__card"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{
+          duration: 0.7,
+          ease: "easeOut",
+        }}
+      >
         <div className="perfil__avatar-wrap">
           <div className="perfil__avatar-atual">{avatarAtual?.emoji}</div>
           <span className="perfil__avatar-label">Avatar atual: {avatar}</span>
           <div className="perfil__avatares">
-            {avatares.map((a) => (
-              <button
+            {avatares.map((a, index) => (
+              <motion.button
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{
+                  duration: 0.3,
+                  delay: index * 0.05,
+                }}
+                whileHover={{
+                  scale: 1.08,
+                }}
+                whileTap={{
+                  scale: 0.95,
+                }}
                 key={a.id}
                 className={`perfil__avatar-btn ${avatar === a.id ? "ativo" : ""}`}
                 onClick={() => setAvatar(a.id)}
                 title={a.id}
               >
                 {a.emoji}
-              </button>
+              </motion.button>
             ))}
           </div>
         </div>
 
-        <div className="perfil__campos">
+        <motion.div
+          className="perfil__campos"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{
+            duration: 0.6,
+            delay: 0.2,
+          }}
+        >
           <div className="perfil__campo">
             <label className="perfil__label">Seu nome *</label>
             <input
@@ -100,17 +141,31 @@ function Perfil() {
               <option>Outro</option>
             </select>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="perfil__acoes">
-          <button className="perfil__salvar" onClick={handleSalvar}>
+        <motion.div
+          className="perfil__acoes"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{
+            duration: 0.5,
+            delay: 0.3,
+          }}
+        >
+          <motion.button
+            className="perfil__salvar"
+            onClick={handleSalvar}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.96 }}
+          >
             {salvo ? "✅ Salvo!" : "Salvar alterações"}
-          </button>
+          </motion.button>
           <button className="perfil__sair" onClick={() => navigate("/login")}>
             Sair da conta
           </button>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </div>
   );
 }

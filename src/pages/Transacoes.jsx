@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
 import "./Transacoes.css";
+
 import { useTransacoes } from "../context/TransacoesContext";
 import { deleteTransacao } from "../services/api";
 
@@ -16,24 +18,36 @@ const iconesPorCategoria = {
 const ITENS_POR_PAGINA = 7;
 
 function Transacoes() {
-
   const [filtroTipo, setFiltroTipo] = useState("saida");
   const [mesSelecionado, setMesSelecionado] = useState("maio");
   const [paginaAtual, setPaginaAtual] = useState(1);
   const [mensagem, setMensagem] = useState("");
-  const { transacoes, carregando, recarregar, erro  } = useTransacoes();
 
+  const { transacoes, carregando, recarregar, erro } = useTransacoes();
 
-  if (carregando)
-    return <div className="transacoes">Carregando transações...</div>;
-  if (erro) return <div className="transacoes">{erro}</div>;
+  if (carregando) {
+    return (
+      <div className="home-loading">
+        <div className="home-loading__logo">
+          <div className="home-loading__spinner"></div>
+          <span>Carregando transações...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (erro) {
+    return <div className="transacoes">{erro}</div>;
+  }
 
   const filtradas = transacoes
     .filter((t) => t.tipo === filtroTipo)
     .sort((a, b) => new Date(b.data) - new Date(a.data));
 
   const totalPaginas = Math.ceil(filtradas.length / ITENS_POR_PAGINA);
+
   const inicio = (paginaAtual - 1) * ITENS_POR_PAGINA;
+
   const paginadas = filtradas.slice(inicio, inicio + ITENS_POR_PAGINA);
 
   async function handleDeletar(id) {
@@ -44,13 +58,16 @@ function Transacoes() {
     if (!confirmar) return;
 
     try {
-    await deleteTransacao(id); // ✅ deleta do banco
-    await recarregar();        // ✅ atualiza a lista
-    setMensagem("Transação excluída com sucesso!");
-  } catch (err) {
-    console.error(err);
-    setMensagem("Erro ao excluir transação.");
-  }
+      await deleteTransacao(id);
+
+      await recarregar();
+
+      setMensagem("Transação excluída com sucesso!");
+    } catch (err) {
+      console.error(err);
+
+      setMensagem("Erro ao excluir transação.");
+    }
 
     setTimeout(() => {
       setMensagem("");
@@ -60,23 +77,29 @@ function Transacoes() {
   return (
     <div className="transacoes">
       {mensagem && (
-        <div
+        <motion.div
           className={`transacoes__feedback ${
-            mensagem.includes("excluída")
+            mensagem.includes("Erro")
               ? "transacoes__feedback--erro"
               : "transacoes__feedback--sucesso"
           }`}
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0 }}
         >
           {mensagem}
-        </div>
+        </motion.div>
       )}
 
       <div className="transacoes__topo">
         <h2 className="transacoes__titulo">Transações</h2>
+
         <div className="transacoes__controles">
           <div className="transacoes__toggle">
             <button
-              className={`transacoes__toggle-btn ${filtroTipo === "entrada" ? "ativo" : ""}`}
+              className={`transacoes__toggle-btn ${
+                filtroTipo === "entrada" ? "ativo" : ""
+              }`}
               onClick={() => {
                 setFiltroTipo("entrada");
                 setPaginaAtual(1);
@@ -84,8 +107,11 @@ function Transacoes() {
             >
               Entradas
             </button>
+
             <button
-              className={`transacoes__toggle-btn ${filtroTipo === "saida" ? "ativo" : ""}`}
+              className={`transacoes__toggle-btn ${
+                filtroTipo === "saida" ? "ativo" : ""
+              }`}
               onClick={() => {
                 setFiltroTipo("saida");
                 setPaginaAtual(1);
@@ -94,6 +120,7 @@ function Transacoes() {
               Saídas
             </button>
           </div>
+
           <select
             className="transacoes__select"
             value={mesSelecionado}
@@ -108,8 +135,18 @@ function Transacoes() {
         </div>
       </div>
 
-      <div className="transacoes__card">
+      <motion.div
+        className="transacoes__card"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{
+          duration: 0.7,
+          ease: "easeOut",
+        }}
+      >
         <h3 className="transacoes__card-titulo">Lista de Gastos — Maio 2026</h3>
+
         <table className="transacoes__tabela">
           <thead>
             <tr>
@@ -120,24 +157,38 @@ function Transacoes() {
               <th></th>
             </tr>
           </thead>
+
           <tbody>
-            {paginadas.map((t) => (
-              <tr key={t.id}>
+            {paginadas.map((t, index) => (
+              <motion.tr
+                key={t.id}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{
+                  duration: 0.4,
+                  delay: index * 0.05,
+                }}
+              >
                 <td className="transacoes__data">
                   {new Date(t.data + "T00:00:00").toLocaleDateString("pt-BR")}
                 </td>
+
                 <td className="transacoes__desc">{t.descricao}</td>
+
                 <td>
                   <span className="transacoes__badge">
                     {iconesPorCategoria[t.categoria] || "📦"} {t.categoria}
                   </span>
                 </td>
+
                 <td className="transacoes__valor">
                   {t.valor.toLocaleString("pt-BR", {
                     style: "currency",
                     currency: "BRL",
                   })}
                 </td>
+
                 <td>
                   <button
                     className="transacoes__deletar"
@@ -147,7 +198,7 @@ function Transacoes() {
                     🗑️
                   </button>
                 </td>
-              </tr>
+              </motion.tr>
             ))}
           </tbody>
         </table>
@@ -160,9 +211,11 @@ function Transacoes() {
           >
             ‹
           </button>
+
           <span className="transacoes__pag-info">
             {paginaAtual} de {totalPaginas}
           </span>
+
           <button
             className="transacoes__pag-btn"
             onClick={() => setPaginaAtual((p) => Math.min(p + 1, totalPaginas))}
@@ -171,7 +224,7 @@ function Transacoes() {
             ›
           </button>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
