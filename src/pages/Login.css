@@ -119,6 +119,7 @@
     display: flex;
     align-items: center;
     color: var(--primary-light);
+    border: none;
 }
 
 .login__toggle-senha:hover {
@@ -133,6 +134,7 @@
     margin-top: -2px;
     font-size: 10px;
     color: var(--text-muted);
+    border: none;
 }
 
 .login__esqueci:hover {
@@ -151,6 +153,7 @@
     font-weight: 500;
     letter-spacing: 0.8px;
     width: 100%;
+    border: none;
 }
 
 .login__btn:hover:not(:disabled) {
@@ -232,10 +235,114 @@
     margin-top: 2px;
 }
 
+.login__erro--global {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    color: var(--danger);
+    font-size: 11px;
+}
+
+.login__card {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.login__card:hover {
+    transform: translateY(-4px);
+}
+
+.login__btn {
+    transition: all 0.2s ease;
+}
+
+.login__btn:active {
+    transform: scale(0.98);
+}
+
+.login__input-wrap {
+    transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.login__input-wrap:focus-within {
+    transform: translateY(-1px);
+}
+
+.login__logo {
+    animation: fadeDown 0.6s ease;
+}
+
+@keyframes fadeDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* MOBILE */
 
+@media (max-width: 768px) {
+    .login {
+        padding: 24px;
+    }
+
+    .login__card {
+        max-width: 420px;
+    }
+
+    .login__titulo {
+        font-size: 1.1rem;
+    }
+}
+
+
 @media (max-width: 480px) {
+    .login {
+        padding: 16px;
+        justify-content: flex-start;
+        padding-top: 60px;
+    }
+
+    .login__logo {
+        margin-bottom: 20px;
+    }
+
+    .login__logo-money,
+    .login__logo-map {
+        font-size: 1.3rem;
+    }
+
     .login__card {
         max-width: 100%;
+        padding: 24px 18px;
+        border-radius: 10px;
+        animation: none;
+    }
+
+    .login__titulo {
+        font-size: 1rem;
+        margin-bottom: 18px;
+    }
+
+    .login__input-wrap {
+        height: 42px;
+    }
+
+    .login__btn,
+    .login__btn-google {
+        height: 42px;
+        font-size: 0.85rem;
+    }
+
+    .login__card:hover {
+        transform: none;
+    }
+
+    .login__rodape {
+        font-size: 0.7rem;
     }
 }

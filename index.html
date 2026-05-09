@@ -2,6 +2,10 @@
 <html lang="pt-br">
 
 <head>
+
+  <!-- 
+       THEME (antes do render)
+  = -->
   <script>
     (function () {
       const theme = localStorage.getItem("moneymap-theme") || "dark";
@@ -9,73 +13,107 @@
     })();
   </script>
 
-  <style>
-    :root {
-      background-color: #0D1017;
-      /* dark default */
-    }
-
-    [data-theme="light"] {
-      background-color: #AFE2DB;
-    }
-
-    [data-theme="dark"] {
-      background-color: #0D1017;
-    }
-  </style>
-
+  <!-- 
+       META BÁSICO
+  = -->
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>moneymap</title>
 
+  <title>MoneyMap | Controle Financeiro Inteligente e Análise de Gastos</title>
+
+  <meta name="description"
+    content="MoneyMap ajuda você a visualizar seus gastos, entender padrões financeiros e tomar decisões mais inteligentes com seu dinheiro." />
+
+  <meta name="author" content="MoneyMap" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#0D1017" />
+
+  <link rel="canonical" href="https://moneymap-delta.vercel.app/" />
+
+
+  <meta name="keywords"
+    content="controle financeiro, gastos, economia, finanças pessoais, dashboard financeiro, planejamento financeiro" />
+
+  <!-- 
+       OPEN GRAPH (REDES SOCIAIS)
+  = -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://moneymap-delta.vercel.app/" />
+  <meta property="og:title" content="MoneyMap | Controle Financeiro Inteligente" />
+  <meta property="og:description" content="Visualize seus gastos, entenda padrões e economize com inteligência." />
+  <meta property="og:image" content="https://moneymap-delta.vercel.app/og-image.png" />
+
+  <!-- 
+       TWITTER CARD
+  = -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="MoneyMap | Controle Financeiro Inteligente" />
+  <meta name="twitter:description" content="Visualize seus gastos e tome decisões financeiras mais inteligentes." />
+  <meta name="twitter:image" content="https://moneymap-delta.vercel.app/og-image.png" />
+
+  <!-- 
+       FAVICON (MOBILE + DESKTOP)
+  = -->
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <!-- 
+       PERFORMANCE
+  = -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
 </head>
 
 <body>
-  <div id="root"></div>
-  <script type="module" src="/src/main.jsx"></script>
 
-  <!-- parte da acessibilidade -->
-  <!-- VLibras começo-->
+  <!-- 
+       ACESSIBILIDADE (VLibras)
+  = -->
   <div vw class="enabled">
     <div vw-access-button class="active"></div>
     <div vw-plugin-wrapper>
       <div class="vw-plugin-top-wrapper"></div>
     </div>
   </div>
+
   <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
   <script>
     new window.VLibras.Widget('https://vlibras.gov.br/app');
   </script>
-  <!-- Vlibras fim -->
 
-  <!-- Widgets de acessibilidade começo-->
+  <!-- 
+       WIDGET DE ACESSIBILIDADE
+  = -->
   <script>
-    // Configure before loading widget
     window.ACCESSIBILITY_WIDGET_CONFIG = {
       widgetWidth: '380px',
       colors: {
-        primary: '#007bff',
+        primary: '#589D99',
         secondary: '#ffffff'
       },
-      enableVoiceControl: false, // Disable voice control
+      enableVoiceControl: false,
       widgetPosition: {
         side: 'right',
         right: '5px',
         bottom: '37%'
       },
-      // Aqui você controla o botão
       button: {
-        size: '40px',        // tamanho do botão (menor ou maior)
-        borderRadius: '45%', // formato arredondado
-        iconSize: '20px'    // tamanho do ícone dentro do botão
+        size: '40px',
+        borderRadius: '45%',
+        iconSize: '20px'
       }
     };
   </script>
+
   <script src="https://unpkg.com/accessibility-widgets@latest/widget.js"></script>
 
-  <!-- Widgets de acessibilidade fim -->
+  <!-- 
+       APP
+  = -->
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
 
 </body>
 

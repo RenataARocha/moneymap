@@ -2,7 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { getUsuario } from "../services/api";
+import { useGoogleLogin } from "@react-oauth/google";
 import "./Login.css";
+import { motion } from "framer-motion";
 
 function Login() {
   const navigate = useNavigate();
@@ -64,15 +66,30 @@ function Login() {
     if (e.key === "Enter") handleLogin();
   }
 
+  const loginComGoogle = useGoogleLogin({
+    onSuccess: () => navigate("/dashboard"),
+    onError: () => setErroLogin("Erro ao entrar com Google."),
+  });
+
   return (
-    <div className="login">
+    <motion.div
+      className="login"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+    >
       {/* LOGO FORA DO CARD */}
       <div className="login__logo">
         <span className="login__logo-money">Money</span>
         <span className="login__logo-map">Map</span>
       </div>
 
-      <div className="login__card">
+      <motion.div
+        className="login__card"
+        initial={{ scale: 0.95, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ delay: 0.1, duration: 0.4 }}
+      >
         <h1 className="login__titulo">Entrar na minha conta</h1>
 
         <div className="login__campos">
@@ -141,7 +158,7 @@ function Login() {
           <span>Ou entre com:</span>
         </div>
 
-        <button className="login__btn-google">
+        <button className="login__btn-google" onClick={() => loginComGoogle()}>
           <img
             src="https://www.google.com/favicon.ico"
             width={16}
@@ -151,14 +168,23 @@ function Login() {
           Google
         </button>
 
-        {erroLogin && <span className="login__erro">{erroLogin}</span>}
+        {erroLogin && (
+          <motion.span
+            className="login__erro login__erro--global"
+            initial={{ opacity: 0, y: -5 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            {erroLogin}
+          </motion.span>
+        )}
 
         <p className="login__rodape">
           Não tem uma conta?
           <span className="login__link"> Cadastre-se agora</span>
         </p>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
