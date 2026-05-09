@@ -16,21 +16,37 @@ function Login() {
   const [carregando, setCarregando] = useState(false);
   const [erroLogin, setErroLogin] = useState("");
 
+  const loginComGoogle = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        const res = await fetch(
+          "https://www.googleapis.com/oauth2/v3/userinfo",
+          {
+            headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+          },
+        );
+        const user = await res.json();
+        localStorage.setItem("moneymap-usuario-nome", user.name);
+        navigate("/dashboard");
+      } catch {
+        setErroLogin("Erro ao obter dados do Google.");
+      }
+    },
+    onError: () => setErroLogin("Erro ao entrar com Google."),
+  });
+
   function validar() {
     const novosErros = {};
-
     if (!email.trim()) {
       novosErros.email = "O e-mail é obrigatório.";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       novosErros.email = "Digite um e-mail válido.";
     }
-
     if (!senha.trim()) {
       novosErros.senha = "A senha é obrigatória.";
     } else if (senha.length < 6) {
       novosErros.senha = "A senha precisa ter no mínimo 6 caracteres.";
     }
-
     return novosErros;
   }
 
@@ -40,7 +56,6 @@ function Login() {
       setErros(novosErros);
       return;
     }
-
     setErros({});
     setErroLogin("");
     setCarregando(true);
@@ -51,7 +66,7 @@ function Login() {
           setErroLogin("E-mail não encontrado. Use o e-mail cadastrado.");
           return;
         }
-
+        localStorage.setItem("moneymap-usuario-nome", usuario.nome);
         navigate("/dashboard");
       })
       .catch(() => {
@@ -66,11 +81,6 @@ function Login() {
     if (e.key === "Enter") handleLogin();
   }
 
-  const loginComGoogle = useGoogleLogin({
-    onSuccess: () => navigate("/dashboard"),
-    onError: () => setErroLogin("Erro ao entrar com Google."),
-  });
-
   return (
     <motion.div
       className="login"
@@ -78,7 +88,6 @@ function Login() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
     >
-      {/* LOGO FORA DO CARD */}
       <div className="login__logo">
         <span className="login__logo-money">Money</span>
         <span className="login__logo-map">Map</span>
@@ -107,7 +116,6 @@ function Login() {
                 onKeyDown={handleKeyDown}
               />
             </div>
-
             {erros.email && <span className="login__erro">{erros.email}</span>}
           </div>
 
@@ -120,14 +128,10 @@ function Login() {
                 value={senha}
                 onChange={(e) => {
                   setSenha(e.target.value);
-
-                  if (erros.senha) {
-                    setErros((p) => ({ ...p, senha: "" }));
-                  }
+                  if (erros.senha) setErros((p) => ({ ...p, senha: "" }));
                 }}
                 onKeyDown={handleKeyDown}
               />
-
               <button
                 type="button"
                 className="login__toggle-senha"
@@ -136,11 +140,9 @@ function Login() {
                 {mostrarSenha ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
             </div>
-
             {erros.senha && <span className="login__erro">{erros.senha}</span>}
           </div>
 
-          {/* AGORA É BUTTON */}
           <button className="login__esqueci" type="button">
             Esqueci minha senha
           </button>

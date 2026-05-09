@@ -22,13 +22,15 @@ import "./styles/globals.css";
 import { TransacoesProvider } from "./context/TransacoesContext";
 
 function LayoutComSidebar() {
-  // ← sem {children}
   const [sidebarAberta, setSidebarAberta] = useState(false);
   const [modalAberto, setModalAberto] = useState(false);
   const [tipoModal, setTipoModal] = useState("saida");
+  const nomeUsuario =
+    localStorage.getItem("moneymap-usuario-nome") || "Maria Silva";
   const navigate = useNavigate();
 
   function handleLogout() {
+    localStorage.removeItem("moneymap-usuario-nome");
     navigate("/login");
   }
 
@@ -54,14 +56,14 @@ function LayoutComSidebar() {
 
       <div className="layout__main">
         <Header
-          nomeUsuario="Maria Silva"
+          nomeUsuario={nomeUsuario}
           onAbrirModal={(tipo = "saida") => {
             setTipoModal(tipo);
             setModalAberto(true);
           }}
         />
         <main className="layout__content">
-          <Outlet /> {/* ← no lugar de {children} */}
+          <Outlet />
         </main>
       </div>
 
@@ -82,23 +84,21 @@ function LayoutComSidebar() {
 function App() {
   return (
     <ThemeProvider>
-      <TransacoesProvider> 
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Navigate to="/login" replace />} />
-          <Route path="/login" element={<Login />} />
-
-          {/* Um único layout que persiste entre as rotas filhas */}
-          <Route element={<LayoutComSidebar />}>
-            <Route path="/dashboard" element={<Home />} />
-            <Route path="/analise" element={<AnaliseGastos />} />
-            <Route path="/transacoes" element={<Transacoes />} />
-            <Route path="/insights" element={<InsightsPage />} />
-            <Route path="/metas" element={<Metas />} />
-            <Route path="/perfil" element={<Perfil />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <TransacoesProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Navigate to="/login" replace />} />
+            <Route path="/login" element={<Login />} />
+            <Route element={<LayoutComSidebar />}>
+              <Route path="/dashboard" element={<Home />} />
+              <Route path="/analise" element={<AnaliseGastos />} />
+              <Route path="/transacoes" element={<Transacoes />} />
+              <Route path="/insights" element={<InsightsPage />} />
+              <Route path="/metas" element={<Metas />} />
+              <Route path="/perfil" element={<Perfil />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
       </TransacoesProvider>
     </ThemeProvider>
   );
