@@ -46,6 +46,7 @@ A API mock é gerenciada pelo **json-server**, que lê dados do arquivo `db.json
 | GET | `/usuario` | Retorna dados do usuário autenticado |
 | GET | `/transacoes` | Lista todas as transações do usuário |
 | POST | `/transacoes` | Adiciona uma nova transação |
+| DELETE | `/transacoes` | Deleta uma transação por vez |
 | GET | `/mesAnterior` | Retorna dados comparativos do mês anterior |
 
 ### Estrutura da API
@@ -89,6 +90,16 @@ curl -X POST http://localhost:3001/transacoes \
   }'
 ```
 
+**DELETE /transacoes/:id**
+```bash
+curl -X DELETE http://localhost:3001/transacoes/1
+```
+
+**Resposta**
+```json
+{}
+```
+
 ## 🏗️ Serviço de API
 
 O serviço centralizado em `src/services/api.js` encapsula todas as chamadas à API:
@@ -121,6 +132,7 @@ await postTransacao({ descricao: 'Novo', categoria: 'Lazer', valor: 10, tipo: 's
 ### Transações (`src/pages/Transacoes.jsx`)
 - Lista e filtra transações via `GET /transacoes`
 - Suporta ordenação por data e categoria
+- Deleta a transação de sua escolha pelo iícone "🗑️"
 
 ## 📂 Estrutura do Projeto
 

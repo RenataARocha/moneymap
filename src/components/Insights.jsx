@@ -46,7 +46,7 @@ function Insights({ padroes, recomendacoes }) {
       <div className="insights__secao">
         <h3 className="insights__titulo">Recomendações de Economia</h3>
         <div className="insights__lista">
-          {recomendacoes.map((r, i) => (
+          {recomendacoes.slice(0, 2).map((r, i) => (
             <div
               key={i}
               className={`insights__rec ${i === 0 ? "insights__rec--destaque" : ""}`}
