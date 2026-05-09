@@ -52,7 +52,7 @@
 }
 
 .insights-page__financeiro-card {
-    background: var(--bg-hover);
+    background: var(--color-optional);
     border-radius: var(--radius);
     padding: 1rem;
     display: flex;
@@ -63,7 +63,7 @@
 }
 
 .insights-page__financeiro-card:hover {
-    background: var(--bg-secondary);
+    background: var(--color-optional-hover);
 }
 
 .insights-page__financeiro-icone {
@@ -72,12 +72,12 @@
 
 .insights-page__financeiro-texto {
     font-size: var(--fs-base);
-    color: var(--color-optional-4);
+    color: var(--text-primary);
     line-height: 1.5;
 }
 
 .insights-page__financeiro-texto strong {
-    color: var(--text-sidebar-icon);
+    color: var(--color-optional-3);
     font-weight: 600;
 }
 
