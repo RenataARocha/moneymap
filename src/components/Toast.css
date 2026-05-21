@@ -1,0 +1,24 @@
+.toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    z-index: 9999;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    white-space: nowrap;
+}
+
+/* Cores fixas */
+.toast--sucesso {
+    background: #22c55e;
+    color: #fff;
+}
+
+.toast--erro {
+    background: #ef4444;
+    color: #fff;
+}
