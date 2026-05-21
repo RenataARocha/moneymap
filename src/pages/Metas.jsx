@@ -1,8 +1,8 @@
 import { useState } from "react";
-import dados from "../data/gastos.json"; // PROVISÓRIO
-import { calcularPorCategoria, formatarMoeda } from "../utils/calculations"; // PROVISÓRIO
+import dados from "../data/gastos.json";
+import { calcularPorCategoria, formatarMoeda } from "../utils/calculations";
 import "./Metas.css";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 const iconesPorCategoria = {
   Alimentação: "🥗",
@@ -26,52 +26,66 @@ function Metas() {
   const porCategoria = calcularPorCategoria(transacoes);
   const totalGastos = Object.values(porCategoria).reduce((a, b) => a + b, 0);
 
-  // ─── cálculos de investimento (fora do map) ───────────
-  const totalReceita = transacoes
-    .filter((t) => t.tipo === "entrada")
-    .reduce((acc, t) => acc + t.valor, 0);
-  const saldoDisponivel = totalReceita - totalGastos;
-
-  const [limites, setLimites] = useState(() => {
+  const [limites, setLimites] = useState(function () {
     const salvo = localStorage.getItem("mm-metas");
-    return salvo ? JSON.parse(salvo) : limitesPadrao;
+    if (!salvo) return limitesPadrao;
+
+    const parsed = JSON.parse(salvo);
+    const temValorInvalido = Object.values(parsed).some(function (v) {
+      return v > 100;
+    });
+
+    if (temValorInvalido) {
+      localStorage.removeItem("mm-metas");
+      return limitesPadrao;
+    }
+
+    return parsed;
   });
-  const [metaInvestimento, setMetaInvestimento] = useState(() =>
-    parseFloat(localStorage.getItem("mm-meta-invest") || "20"),
-  );
-  const [editandoInvest, setEditandoInvest] = useState(false);
-  const [investTemp, setInvestTemp] = useState("");
+
+  const [metaEconomia, setMetaEconomia] = useState(function () {
+    return parseFloat(localStorage.getItem("mm-meta-economia") || "500");
+  });
+
+  const [editandoEconomia, setEditandoEconomia] = useState(false);
+  const [economiaTemp, setEconomiaTemp] = useState("");
   const [editando, setEditando] = useState(null);
   const [valorTemp, setValorTemp] = useState("");
   const [salvo, setSalvo] = useState(false);
 
-  const valorMetaInvest = (totalReceita * metaInvestimento) / 100;
-  const progressoInvest =
-    valorMetaInvest > 0
-      ? Math.min((saldoDisponivel / valorMetaInvest) * 100, 100)
+  const totalReceita = transacoes
+    .filter(function (t) {
+      return t.tipo === "entrada";
+    })
+    .reduce(function (acc, t) {
+      return acc + t.valor;
+    }, 0);
+
+  const saldoDisponivel = totalReceita - totalGastos;
+  const progressoEconomia =
+    metaEconomia > 0
+      ? Math.min((saldoDisponivel / metaEconomia) * 100, 100)
       : 0;
-  const statusInvest =
-    progressoInvest >= 100
+  const statusEconomia =
+    progressoEconomia >= 100
       ? "ok"
-      : progressoInvest >= 60
+      : progressoEconomia >= 60
         ? "warning"
         : "danger";
 
-  const mensagemInvest = () => {
-    if (progressoInvest >= 100)
-      return `✅ Ótimo! Você tem saldo suficiente para investir ${formatarMoeda(valorMetaInvest)} esse mês.`;
-    if (progressoInvest >= 60)
-      return `⚠️ Atenção! Você tem ${formatarMoeda(saldoDisponivel)} disponível. Sua meta é ${formatarMoeda(valorMetaInvest)}.`;
-    return `🚨 Seus gastos estão altos. Sobrou apenas ${formatarMoeda(saldoDisponivel)} para investir.`;
-  };
+  function salvarEconomia() {
+    const val = parseFloat(economiaTemp) || 0;
+    setMetaEconomia(val);
+    localStorage.setItem("mm-meta-economia", String(val));
+    setEditandoEconomia(false);
+    mostrarSalvo();
+  }
 
-  function salvarInvestimento() {
-    const val = parseFloat(investTemp) || 0;
-    setMetaInvestimento(val);
-    localStorage.setItem("mm-meta-invest", val);
-    setEditandoInvest(false);
+  function mostrarSalvo() {
     setSalvo(true);
-    setTimeout(() => setSalvo(false), 2000);
+    setTimeout(function () {
+      setSalvo(false);
+    }, 2000);
   }
 
   function handleEditar(cat) {
@@ -80,13 +94,16 @@ function Metas() {
   }
 
   function handleConfirmar(cat) {
-    const novo = { ...limites, [cat]: parseFloat(valorTemp) || 0 };
+    const novo = Object.assign({}, limites, {
+      [cat]: parseFloat(valorTemp) || 0,
+    });
     setLimites(novo);
     localStorage.setItem("mm-metas", JSON.stringify(novo));
     setEditando(null);
-    setSalvo(true);
-    setTimeout(() => setSalvo(false), 2000);
+    mostrarSalvo();
   }
+
+  const categorias = Object.keys(porCategoria);
 
   return (
     <div className="metas">
@@ -95,10 +112,7 @@ function Metas() {
         initial={{ opacity: 0, y: -20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{
-          duration: 0.5,
-          ease: "easeOut",
-        }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
       >
         <div>
           <h2 className="metas__titulo">Metas</h2>
@@ -106,62 +120,88 @@ function Metas() {
             Defina limites de gasto por categoria
           </p>
         </div>
-        {salvo && <span className="metas__salvo">✅ Meta salva!</span>}
+        <AnimatePresence>
+          {salvo && (
+            <motion.span
+              className="metas__salvo"
+              role="status"
+              aria-live="polite"
+              initial={{ opacity: 0, y: -5 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+            >
+              <span aria-hidden="true">✅</span> Meta salva!
+            </motion.span>
+          )}
+        </AnimatePresence>
       </motion.div>
 
-      {/* ─── Card de Investimento ─── */}
-      <motion.div
-        className={`metas__invest-card metas__invest-card--${statusInvest}`}
+      {/* ─── Card de Economia ─── */}
+      <motion.section
+        aria-label="Meta de Economia"
+        className={"metas__invest-card metas__invest-card--" + statusEconomia}
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
-        transition={{
-          duration: 0.7,
-          ease: "easeOut",
-        }}
-        whileHover={{
-          y: -4,
-        }}
+        transition={{ duration: 0.7, ease: "easeOut" }}
+        whileHover={{ y: -4 }}
       >
         <div className="metas__invest-top">
           <div className="metas__invest-left">
-            <div className="metas__invest-icone">📈</div>
+            <div className="metas__invest-icone" aria-hidden="true">
+              🎯
+            </div>
             <div>
-              <span className="metas__invest-titulo">Meta de Investimento</span>
+              <span className="metas__invest-titulo">Meta de Economia</span>
               <span className="metas__invest-sub">
-                Separe parte da sua receita para investir todo mês
+                Quanto você quer guardar este mês?
               </span>
             </div>
           </div>
           <div className="metas__invest-right">
-            {editandoInvest ? (
-              <div className="metas__edit">
+            {editandoEconomia ? (
+              <div
+                className="metas__edit"
+                role="group"
+                aria-label="Editar meta de economia"
+              >
+                <label htmlFor="input-economia" className="sr-only">
+                  Meta de economia em reais
+                </label>
+                <span className="metas__edit-prefix" aria-hidden="true">
+                  R$
+                </span>
                 <input
+                  id="input-economia"
                   className="metas__input"
                   type="number"
                   min="0"
-                  max="100"
-                  value={investTemp}
-                  onChange={(e) => setInvestTemp(e.target.value)}
+                  value={economiaTemp}
+                  onChange={function (e) {
+                    setEconomiaTemp(e.target.value);
+                  }}
                   autoFocus
                 />
-                <span className="metas__edit-prefix">%</span>
-                <button className="metas__btn-ok" onClick={salvarInvestimento}>
+                <button
+                  className="metas__btn-ok"
+                  onClick={salvarEconomia}
+                  aria-label="Confirmar meta de economia"
+                >
                   ✓
                 </button>
               </div>
             ) : (
               <div className="metas__invest-valor-wrap">
-                <span className="metas__invest-pct">{metaInvestimento}%</span>
-                <span className="metas__invest-reais">
-                  {formatarMoeda(valorMetaInvest)}/mês
+                <span className="metas__invest-pct">
+                  {formatarMoeda(metaEconomia)}
                 </span>
                 <button
                   className="metas__btn-editar"
-                  onClick={() => {
-                    setEditandoInvest(true);
-                    setInvestTemp(metaInvestimento);
+                  onClick={function () {
+                    setEditandoEconomia(true);
+                    setEconomiaTemp(metaEconomia);
                   }}
+                  aria-label="Editar meta de economia"
                 >
                   ✏️
                 </button>
@@ -171,44 +211,68 @@ function Metas() {
         </div>
 
         <div className="metas__invest-progresso-wrap">
-          <div className="metas__progresso">
+          <div
+            className="metas__progresso"
+            role="progressbar"
+            aria-valuenow={Math.round(progressoEconomia)}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-label="Progresso da meta de economia"
+          >
             <div
-              className={`metas__progresso-fill metas__progresso-fill--${statusInvest}`}
-              style={{ width: `${progressoInvest}%` }}
+              className={
+                "metas__progresso-fill metas__progresso-fill--" + statusEconomia
+              }
+              style={{ width: progressoEconomia + "%" }}
             />
           </div>
-          <span className={`metas__pct metas__pct--${statusInvest}`}>
-            {mensagemInvest()}
+          <span
+            className={"metas__pct metas__pct--" + statusEconomia}
+            aria-live="polite"
+          >
+            {progressoEconomia >= 100 ? (
+              <>
+                <span aria-hidden="true">✅</span> Parabéns! Você atingiu sua
+                meta de economia!
+              </>
+            ) : (
+              "Saldo disponível: " +
+              formatarMoeda(saldoDisponivel) +
+              " de " +
+              formatarMoeda(metaEconomia)
+            )}
           </span>
         </div>
 
-        <div className="metas__invest-resumo">
+        <dl className="metas__invest-resumo">
           <div className="metas__invest-item">
-            <span className="metas__invest-item-label">Receita do mês</span>
-            <span className="metas__invest-item-valor">
+            <dt className="metas__invest-item-label">Receita</dt>
+            <dd className="metas__invest-item-valor">
               {formatarMoeda(totalReceita)}
-            </span>
+            </dd>
           </div>
           <div className="metas__invest-item">
-            <span className="metas__invest-item-label">Total gasto</span>
-            <span className="metas__invest-item-valor">
+            <dt className="metas__invest-item-label">Total gasto</dt>
+            <dd className="metas__invest-item-valor">
               {formatarMoeda(totalGastos)}
-            </span>
+            </dd>
           </div>
           <div className="metas__invest-item">
-            <span className="metas__invest-item-label">Saldo disponível</span>
-            <span
-              className={`metas__invest-item-valor metas__pct--${statusInvest}`}
+            <dt className="metas__invest-item-label">Saldo disponível</dt>
+            <dd
+              className={
+                "metas__invest-item-valor metas__pct--" + statusEconomia
+              }
             >
               {formatarMoeda(saldoDisponivel)}
-            </span>
+            </dd>
           </div>
-        </div>
-      </motion.div>
+        </dl>
+      </motion.section>
 
       {/* ─── Lista de categorias ─── */}
-      <div className="metas__lista">
-        {Object.keys(porCategoria).map((cat) => {
+      <ul className="metas__lista" aria-label="Metas por categoria">
+        {categorias.map(function (cat, catIndex) {
           const gasto = porCategoria[cat] || 0;
           const limite = limites[cat] || 0;
           const percentualAtual =
@@ -223,24 +287,30 @@ function Metas() {
                 : "ok";
 
           return (
-            <motion.div
+            <motion.li
               key={cat}
-              className={`metas__card metas__card--${status}`}
+              aria-label={
+                cat +
+                ": " +
+                formatarMoeda(gasto) +
+                ", " +
+                percentualAtual.toFixed(1) +
+                "% do total"
+              }
+              className={"metas__card metas__card--" + status}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.15 }}
               transition={{
                 duration: 0.6,
-                delay: Object.keys(porCategoria).indexOf(cat) * 0.08,
+                delay: catIndex * 0.08,
                 ease: "easeOut",
               }}
-              whileHover={{
-                y: -5,
-              }}
+              whileHover={{ y: -5 }}
             >
               <div className="metas__card-topo">
                 <div className="metas__card-info">
-                  <div className="metas__icone">
+                  <div className="metas__icone" aria-hidden="true">
                     {iconesPorCategoria[cat] || "📦"}
                   </div>
                   <div>
@@ -248,28 +318,43 @@ function Metas() {
                     <span className="metas__cat-gasto">
                       {formatarMoeda(gasto)}
                     </span>
-
                     <span className="metas__cat-percentual">
                       {percentualAtual.toFixed(1)}% do total
                     </span>
                   </div>
                 </div>
+
                 <div className="metas__card-limite">
                   {editando === cat ? (
-                    <div className="metas__edit">
+                    <div
+                      className="metas__edit"
+                      role="group"
+                      aria-label={"Editar limite de " + cat}
+                    >
+                      <label htmlFor={"input-" + cat} className="sr-only">
+                        Limite para {cat} em porcentagem
+                      </label>
                       <input
+                        id={"input-" + cat}
                         className="metas__input"
                         type="number"
                         min="0"
                         max="100"
                         value={valorTemp}
-                        onChange={(e) => setValorTemp(e.target.value)}
+                        onChange={function (e) {
+                          setValorTemp(e.target.value);
+                        }}
                         autoFocus
                       />
-                      <span className="metas__edit-prefix">%</span>
+                      <span className="metas__edit-prefix" aria-hidden="true">
+                        %
+                      </span>
                       <button
                         className="metas__btn-ok"
-                        onClick={() => handleConfirmar(cat)}
+                        onClick={function () {
+                          handleConfirmar(cat);
+                        }}
+                        aria-label={"Confirmar limite de " + cat}
                       >
                         ✓
                       </button>
@@ -277,11 +362,14 @@ function Metas() {
                   ) : (
                     <div className="metas__limite-wrap">
                       <span className="metas__limite-valor">
-                        Limite: {limite > 0 ? `${limite}%` : "—"}
+                        Limite: {limite > 0 ? limite + "%" : "—"}
                       </span>
                       <button
                         className="metas__btn-editar"
-                        onClick={() => handleEditar(cat)}
+                        onClick={function () {
+                          handleEditar(cat);
+                        }}
+                        aria-label={"Editar limite de " + cat}
                       >
                         ✏️
                       </button>
@@ -289,31 +377,48 @@ function Metas() {
                   )}
                 </div>
               </div>
+
               {limite > 0 && (
                 <div className="metas__progresso-wrap">
-                  <div className="metas__progresso">
+                  <div
+                    className="metas__progresso"
+                    role="progressbar"
+                    aria-valuenow={Math.round(percentualMeta)}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-label={"Progresso da meta de " + cat}
+                  >
                     <motion.div
-                      className={`metas__progresso-fill metas__progresso-fill--${statusInvest}`}
+                      className={
+                        "metas__progresso-fill metas__progresso-fill--" + status
+                      }
                       initial={{ width: 0 }}
-                      whileInView={{ width: `${progressoInvest}%` }}
+                      whileInView={{ width: percentualMeta + "%" }}
                       viewport={{ once: true }}
-                      transition={{
-                        duration: 1,
-                        ease: "easeOut",
-                      }}
+                      transition={{ duration: 1, ease: "easeOut" }}
                     />
                   </div>
-                  <span className={`metas__pct metas__pct--${status}`}>
-                    {percentualAtual.toFixed(1)}% usado
-                    {status === "danger" && "Limite atingido"}
-                    {status === "warning" && "Atenção ao limite"}
+                  <span className={"metas__pct metas__pct--" + status}>
+                    {percentualAtual.toFixed(1)}% usado de {limite}%
+                    {status === "danger" && (
+                      <>
+                        <span aria-hidden="true"> ⚠️</span>
+                        <span> Limite atingido!</span>
+                      </>
+                    )}
+                    {status === "warning" && (
+                      <>
+                        <span aria-hidden="true"> ⚠️</span>
+                        <span> Atenção ao limite!</span>
+                      </>
+                    )}
                   </span>
                 </div>
               )}
-            </motion.div>
+            </motion.li>
           );
         })}
-      </div>
+      </ul>
     </div>
   );
 }
