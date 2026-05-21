@@ -5,6 +5,7 @@ import { getUsuario } from "../services/api";
 import { useGoogleLogin } from "@react-oauth/google";
 import "./Login.css";
 import { motion } from "framer-motion";
+import { useAuth } from "../hooks/useAuth";
 
 function Login() {
   const navigate = useNavigate();
@@ -16,6 +17,8 @@ function Login() {
   const [carregando, setCarregando] = useState(false);
   const [erroLogin, setErroLogin] = useState("");
 
+  const { login } = useAuth();
+
   const loginComGoogle = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
@@ -26,7 +29,7 @@ function Login() {
           },
         );
         const user = await res.json();
-        localStorage.setItem("moneymap-usuario-nome", user.name);
+        login(user.name);
         navigate("/dashboard");
       } catch {
         setErroLogin("Erro ao obter dados do Google.");
@@ -61,12 +64,12 @@ function Login() {
     setCarregando(true);
 
     getUsuario()
-      .then((usuario) => {
+      .then(function (usuario) {
         if (usuario.email.toLowerCase() !== email.trim().toLowerCase()) {
           setErroLogin("E-mail não encontrado. Use o e-mail cadastrado.");
           return;
         }
-        localStorage.setItem("moneymap-usuario-nome", usuario.nome);
+        login(usuario.nome);
         navigate("/dashboard");
       })
       .catch(() => {
