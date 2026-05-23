@@ -183,11 +183,12 @@ function Metas() {
                   autoFocus
                 />
                 <button
+                  type="button"
                   className="metas__btn-ok"
                   onClick={salvarEconomia}
                   aria-label="Confirmar meta de economia"
                 >
-                  ✓
+                  <span aria-hidden="true">✓</span>
                 </button>
               </div>
             ) : (
@@ -196,14 +197,16 @@ function Metas() {
                   {formatarMoeda(metaEconomia)}
                 </span>
                 <button
+                  type="button"
                   className="metas__btn-editar"
                   onClick={function () {
                     setEditandoEconomia(true);
                     setEconomiaTemp(metaEconomia);
                   }}
                   aria-label="Editar meta de economia"
+                  title="Editar meta de economia"
                 >
-                  ✏️
+                  <span aria-hidden="true">✏️</span>
                 </button>
               </div>
             )}
@@ -218,6 +221,9 @@ function Metas() {
             aria-valuemin={0}
             aria-valuemax={100}
             aria-label="Progresso da meta de economia"
+            aria-valuetext={
+              Math.round(progressoEconomia) + "% da meta de economia concluída"
+            }
           >
             <div
               className={
@@ -350,13 +356,14 @@ function Metas() {
                         %
                       </span>
                       <button
+                        type="button"
                         className="metas__btn-ok"
                         onClick={function () {
                           handleConfirmar(cat);
                         }}
                         aria-label={"Confirmar limite de " + cat}
                       >
-                        ✓
+                        <span aria-hidden="true">✓</span>
                       </button>
                     </div>
                   ) : (
@@ -365,13 +372,14 @@ function Metas() {
                         Limite: {limite > 0 ? limite + "%" : "—"}
                       </span>
                       <button
+                        type="button"
                         className="metas__btn-editar"
                         onClick={function () {
                           handleEditar(cat);
                         }}
-                        aria-label={"Editar limite de " + cat}
+                        title={"Editar limite de " + cat}
                       >
-                        ✏️
+                        <span aria-hidden="true">✏️</span>
                       </button>
                     </div>
                   )}
@@ -386,7 +394,9 @@ function Metas() {
                     aria-valuenow={Math.round(percentualMeta)}
                     aria-valuemin={0}
                     aria-valuemax={100}
-                    aria-label={"Progresso da meta de " + cat}
+                    aria-valuetext={
+                      percentualAtual.toFixed(1) + "% usado de " + limite + "%"
+                    }
                   >
                     <motion.div
                       className={

@@ -28,11 +28,6 @@
     margin-top: 2px;
 }
 
-.metas__controles {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
 
 .metas__salvo {
     font-size: var(--fs-sm);
@@ -56,12 +51,16 @@
     flex-direction: column;
     gap: 1.2rem;
     transition: all var(--transition);
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.12);
 }
 
 .metas__card:hover {
-    transform: translateY(-2px);
+    transform: translateY(-4px);
     border-color: rgba(120, 255, 214, 0.15);
     background: var(--bg-hover);
+    box-shadow:
+        0 10px 24px rgba(0, 0, 0, 0.15);
 }
 
 .metas__card--warning {
@@ -198,6 +197,7 @@
     height: 6px;
     background: var(--border);
     border-radius: 3px;
+    position: relative;
     overflow: hidden;
 }
 
@@ -205,6 +205,32 @@
     height: 100%;
     border-radius: 3px;
     transition: width 0.4s ease;
+}
+
+.metas__progresso-fill::after {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.25),
+            transparent);
+
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
 }
 
 .metas__progresso-fill--ok {
@@ -246,6 +272,9 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.12);
 }
 
 .metas__invest-card--warning {
@@ -372,7 +401,16 @@
     border: 0;
 }
 
+.metas__btn-editar:focus-visible,
+.metas__btn-ok:focus-visible,
+.metas__input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* ───────────────── MOBILE ───────────────── */
 @media (max-width: 768px) {
+
     .metas {
         padding: 1rem;
         gap: 1rem;
@@ -381,6 +419,16 @@
     .metas__topo {
         flex-direction: column;
         align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .metas__titulo {
+        padding-bottom: 0.75rem;
+    }
+
+    .metas__salvo {
+        width: 100%;
+        text-align: center;
     }
 
     .metas__lista {
@@ -395,10 +443,21 @@
     .metas__card-topo {
         flex-direction: column;
         align-items: flex-start;
-        gap: 0.75rem;
+        gap: 0.9rem;
+    }
+
+    .metas__card-info {
+        width: 100%;
     }
 
     .metas__card-limite {
+        width: 100%;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    .metas__limite-wrap {
         width: 100%;
         justify-content: space-between;
     }
@@ -407,25 +466,129 @@
         font-size: var(--fs-md);
     }
 
+    .metas__edit {
+        width: 100%;
+    }
+
     .metas__input {
         width: 100%;
+        min-height: 42px;
+    }
+
+    .metas__btn-ok {
+        min-width: 42px;
+        min-height: 42px;
+    }
+
+    .metas__btn-editar {
+        min-width: 40px;
+        min-height: 40px;
+    }
+
+    .metas__invest-card {
+        padding: 1rem;
     }
 
     .metas__invest-top {
         flex-direction: column;
         align-items: flex-start;
         gap: 1rem;
+        padding-bottom: 1rem;
     }
 
     .metas__invest-right {
         width: 100%;
     }
 
-    .metas__invest-resumo {
-        grid-template-columns: 1fr;
+    .metas__invest-valor-wrap {
+        justify-content: space-between;
+        width: 100%;
     }
 
     .metas__invest-pct {
         font-size: var(--fs-lg);
+    }
+
+    .metas__invest-resumo {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .metas__pct {
+        line-height: 1.5;
+    }
+}
+
+
+/* ───────────────── TABLET ───────────────── */
+@media (min-width: 769px) and (max-width: 1024px) {
+
+    .metas {
+        padding: 1.25rem;
+    }
+
+    .metas__lista {
+        grid-template-columns: 1fr;
+    }
+
+    .metas__card {
+        padding: 1.25rem;
+    }
+
+    .metas__invest-card {
+        padding: 1.5rem;
+    }
+
+    .metas__invest-resumo {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .metas__invest-pct {
+        font-size: 1.5rem;
+    }
+}
+
+
+/* ───────────────── NOTEBOOK ───────────────── */
+@media (min-width: 1025px) and (max-width: 1440px) {
+
+    .metas__lista {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+/* ───────────────── ULTRA-WIDE ───────────────── */
+@media (min-width: 1600px) {
+
+    .metas {
+        max-width: 1600px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .metas__lista {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .metas__card,
+    .metas__invest-card {
+        padding: 1.75rem;
+    }
+
+    .metas__titulo {
+        font-size: 2rem;
+    }
+
+    .metas__invest-pct {
+        font-size: 2rem;
+    }
+
+    .metas__limite-valor {
+        font-size: 1.3rem;
+    }
+
+    .metas__cat-gasto {
+        font-size: 1rem;
     }
 }
