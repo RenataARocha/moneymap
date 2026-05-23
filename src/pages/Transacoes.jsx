@@ -66,14 +66,13 @@ function Transacoes() {
 
   if (carregando) {
     return (
-      <div
-        className="home-loading"
-        role="status"
-        aria-label="Carregando transações"
-      >
-        <div className="home-loading__logo">
-          <div className="home-loading__spinner" aria-hidden="true" />
-          <span>Carregando transações...</span>
+      <div className="transacoes">
+        <div className="transacoes__skeleton-card">
+          <div className="transacoes__skeleton-title" />
+
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="transacoes__skeleton-row" />
+          ))}
         </div>
       </div>
     );
@@ -140,6 +139,7 @@ function Transacoes() {
             aria-label="Tipo de transação"
           >
             <button
+              type="button"
               className={`transacoes__toggle-btn ${filtroTipo === "entrada" ? "ativo" : ""}`}
               aria-pressed={filtroTipo === "entrada"}
               onClick={() => {
@@ -150,6 +150,7 @@ function Transacoes() {
               Entradas
             </button>
             <button
+              type="button"
               className={`transacoes__toggle-btn ${filtroTipo === "saida" ? "ativo" : ""}`}
               aria-pressed={filtroTipo === "saida"}
               onClick={() => {
@@ -200,6 +201,7 @@ function Transacoes() {
           </div>
         ) : (
           <table className="transacoes__tabela" aria-label={tituloLista}>
+            <caption className="sr-only">{tituloLista}</caption>
             <thead>
               <tr>
                 <th scope="col">Data</th>
