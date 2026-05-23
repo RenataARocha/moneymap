@@ -66,11 +66,17 @@ function Perfil() {
         }}
       >
         <div className="perfil__avatar-wrap">
-          <div className="perfil__avatar-atual">{avatarAtual?.emoji}</div>
+          <div
+            className="perfil__avatar-atual"
+            aria-label={`Avatar atual ${avatar}`}
+          >
+            {avatarAtual?.emoji}
+          </div>
           <span className="perfil__avatar-label">Avatar atual: {avatar}</span>
           <div className="perfil__avatares">
             {avatares.map((a, index) => (
               <motion.button
+                type="button"
                 initial={{ opacity: 0, scale: 0.8 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
@@ -79,7 +85,7 @@ function Perfil() {
                   delay: index * 0.05,
                 }}
                 whileHover={{
-                  scale: 1.08,
+                  scale: 1.04,
                 }}
                 whileTap={{
                   scale: 0.95,
@@ -87,7 +93,8 @@ function Perfil() {
                 key={a.id}
                 className={`perfil__avatar-btn ${avatar === a.id ? "ativo" : ""}`}
                 onClick={() => setAvatar(a.id)}
-                title={a.id}
+                aria-label={`Selecionar avatar ${a.id}`}
+                aria-pressed={avatar === a.id}
               >
                 {a.emoji}
               </motion.button>
@@ -106,8 +113,12 @@ function Perfil() {
           }}
         >
           <div className="perfil__campo">
-            <label className="perfil__label">Seu nome *</label>
+            <label htmlFor="nome" className="perfil__label">
+              Seu nome *
+            </label>
+
             <input
+              id="nome"
               className="perfil__input"
               type="text"
               value={nome}
@@ -117,8 +128,11 @@ function Perfil() {
           </div>
 
           <div className="perfil__campo">
-            <label className="perfil__label">Sobrenome *</label>
+            <label htmlFor="sobrenome" className="perfil__label">
+              Sobrenome *
+            </label>
             <input
+              id="sobrenome"
               className="perfil__input"
               type="text"
               value={sobrenome}
@@ -128,8 +142,11 @@ function Perfil() {
           </div>
 
           <div className="perfil__campo perfil__campo--full">
-            <label className="perfil__label">Gênero *</label>
+            <label htmlFor="sobrenome" className="perfil__label">
+              Gênero *
+            </label>
             <select
+              id="genero"
               className="perfil__select"
               value={genero}
               onChange={(e) => setGenero(e.target.value)}
@@ -154,16 +171,29 @@ function Perfil() {
           }}
         >
           <motion.button
+            type="button"
             className="perfil__salvar"
             onClick={handleSalvar}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.96 }}
           >
-            {salvo ? "✅ Salvo!" : "Salvar alterações"}
+            Salvar alterações
           </motion.button>
-          <button className="perfil__sair" onClick={() => navigate("/login")}>
+
+          <button
+            type="button"
+            className="perfil__sair"
+            aria-label="Sair da conta"
+            onClick={() => navigate("/login")}
+          >
             Sair da conta
           </button>
+
+          {salvo && (
+            <p className="perfil__feedback" role="status" aria-live="polite">
+              ✅ Perfil salvo com sucesso!
+            </p>
+          )}
         </motion.div>
       </motion.div>
     </div>
