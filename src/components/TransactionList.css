@@ -91,7 +91,6 @@
 
 .transaction-list__valor.saida {
     color: var(--text-secondary);
-    font-weight: 600;
 }
 
 .transaction-list__paginacao {

@@ -76,7 +76,9 @@ function TransactionList({ transacoes }) {
                       (t.tipo === "entrada" ? "entrada" : "saida")
                     }
                   >
-                    {t.tipo === "entrada" ? "+" : "-"}
+                    <span aria-hidden="true">
+                      {t.tipo === "entrada" ? "+ " : "- "}
+                    </span>
                     {t.valor.toLocaleString("pt-BR", {
                       style: "currency",
                       currency: "BRL",
