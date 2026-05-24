@@ -18,7 +18,7 @@
     font-size: var(--fs-md);
     font-weight: 700;
     color: var(--text-primary);
-    font-family: 'Quicksand', sans-serif;
+    font-family: "Quicksand", sans-serif;
     margin-right: auto;
 }
 
@@ -131,10 +131,18 @@
     white-space: nowrap;
 }
 
+/* ─── VALOR (única definição) ───────────────────────── */
 .transacoes__valor {
     font-weight: 600;
-    color: var(--text-primary);
     white-space: nowrap;
+}
+
+.transacoes__valor--entrada {
+    color: var(--success);
+}
+
+.transacoes__valor--saida {
+    color: var(--text-secondary);
 }
 
 .transacoes__deletar {
@@ -142,9 +150,8 @@
     border: none;
     cursor: pointer;
     font-size: 1rem;
-    opacity: 0.5;
-    transition: opacity var(--transition);
     padding: 0;
+    opacity: 0.5;
     transform: scale(1);
     transition:
         opacity var(--transition),
@@ -217,7 +224,6 @@
     color: white;
 }
 
-
 .transacoes__vazio {
     display: flex;
     flex-direction: column;
@@ -233,6 +239,7 @@
     font-size: 2.5rem;
 }
 
+/* ─── SKELETON ──────────────────────────────────────── */
 .transacoes__skeleton-card {
     background: var(--bg-card);
     border-radius: var(--radius);
@@ -245,7 +252,6 @@
             var(--bg-hover) 25%,
             rgba(255, 255, 255, 0.08) 50%,
             var(--bg-hover) 75%);
-
     background-size: 200% 100%;
     animation: skeleton-loading 1.2s infinite linear;
     border-radius: 8px;
@@ -272,9 +278,21 @@
     }
 }
 
-/* ───────────────── MOBILE ───────────────── */
-@media (max-width: 768px) {
+/* ─── SR-ONLY ───────────────────────────────────────── */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
 
+/* ─── MOBILE ────────────────────────────────────────── */
+@media (max-width: 768px) {
     .transacoes {
         padding: 1rem;
         gap: 0.75rem;
@@ -314,7 +332,6 @@
 
     .transacoes__card {
         padding: 1rem;
-        overflow-x: auto;
     }
 
     .transacoes__card-titulo {
@@ -323,7 +340,6 @@
         line-height: 1.4;
     }
 
-    /* tabela */
     .transacoes__tabela {
         min-width: 650px;
         font-size: var(--fs-sm);
@@ -336,10 +352,6 @@
 
     .transacoes__tabela thead th {
         white-space: nowrap;
-    }
-
-    .transacoes__valor {
-        font-size: var(--fs-sm);
     }
 
     .transacoes__badge {
@@ -392,10 +404,8 @@
     }
 }
 
-
-/* ───────────────── TABLET ───────────────── */
+/* ─── TABLET ────────────────────────────────────────── */
 @media (min-width: 769px) and (max-width: 1024px) {
-
     .transacoes {
         padding: 1.25rem;
     }
@@ -439,10 +449,8 @@
     }
 }
 
-
-/* ───────────────── NOTEBOOK / DESKTOP MÉDIO ───────────────── */
+/* ─── NOTEBOOK / DESKTOP MÉDIO ──────────────────────── */
 @media (min-width: 1025px) and (max-width: 1440px) {
-
     .transacoes {
         padding: 1.5rem;
     }
@@ -456,10 +464,8 @@
     }
 }
 
-
-/* ───────────────── ULTRA-WIDE ───────────────── */
+/* ─── ULTRA-WIDE ────────────────────────────────────── */
 @media (min-width: 1600px) {
-
     .transacoes {
         max-width: 1600px;
         margin: 0 auto;
@@ -485,10 +491,6 @@
     .transacoes__tabela thead th,
     .transacoes__tabela tbody td {
         padding: 1rem 1rem 1rem 0;
-    }
-
-    .transacoes__valor {
-        font-size: 1rem;
     }
 
     .transacoes__badge {

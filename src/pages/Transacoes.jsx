@@ -14,20 +14,22 @@ const iconesPorCategoria = {
   Outros: "📦",
 };
 
-const mesesMap = {
-  "01": "Janeiro",
-  "02": "Fevereiro",
-  "03": "Março",
-  "04": "Abril",
-  "05": "Maio",
-  "06": "Junho",
-  "07": "Julho",
-  "08": "Agosto",
-  "09": "Setembro",
-  10: "Outubro",
-  11: "Novembro",
-  12: "Dezembro",
-};
+// Array garante ordem e evita o problema do Prettier
+// remover aspas das chaves numéricas >= 10
+const MESES = [
+  { valor: "01", nome: "Janeiro" },
+  { valor: "02", nome: "Fevereiro" },
+  { valor: "03", nome: "Março" },
+  { valor: "04", nome: "Abril" },
+  { valor: "05", nome: "Maio" },
+  { valor: "06", nome: "Junho" },
+  { valor: "07", nome: "Julho" },
+  { valor: "08", nome: "Agosto" },
+  { valor: "09", nome: "Setembro" },
+  { valor: "10", nome: "Outubro" },
+  { valor: "11", nome: "Novembro" },
+  { valor: "12", nome: "Dezembro" },
+];
 
 const ITENS_POR_PAGINA = 7;
 
@@ -35,11 +37,7 @@ function Transacoes() {
   const [filtroTipo, setFiltroTipo] = useState("saida");
   const [mesSelecionado, setMesSelecionado] = useState("05");
   const [paginaAtual, setPaginaAtual] = useState(1);
-
-  const [mensagem, setMensagem] = useState({
-    texto: "",
-    tipo: "",
-  });
+  const [mensagem, setMensagem] = useState({ texto: "", tipo: "" });
 
   const { transacoes, carregando, recarregar, erro } = useTransacoes();
 
@@ -69,7 +67,6 @@ function Transacoes() {
       <div className="transacoes">
         <div className="transacoes__skeleton-card">
           <div className="transacoes__skeleton-title" />
-
           {[...Array(6)].map((_, i) => (
             <div key={i} className="transacoes__skeleton-row" />
           ))}
@@ -100,7 +97,8 @@ function Transacoes() {
   const inicio = (paginaAtual - 1) * ITENS_POR_PAGINA;
   const paginadas = filtradas.slice(inicio, inicio + ITENS_POR_PAGINA);
 
-  const nomeMes = mesesMap[mesSelecionado] || "—";
+  const mesAtual = MESES.find((m) => m.valor === mesSelecionado);
+  const nomeMes = mesAtual?.nome ?? "—";
   const tituloLista =
     filtroTipo === "saida"
       ? `Lista de Gastos — ${nomeMes} 2026`
@@ -175,7 +173,7 @@ function Transacoes() {
               setPaginaAtual(1);
             }}
           >
-            {Object.entries(mesesMap).map(([valor, nome]) => (
+            {MESES.map(({ valor, nome }) => (
               <option key={valor} value={valor}>
                 Mês: {nome} 2026
               </option>
@@ -237,7 +235,16 @@ function Transacoes() {
                       {t.categoria}
                     </span>
                   </td>
-                  <td className="transacoes__valor">
+                  <td
+                    className={`transacoes__valor ${
+                      t.tipo === "entrada"
+                        ? "transacoes__valor--entrada"
+                        : "transacoes__valor--saida"
+                    }`}
+                  >
+                    <span aria-hidden="true">
+                      {t.tipo === "entrada" ? "+ " : "- "}
+                    </span>
                     {t.valor.toLocaleString("pt-BR", {
                       style: "currency",
                       currency: "BRL",
