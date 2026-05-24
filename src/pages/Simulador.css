@@ -1,0 +1,262 @@
+.sim {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 1.5rem;
+    width: 100%;
+}
+
+.sim__topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.sim__titulo {
+    font-size: var(--fs-md);
+    font-weight: 700;
+    color: var(--text-primary);
+    font-family: 'Quicksand', sans-serif;
+}
+
+.sim__subtitulo {
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+.sim__btn-voltar {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.sim__btn-voltar:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+/* ─── MODOS ─── */
+.sim__modos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+}
+
+.sim__modo-btn {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem;
+    cursor: pointer;
+    text-align: left;
+    transition: all var(--transition);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.sim__modo-btn:hover {
+    border-color: var(--primary-light);
+    background: var(--bg-hover);
+}
+
+.sim__modo-btn.ativo {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+}
+
+.sim__modo-label {
+    font-size: var(--fs-sm);
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.sim__modo-desc {
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+}
+
+/* ─── CORPO ─── */
+.sim__corpo {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 1rem;
+    align-items: start;
+}
+
+/* ─── FORMULÁRIO ─── */
+.sim__form {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.sim__form-titulo {
+    font-size: var(--fs-base);
+    font-weight: 700;
+    color: var(--text-primary);
+    font-family: 'Quicksand', sans-serif;
+}
+
+.sim__campos {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.sim__campo {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.sim__label {
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.sim__input,
+.sim__select {
+    background: var(--bg-hover);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.65rem 0.75rem;
+    font-size: var(--fs-sm);
+    color: var(--text-primary);
+    outline: none;
+    transition: border var(--transition);
+    width: 100%;
+}
+
+.sim__input:focus,
+.sim__select:focus {
+    border-color: var(--accent);
+}
+
+.sim__preview {
+    background: var(--accent-dim);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: var(--fs-sm);
+    color: var(--text-primary);
+}
+
+.sim__btn-simular {
+    background: var(--primary-light);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 0.75rem;
+    font-size: var(--fs-sm);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all var(--transition);
+    letter-spacing: 0.05em;
+    margin-top: 0.25rem;
+}
+
+.sim__btn-simular:hover {
+    background: var(--primary);
+}
+
+/* ─── RESULTADO ─── */
+.sim__resultado {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.sim__resultado-destaque {
+    background: var(--accent-dim);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.sim__resultado-label {
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+}
+
+.sim__resultado-valor {
+    font-size: var(--fs-xl);
+    font-weight: 700;
+    color: var(--accent);
+    font-family: 'Quicksand', sans-serif;
+}
+
+.sim__resultado-detalhe {
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+}
+
+.sim__grafico {
+    width: 100%;
+}
+
+.sim__tooltip {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+}
+
+.sim__tooltip-label {
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.sim__tooltip-valor {
+    font-size: var(--fs-sm);
+}
+
+.sim__btn-limpar {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.6rem;
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.sim__btn-limpar:hover {
+    border-color: var(--primary-light);
+    color: var(--primary-light);
+}
+
+/* ─── RESPONSIVO ─── */
+@media (max-width: 768px) {
+    .sim__modos {
+        grid-template-columns: 1fr;
+    }
+
+    .sim__corpo {
+        grid-template-columns: 1fr;
+    }
+}
