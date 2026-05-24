@@ -9,6 +9,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { TrendingUp } from "lucide-react";
+import { Calculator } from "lucide-react";
 import "./Sidebar.css";
 
 const navItems = [
@@ -18,6 +19,7 @@ const navItems = [
   { to: "/insights", label: "Insights", icon: Lightbulb },
   { to: "/metas", label: "Metas", icon: Target },
   { to: "/investimentos", label: "Investimentos", icon: TrendingUp },
+  { to: "/simulador", label: "Simulador", icon: Calculator },
   { to: "/perfil", label: "Perfil", icon: User },
 ];
 
