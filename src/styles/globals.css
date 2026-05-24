@@ -66,13 +66,13 @@
     --text-sidebar: #FFFFFF;
     --text-sidebar-icon: #1A5A5A;
     --text-sidebar-hover: #90CFCB;
-    --color-optional: #589D99;
+    --color-optional: #84cfcda6;
     --color-optional-2: #1A5A5A;
     --color-optional-3: #000000;
     --color-optional-4: #000000;
     --color-optional-5: #1A5A5A;
     --warning: #da7912;
-    --color-optional-hover: #4c908d;
+    --color-optional-hover: #4c908d88;
     --color-optional-hover-2: #b7ebe8;
     --border: rgba(0, 0, 0, 0.08);
     --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
@@ -210,7 +210,7 @@ h3 {
 
     .layout__content {
         padding: 1rem;
-        padding-top: 4rem;
+        padding-top: 1rem;
         /* espaço pro menu-toggle */
     }
 }
