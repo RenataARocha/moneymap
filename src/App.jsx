@@ -24,6 +24,7 @@ import ModalTransacao from "./components/ModalTransacao";
 import { AuthProvider } from "./context/AuthContext";
 import { useAuth } from "./hooks/useAuth";
 import RotaProtegida from "./components/RotaProtegida";
+import Simulador from "./pages/Simulador";
 import "./styles/globals.css";
 
 function LayoutComSidebar() {
@@ -136,6 +137,7 @@ function App() {
                 <Route path="/metas" element={<Metas />} />
                 <Route path="/perfil" element={<Perfil />} />
                 <Route path="/investimentos" element={<Investimentos />} />
+                <Route path="/simulador" element={<Simulador />} />
               </Route>
             </Routes>
           </BrowserRouter>
