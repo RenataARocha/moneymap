@@ -312,7 +312,11 @@ function AnaliseGastos() {
                     {iconesPorCategoria[t.categoria] || "📦"} {t.categoria}
                   </span>
                 </td>
+
                 <td className="analise__tabela-valor">
+                  <span aria-hidden="true">
+                    {t.tipo === "entrada" ? "+ " : "- "}
+                  </span>
                   {formatarMoeda(t.valor)}
                 </td>
               </tr>
