@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   calcularTotalGastos,
   calcularTotalEntradas,
@@ -10,129 +11,370 @@ import {
   gerarRecomendacoes,
   ultimas5Transacoes,
   formatarMoeda,
+  calcularScore,
 } from "../utils/calculations";
-import { getUsuario, getTransacoes, getMesAnterior } from "../services/api";
+import { getTransacoes, getMesAnterior } from "../services/api";
 import CardResumo from "../components/CardResumo";
 import CardCategoria from "../components/CardCategoria";
 import Chart from "../components/Chart";
 import Insights from "../components/Insights";
 import TransactionList from "../components/TransactionList";
+import { SkeletonHome } from "../components/Skeleton";
 import imgSaldo from "../assets/saldo.png";
 import imgGasto from "../assets/gasto.png";
 import imgCategoria from "../assets/categoria.png";
 import imgInvestimento from "../assets/investimento.png";
 import { motion } from "framer-motion";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  CartesianGrid,
+} from "recharts";
 import "./Home.css";
 
+const MESES = [
+  { valor: "01", nome: "Janeiro" },
+  { valor: "02", nome: "Fevereiro" },
+  { valor: "03", nome: "Março" },
+  { valor: "04", nome: "Abril" },
+  { valor: "05", nome: "Maio" },
+  { valor: "06", nome: "Junho" },
+  { valor: "07", nome: "Julho" },
+  { valor: "08", nome: "Agosto" },
+  { valor: "09", nome: "Setembro" },
+  { valor: "10", nome: "Outubro" },
+  { valor: "11", nome: "Novembro" },
+  { valor: "12", nome: "Dezembro" },
+];
+
+function ScoreFinanceiro({ score, nivel, detalhes }) {
+  const cor =
+    nivel === "ok"
+      ? "var(--success)"
+      : nivel === "warning"
+        ? "var(--warning)"
+        : "var(--danger)";
+  const label =
+    nivel === "ok" ? "Excelente" : nivel === "warning" ? "Regular" : "Atenção";
+  const raio = 48;
+  const circunf = 2 * Math.PI * raio;
+  const offset = circunf - (score / 100) * circunf;
+
+  return (
+    <motion.section
+      className="score"
+      aria-label={"Score financeiro: " + score + " de 100 — " + label}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.7 }}
+    >
+      <h3 className="score__titulo">Score Financeiro</h3>
+
+      <div className="score__topo">
+        <div className="score__circulo-wrap" aria-hidden="true">
+          <svg width="120" height="120" viewBox="0 0 120 120">
+            <circle
+              cx="60"
+              cy="60"
+              r={raio}
+              fill="none"
+              stroke="var(--border)"
+              strokeWidth="9"
+            />
+            <circle
+              cx="60"
+              cy="60"
+              r={raio}
+              fill="none"
+              stroke={cor}
+              strokeWidth="9"
+              strokeDasharray={circunf}
+              strokeDashoffset={offset}
+              strokeLinecap="round"
+              transform="rotate(-90 60 60)"
+              style={{ transition: "stroke-dashoffset 1.2s ease" }}
+            />
+            <text
+              x="60"
+              y="55"
+              textAnchor="middle"
+              fill={cor}
+              fontSize="24"
+              fontWeight="700"
+              fontFamily="Quicksand"
+            >
+              {score}
+            </text>
+            <text
+              x="60"
+              y="70"
+              textAnchor="middle"
+              fill="var(--text-muted)"
+              fontSize="10"
+            >
+              de 100
+            </text>
+          </svg>
+          <span className="score__nivel" style={{ color: cor }}>
+            {label}
+          </span>
+        </div>
+
+        <ul
+          className="score__detalhes"
+          aria-label="Critérios do score financeiro"
+        >
+          {detalhes.map(function (d, i) {
+            return (
+              <li
+                key={i}
+                className={
+                  "score__detalhe " +
+                  (d.ok ? "score__detalhe--ok" : "score__detalhe--nok")
+                }
+              >
+                <span className="score__detalhe-icone" aria-hidden="true">
+                  {d.ok ? "✅" : "❌"}
+                </span>
+                <span className="score__detalhe-texto">{d.texto}</span>
+                <span className="score__pts">+{d.pts}pts</span>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </motion.section>
+  );
+}
+
+// Fatores aleatórios gerados uma única vez fora do ciclo de render
+const FATORES_PROJECAO = Array.from({ length: 6 }, function (_, i) {
+  return i === 0 ? 1 : 1 + (Math.random() * 0.1 - 0.05);
+});
+
+function ProjecaoSemestral({ totalGastos, totalEntradas, mesAtual }) {
+  const mesIdx = parseInt(mesAtual, 10) - 1;
+  const dados = useMemo(
+    function () {
+      return Array.from({ length: 6 }, function (_, i) {
+        const idx = (mesIdx + i) % 12;
+        const fator = FATORES_PROJECAO[i];
+        return {
+          mes: MESES[idx].nome.substring(0, 3),
+          gastos: parseFloat((totalGastos * fator).toFixed(2)),
+          receita: parseFloat((totalEntradas * fator).toFixed(2)),
+        };
+      });
+    },
+    [mesIdx, totalGastos, totalEntradas],
+  );
+
+  return (
+    <motion.section
+      className="home__projecao"
+      aria-label="Projeção semestral de gastos e receitas"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.7 }}
+    >
+      <h3 className="home__secao-titulo">Projeção Semestral</h3>
+      <ResponsiveContainer width="100%" height={180}>
+        <LineChart
+          data={dados}
+          margin={{ top: 5, right: 10, left: 0, bottom: 5 }}
+        >
+          <CartesianGrid
+            strokeDasharray="3 3"
+            stroke="rgba(255,255,255,0.06)"
+            vertical={false}
+          />
+          <XAxis
+            dataKey="mes"
+            tick={{ fill: "var(--text-muted)", fontSize: 11 }}
+            axisLine={false}
+            tickLine={false}
+          />
+          <YAxis
+            tick={{ fill: "var(--text-muted)", fontSize: 11 }}
+            axisLine={false}
+            tickLine={false}
+            tickFormatter={function (v) {
+              return "R$" + (v / 1000).toFixed(0) + "k";
+            }}
+          />
+          <Tooltip
+            formatter={function (v) {
+              return formatarMoeda(v);
+            }}
+            contentStyle={{
+              background: "var(--bg-card)",
+              border: "1px solid var(--border)",
+              borderRadius: "8px",
+              fontSize: "12px",
+            }}
+          />
+          <Line
+            type="monotone"
+            dataKey="receita"
+            stroke="var(--success)"
+            strokeWidth={2}
+            dot={false}
+            name="Receita"
+            animationDuration={1200}
+          />
+          <Line
+            type="monotone"
+            dataKey="gastos"
+            stroke="var(--danger)"
+            strokeWidth={2}
+            dot={false}
+            name="Gastos"
+            animationDuration={1200}
+          />
+        </LineChart>
+      </ResponsiveContainer>
+      <div className="home__projecao-legenda" aria-hidden="true">
+        <span className="home__projecao-leg home__projecao-leg--receita">
+          — Receita
+        </span>
+        <span className="home__projecao-leg home__projecao-leg--gastos">
+          — Gastos
+        </span>
+      </div>
+    </motion.section>
+  );
+}
+
 function Home() {
-  const [usuario, setUsuario] = useState(null);
+  const navigate = useNavigate();
   const [transacoes, setTransacoes] = useState([]);
   const [mesAnterior, setMesAnterior] = useState(null);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
-  const [mesSelecionado, setMesSelecionado] = useState("05");
+  const [mesIdx, setMesIdx] = useState(4);
   const [percentualInvestimento] = useState(10);
 
-  useEffect(() => {
-    const carregarDados = async () => {
+  useEffect(function () {
+    async function carregarDados() {
       try {
         setCarregando(true);
-
-        const [usuarioData, transacoesData, mesAnteriorData] =
-          await Promise.all([getUsuario(), getTransacoes(), getMesAnterior()]);
-
-        setUsuario(usuarioData);
-        setTransacoes(transacoesData);
-        setMesAnterior(mesAnteriorData);
+        const [t, m] = await Promise.all([getTransacoes(), getMesAnterior()]);
+        setTransacoes(t);
+        setMesAnterior(m);
       } catch (err) {
         console.log(err);
-
-        setErro(
-          "Não foi possível carregar os dados. Tente novamente mais tarde.",
-        );
+        setErro("Não foi possível carregar os dados.");
       } finally {
         setCarregando(false);
       }
-    };
-
+    }
     carregarDados();
   }, []);
 
-  if (carregando) {
+  if (carregando) return <SkeletonHome />;
+
+  if (erro)
     return (
-      <div className="home-loading">
-        <div className="home-loading__logo">
-          <div className="home-loading__spinner"></div>
-          <span>Carregando dashboard...</span>
+      <div className="home" role="alert">
+        <div className="home__erro">
+          <span aria-hidden="true">⚠️</span>
+          <p>{erro}</p>
+          <button
+            onClick={function () {
+              window.location.reload();
+            }}
+            className="home__erro-btn"
+          >
+            Tentar novamente
+          </button>
         </div>
       </div>
     );
-  }
 
-  if (erro) {
-    return <div className="home">{erro}</div>;
-  }
+  const mesSelecionado = MESES[mesIdx].valor;
+  const nomeMes = MESES[mesIdx].nome;
 
-  if (!usuario || !mesAnterior) {
-    return <div className="home">Carregando...</div>;
-  }
-
-  const transacoesFiltradas = transacoes.filter(
-    (t) => t.data.split("-")[1] === mesSelecionado,
-  );
+  const transacoesFiltradas = transacoes.filter(function (t) {
+    return t.data && t.data.split("-")[1] === mesSelecionado;
+  });
 
   const totalGastos = calcularTotalGastos(transacoesFiltradas);
-
   const totalEntradas = calcularTotalEntradas(transacoesFiltradas);
-
-  const valorInvestimento = (totalEntradas * percentualInvestimento) / 100;
-
+  const valorInvest = (totalEntradas * percentualInvestimento) / 100;
   const porCategoria = calcularPorCategoria(transacoesFiltradas);
-
-  const [catNome] = maiorCategoria(porCategoria);
-
+  const [catNome] = maiorCategoria(porCategoria) || [];
   const porcentagens = calcularPorcentagens(porCategoria, totalGastos);
-
   const variacaoGastos = calcularVariacaoMensal(
     totalGastos,
-    mesAnterior.totalGastos,
+    mesAnterior?.totalGastos || 0,
   );
-
-  const padroes = detectarPadroes(transacoesFiltradas, mesAnterior);
-
+  const padroes = detectarPadroes(transacoesFiltradas, mesAnterior || {});
   const recomendacoes = gerarRecomendacoes(
     porCategoria,
     totalGastos,
-    mesAnterior,
+    mesAnterior || {},
+    transacoesFiltradas,
   );
-
   const ultimas = ultimas5Transacoes(transacoesFiltradas);
+  const qtdSaidas = transacoesFiltradas.filter(function (t) {
+    return t.tipo === "saida";
+  }).length;
+  const ticketMedio = qtdSaidas > 0 ? totalGastos / qtdSaidas : 0;
+  const saldo = totalEntradas - totalGastos;
+  const {
+    score,
+    nivel: nivelScore,
+    detalhes: detalhesScore,
+  } = calcularScore(
+    transacoesFiltradas,
+    porCategoria,
+    totalGastos,
+    mesAnterior,
+    {},
+  );
 
   return (
     <div className="home">
-      <div className="home__filtro">
-        <select
-          className="home__select"
-          value={mesSelecionado}
-          onChange={(e) => setMesSelecionado(e.target.value)}
+      {/* ─── Navegação de mês ─── */}
+      <div className="home__mes-nav" role="group" aria-label="Selecionar mês">
+        <button
+          className="home__mes-btn"
+          onClick={function () {
+            setMesIdx(function (i) {
+              return (i - 1 + 12) % 12;
+            });
+          }}
+          aria-label="Mês anterior"
         >
-          <option value="01">Janeiro 2026</option>
-          <option value="02">Fevereiro 2026</option>
-          <option value="03">Março 2026</option>
-          <option value="04">Abril 2026</option>
-          <option value="05">Maio 2026</option>
-          <option value="06">Junho 2026</option>
-          <option value="07">Julho 2026</option>
-          <option value="08">Agosto 2026</option>
-          <option value="09">Setembro 2026</option>
-          <option value="10">Outubro 2026</option>
-          <option value="11">Novembro 2026</option>
-          <option value="12">Dezembro 2026</option>
-        </select>
+          ←
+        </button>
+        <span className="home__mes-nome" aria-live="polite" aria-atomic="true">
+          {nomeMes} 2026
+        </span>
+        <button
+          className="home__mes-btn"
+          onClick={function () {
+            setMesIdx(function (i) {
+              return (i + 1) % 12;
+            });
+          }}
+          aria-label="Próximo mês"
+        >
+          →
+        </button>
       </div>
 
+      {/* ─── Cards topo ─── */}
       <motion.div
         className="home__cards-topo"
+        role="region"
+        aria-label={`Resumo financeiro de ${nomeMes}`}
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
@@ -142,52 +384,203 @@ function Home() {
           label="Receita do Mês"
           valor={formatarMoeda(totalEntradas)}
         />
-
         <CardResumo
           icone={imgGasto}
           label="Gasto do Mês"
           valor={formatarMoeda(totalGastos)}
           variacao={variacaoGastos}
         />
-
         <CardCategoria
           categoria={catNome}
           valor={porCategoria[catNome]}
           percentual={porcentagens[catNome]}
           iconePadrao={imgCategoria}
         />
-
         <CardResumo
           icone={imgInvestimento}
-          label="Investimento do Mês"
-          valor={`${percentualInvestimento}% • ${formatarMoeda(
-            valorInvestimento,
-          )}`}
+          label="Investimento"
+          valor={`${percentualInvestimento}% • ${formatarMoeda(valorInvest)}`}
         />
       </motion.div>
 
+      {/* ─── Indicadores ─── */}
+      <motion.section
+        className="home__ticket"
+        aria-label="Indicadores financeiros do mês"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="home__ticket-card">
+          <span className="home__ticket-label">🎫 Ticket Médio</span>
+          <span className="home__ticket-valor">
+            {formatarMoeda(ticketMedio)}
+          </span>
+          <span className="home__ticket-sub">{qtdSaidas} despesas no mês</span>
+        </div>
+        <div className="home__ticket-card">
+          <span className="home__ticket-label">📊 Média Diária</span>
+          <span className="home__ticket-valor">
+            {formatarMoeda(totalGastos / 30)}
+          </span>
+          <span className="home__ticket-sub">estimativa por dia</span>
+        </div>
+        <div className="home__ticket-card">
+          <span className="home__ticket-label">💰 Saldo do Mês</span>
+          <span
+            className={`home__ticket-valor ${saldo >= 0 ? "home__ticket-valor--ok" : "home__ticket-valor--danger"}`}
+          >
+            {formatarMoeda(saldo)}
+          </span>
+          <span className="home__ticket-sub">receita menos gastos</span>
+        </div>
+        <div
+          className="home__ticket-card home__ticket-card--link"
+          onClick={function () {
+            navigate("/simulador");
+          }}
+          role="button"
+          tabIndex={0}
+          aria-label="Acessar o simulador financeiro"
+          onKeyDown={function (e) {
+            if (e.key === "Enter") navigate("/simulador");
+          }}
+        >
+          <span className="home__ticket-label">🧮 Simulador</span>
+          <span className="home__ticket-valor home__ticket-valor--accent">
+            Planejar →
+          </span>
+          <span className="home__ticket-sub">simule seu futuro</span>
+        </div>
+      </motion.section>
+
+      {/* ─── Gráfico + Insights ─── */}
       <div className="home__meio">
         <motion.div
           className="home__chart-card"
           initial={{ opacity: 0, x: -40 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, amount: 0.3 }}
-          transition={{
-            duration: 0.7,
-            ease: "easeOut",
-          }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
         >
-          <h3 className="home__secao-titulo">
-            Distribuição de Consumo por Categorias (%)
-          </h3>
-
-          <Chart porCategoria={porCategoria} />
+          <div className="home__secao-header">
+            <h3 className="home__secao-titulo">Distribuição de Consumo (%)</h3>
+            <button
+              className="home__link-btn"
+              onClick={function () {
+                navigate("/analise");
+              }}
+              aria-label="Ver análise completa de gastos"
+            >
+              Ver análise →
+            </button>
+          </div>
+          {Object.keys(porCategoria).length === 0 ? (
+            <div className="home__vazio" role="status">
+              <span aria-hidden="true">📊</span>
+              <p>Nenhum gasto registrado em {nomeMes}.</p>
+            </div>
+          ) : (
+            <Chart porCategoria={porCategoria} />
+          )}
         </motion.div>
 
-        <Insights padroes={padroes} recomendacoes={recomendacoes} />
+        <div className="home__insights-wrap">
+          <div className="home__secao-header">
+            <h3
+              className="home__secao-titulo"
+              style={{ fontSize: "var(--fs-sm)", paddingBottom: 0 }}
+            >
+              Insights
+            </h3>
+            <button
+              className="home__link-btn"
+              onClick={function () {
+                navigate("/insights");
+              }}
+              aria-label="Ver todos os insights"
+            >
+              Ver todos →
+            </button>
+          </div>
+          <Insights padroes={padroes} recomendacoes={recomendacoes} />
+        </div>
       </div>
 
-      <TransactionList transacoes={ultimas} />
+      {/* ─── Score + Projeção ─── */}
+      <div className="home__score-projecao">
+        <ScoreFinanceiro
+          score={score}
+          nivel={nivelScore}
+          detalhes={detalhesScore}
+        />
+        <ProjecaoSemestral
+          totalGastos={totalGastos}
+          totalEntradas={totalEntradas}
+          mesAtual={mesSelecionado}
+        />
+      </div>
+
+      {/* ─── Últimas transações ─── */}
+      <div>
+        <div className="home__secao-header" style={{ marginBottom: "0.75rem" }}>
+          <h3 className="home__secao-titulo" style={{ paddingBottom: 0 }}>
+            Últimas Transações
+          </h3>
+          <button
+            className="home__link-btn"
+            onClick={function () {
+              navigate("/transacoes");
+            }}
+            aria-label="Ver todas as transações"
+          >
+            Ver todas →
+          </button>
+        </div>
+        <TransactionList transacoes={ultimas} />
+      </div>
+
+      {/* ─── Atalhos rápidos ─── */}
+      <motion.nav
+        className="home__atalhos"
+        aria-label="Atalhos rápidos para outras seções"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+      >
+        {[
+          { label: "📊 Análise", sub: "Gráficos detalhados", to: "/analise" },
+          {
+            label: "💳 Transações",
+            sub: "Histórico completo",
+            to: "/transacoes",
+          },
+          { label: "🎯 Metas", sub: "Limites por categoria", to: "/metas" },
+          {
+            label: "📈 Investimentos",
+            sub: "Planeje seu patrimônio",
+            to: "/investimentos",
+          },
+          { label: "🧮 Simulador", sub: "Simule cenários", to: "/simulador" },
+          { label: "💡 Insights", sub: "Padrões e dicas", to: "/insights" },
+        ].map(function (a) {
+          return (
+            <button
+              key={a.to}
+              className="home__atalho"
+              onClick={function () {
+                navigate(a.to);
+              }}
+              aria-label={`Ir para ${a.label}`}
+            >
+              <span className="home__atalho-label">{a.label}</span>
+              <span className="home__atalho-sub">{a.sub}</span>
+            </button>
+          );
+        })}
+      </motion.nav>
     </div>
   );
 }
