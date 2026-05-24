@@ -1,53 +1,90 @@
 import { useNavigate } from "react-router-dom";
+import { LogOut } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
+import { useAuth } from "../hooks/useAuth";
 import { motion } from "framer-motion";
 import "./Header.css";
 
+function saudacaoPorHorario() {
+  const h = new Date().getHours();
+  if (h < 12) return "Bom dia";
+  if (h < 18) return "Boa tarde";
+  return "Boa noite";
+}
+
 function Header({ nomeUsuario, onAbrirModal }) {
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   const primeiroNome = nomeUsuario ? nomeUsuario.split(" ")[0] : "Usuário";
   const iniciais = nomeUsuario
     ? nomeUsuario
         .split(" ")
-        .map((n) => n[0])
+        .map(function (n) {
+          return n[0];
+        })
         .slice(0, 2)
         .join("")
     : "U";
+
+  function handleLogout() {
+    logout();
+    navigate("/login");
+  }
 
   return (
     <motion.header
       className="header"
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{
-        duration: 0.6,
-        ease: "easeOut",
-      }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
     >
       <div className="header__saudacao">
-        <h1 className="header__titulo">Olá, {primeiroNome}! 👋</h1>
-        <p className="header__subtitulo">Resumo de consumo — Maio 2026</p>
+        <h1 className="header__titulo">
+          {saudacaoPorHorario()}, {primeiroNome}! 👋
+        </h1>
+        <p className="header__subtitulo">Resumo de consumo — MoneyMap</p>
       </div>
 
       <div className="header__acoes">
         <button
           className="header__btn-adicionar"
-          onClick={() => onAbrirModal("saida")}
+          onClick={function () {
+            onAbrirModal("saida");
+          }}
+          aria-label="Adicionar despesa"
         >
           + Despesa
         </button>
         <button
           className="header__btn-receita"
-          onClick={() => onAbrirModal("entrada")}
+          onClick={function () {
+            onAbrirModal("entrada");
+          }}
+          aria-label="Adicionar receita"
         >
           + Receita
         </button>
         <ThemeToggle />
+        <button
+          className="header__logout"
+          onClick={handleLogout}
+          aria-label="Sair da conta"
+        >
+          <LogOut size={16} />
+        </button>
         <div
           className="header__avatar"
           title={nomeUsuario}
-          onClick={() => navigate("/perfil")}
+          onClick={function () {
+            navigate("/perfil");
+          }}
+          role="button"
+          tabIndex={0}
+          aria-label={"Perfil de " + nomeUsuario}
+          onKeyDown={function (e) {
+            if (e.key === "Enter") navigate("/perfil");
+          }}
         >
           {iniciais}
         </div>

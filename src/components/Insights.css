@@ -147,8 +147,15 @@
 }
 
 .insights__rec-valor {
-    font-size: var(--fs-md) !important;
-    font-weight: 700 !important;
-    color: var(--accent) !important;
+    font-size: var(--fs-md);
+    font-weight: 700;
+    color: var(--accent);
     font-family: 'Quicksand', sans-serif;
+}
+
+.insights__vazio {
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+    padding: 1rem 0;
+    text-align: center;
 }

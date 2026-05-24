@@ -94,6 +94,25 @@
     background: var(--primary-light);
 }
 
+.header__logout {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: var(--bg-hover);
+    border: 1px solid var(--border);
+    color: var(--danger);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.header__logout:hover {
+    background: rgba(215, 176, 107, 0.1);
+    border-color: var(--danger);
+}
+
 @media (max-width: 768px) {
     .header {
         flex-direction: column;
