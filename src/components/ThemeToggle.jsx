@@ -4,16 +4,20 @@ import "./ThemeToggle.css";
 
 function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
+  const label = theme === "dark" ? "Ativar tema claro" : "Ativar tema escuro";
 
   return (
     <button
       className="theme-toggle"
       onClick={toggleTheme}
-      title={
-        theme === "dark" ? "Mudar para tema claro" : "Mudar para tema escuro"
-      }
+      aria-label={label}
+      title={label}
     >
-      {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+      {theme === "dark" ? (
+        <Sun size={16} aria-hidden="true" />
+      ) : (
+        <Moon size={16} aria-hidden="true" />
+      )}
     </button>
   );
 }
