@@ -103,13 +103,14 @@
     outline: none;
     padding: 0;
     margin: 0;
-    color: var(--bg-primary);
+    color: var(--primary);
     font-size: 12px;
     font-family: 'Poppins', sans-serif;
 }
 
 .login__input::placeholder {
-    color: var(--text-primary);
+    color: var(--primary);
+    background: var(--color-optional-6);
 }
 
 /* OLHO */
@@ -120,6 +121,7 @@
     align-items: center;
     color: var(--primary-light);
     border: none;
+    background: var(--color-optional-6);
 }
 
 .login__toggle-senha:hover {
@@ -135,6 +137,7 @@
     font-size: 10px;
     color: var(--text-muted);
     border: none;
+    background: var(--color-optional-6);
 }
 
 .login__esqueci:hover {
@@ -147,17 +150,19 @@
     margin-top: 16px;
     height: 40px;
     border-radius: 6px;
-    background: #1d5d59;
+    background: var(--primary);
     color: white;
     font-size: 12px;
     font-weight: 500;
     letter-spacing: 0.8px;
     width: 100%;
     border: none;
+    cursor: pointer;
 }
 
 .login__btn:hover:not(:disabled) {
-    opacity: 0.92;
+    background: var(--color-optional-7);
+    transition: 1s;
 }
 
 .login__btn:disabled {
@@ -202,10 +207,12 @@
     color: var(--primary);
     font-size: 0.8rem;
     font-weight: 600;
+    cursor: pointer;
 }
 
 .login__btn-google:hover {
-    background: var(--bg-primary);
+    background: var(--bg-hover-2);
+    transition: 1s;
 }
 
 /* RODAPÉ */
@@ -283,6 +290,18 @@
     }
 }
 
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
 /* MOBILE */
 
 @media (max-width: 768px) {
@@ -303,46 +322,48 @@
 @media (max-width: 480px) {
     .login {
         padding: 16px;
-        justify-content: flex-start;
-        padding-top: 60px;
-    }
-
-    .login__logo {
-        margin-bottom: 20px;
-    }
-
-    .login__logo-money,
-    .login__logo-map {
-        font-size: 1.3rem;
+        justify-content: center;
+        min-height: 100dvh;
     }
 
     .login__card {
-        max-width: 100%;
-        padding: 24px 18px;
-        border-radius: 10px;
-        animation: none;
+        width: 100%;
+        padding: 22px 18px;
     }
 
-    .login__titulo {
-        font-size: 1rem;
-        margin-bottom: 18px;
+    .login__campos {
+        gap: 12px;
     }
 
     .login__input-wrap {
-        height: 42px;
+        height: 44px;
+        padding: 0 14px;
+    }
+
+    .login__input {
+        font-size: 0.9rem;
     }
 
     .login__btn,
     .login__btn-google {
-        height: 42px;
-        font-size: 0.85rem;
+        height: 44px;
+        font-size: 0.9rem;
     }
 
-    .login__card:hover {
-        transform: none;
+    .login__esqueci {
+        font-size: 0.72rem;
     }
 
-    .login__rodape {
-        font-size: 0.7rem;
+    .login__rodape,
+    .login__link {
+        font-size: 0.72rem;
+    }
+
+    .login__erro {
+        font-size: 0.72rem;
+    }
+
+    .login__separador span {
+        font-size: 0.72rem;
     }
 }

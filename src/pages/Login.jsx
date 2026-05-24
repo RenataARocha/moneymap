@@ -107,7 +107,11 @@ function Login() {
         <div className="login__campos">
           <div className="login__campo">
             <div className={`login__input-wrap ${erros.email ? "erro" : ""}`}>
+              <label htmlFor="email" className="sr-only">
+                E-mail
+              </label>
               <input
+                id="email"
                 className="login__input"
                 type="email"
                 placeholder="E-mail"
@@ -117,14 +121,25 @@ function Login() {
                   if (erros.email) setErros((p) => ({ ...p, email: "" }));
                 }}
                 onKeyDown={handleKeyDown}
+                aria-invalid={!!erros.email}
+                aria-describedby={erros.email ? "erro-email" : undefined}
               />
             </div>
-            {erros.email && <span className="login__erro">{erros.email}</span>}
+            {erros.email && (
+              <span id="erro-email" className="login__erro">
+                {erros.email}
+              </span>
+            )}
           </div>
 
           <div className="login__campo">
             <div className={`login__input-wrap ${erros.senha ? "erro" : ""}`}>
+              <label htmlFor="senha" className="sr-only">
+                Senha
+              </label>
+
               <input
+                id="senha"
                 className="login__input"
                 type={mostrarSenha ? "text" : "password"}
                 placeholder="Senha"
@@ -134,16 +149,24 @@ function Login() {
                   if (erros.senha) setErros((p) => ({ ...p, senha: "" }));
                 }}
                 onKeyDown={handleKeyDown}
+                aria-invalid={!!erros.senha}
+                aria-describedby={erros.senha ? "erro-senha" : undefined}
               />
               <button
                 type="button"
                 className="login__toggle-senha"
                 onClick={() => setMostrarSenha((p) => !p)}
+                aria-label={mostrarSenha ? "Ocultar senha" : "Mostrar senha"}
+                title={mostrarSenha ? "Ocultar senha" : "Mostrar senha"}
               >
                 {mostrarSenha ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
             </div>
-            {erros.senha && <span className="login__erro">{erros.senha}</span>}
+            {erros.senha && (
+              <span id="erro-senha" className="login__erro">
+                {erros.senha}
+              </span>
+            )}
           </div>
 
           <button className="login__esqueci" type="button">
@@ -152,9 +175,11 @@ function Login() {
         </div>
 
         <button
+          type="button"
           className={`login__btn ${carregando ? "login__btn--carregando" : ""}`}
           onClick={handleLogin}
           disabled={carregando}
+          aria-busy={carregando}
         >
           {carregando ? "Entrando..." : "ENTRAR"}
         </button>
@@ -163,7 +188,12 @@ function Login() {
           <span>Ou entre com:</span>
         </div>
 
-        <button className="login__btn-google" onClick={() => loginComGoogle()}>
+        <button
+          type="button"
+          className="login__btn-google"
+          onClick={() => loginComGoogle()}
+          aria-label="Entrar com Google"
+        >
           <img
             src="https://www.google.com/favicon.ico"
             width={16}
@@ -176,6 +206,8 @@ function Login() {
         {erroLogin && (
           <motion.span
             className="login__erro login__erro--global"
+            role="alert"
+            aria-live="assertive"
             initial={{ opacity: 0, y: -5 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.2 }}
