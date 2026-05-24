@@ -230,6 +230,33 @@
       "categoria": "Lazer",
       "tipo": "saida",
       "metodoPagamento": "pix"
+    },
+    {
+      "id": "c9X8oAKTHRA",
+      "valor": 150,
+      "descricao": "aaaaa",
+      "data": "2026-05-24",
+      "categoria": "Receita",
+      "tipo": "entrada",
+      "metodoPagamento": "dinheiro"
+    },
+    {
+      "id": "GfmBHTRYy1s",
+      "valor": 150,
+      "descricao": "aaaaaaaa",
+      "data": "2026-05-24",
+      "categoria": "Receita",
+      "tipo": "entrada",
+      "metodoPagamento": "dinheiro"
+    },
+    {
+      "id": "YXonyDuNMFQ",
+      "valor": 140,
+      "descricao": "Entradaaa",
+      "data": "2026-05-24",
+      "categoria": "Receita",
+      "tipo": "entrada",
+      "metodoPagamento": "pix"
     }
   ],
   "mesAnterior": {
