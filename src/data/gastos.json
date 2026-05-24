@@ -196,24 +196,6 @@
       "metodoPagamento": "pix"
     },
     {
-      "id": "9mSk5W1gPHg",
-      "valor": 255,
-      "descricao": "dfghjjkm",
-      "data": "2026-05-20",
-      "categoria": "Transporte",
-      "tipo": "saida",
-      "metodoPagamento": "pix"
-    },
-    {
-      "id": "GjoGs5zyDN4",
-      "valor": 451,
-      "descricao": "asdfg",
-      "data": "2026-05-20",
-      "categoria": "Saúde",
-      "tipo": "saida",
-      "metodoPagamento": "outros"
-    },
-    {
       "id": "Jws1C4vcp6c",
       "valor": 132,
       "descricao": "sdfg",
