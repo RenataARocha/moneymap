@@ -81,3 +81,7 @@ export const deleteTransacao = async (id) => {
     throw error;
   }
 };
+
+export function usuarioEstaLogado() {
+  return !!localStorage.getItem("moneymap-usuario-nome");
+}
