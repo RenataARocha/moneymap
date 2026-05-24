@@ -102,7 +102,7 @@ export function gerarRecomendacoes(
   if (pct > 30) {
     const economia = maiorValor * 0.1;
     recomendacoes.push({
-        imagem:imgContas,
+      imagem: imgContas,
       icone: "💡",
       titulo: "Categoria dominante",
       valor: `R$ ${economia.toFixed(0)}/mês`,
@@ -118,7 +118,7 @@ export function gerarRecomendacoes(
       const variacao = ((valorAtual - valorAnterior) / valorAnterior) * 100;
       if (variacao > 20) {
         recomendacoes.push({
-            imagem:imgOutros,
+          imagem: imgOutros,
           icone: "📈",
           titulo: `Alta em ${cat}`,
           valor: `+${variacao.toFixed(0)}% vs mês anterior`,
@@ -131,7 +131,7 @@ export function gerarRecomendacoes(
         const variacao = ((valorAtual - valorAnterior) / valorAnterior) * 100;
         if (variacao < -5) {
           recomendacoes.push({
-            imagem:imgParabens,
+            imagem: imgParabens,
             icone: "🎉",
             titulo: `Menos gastos em ${cat}`,
             valor: null,
@@ -157,7 +157,7 @@ export function gerarRecomendacoes(
           .filter((t) => t.descricao === desc)
           .reduce((s, t) => s + t.valor, 0);
         recomendacoes.push({
-            imagem:imgReduzir,
+          imagem: imgReduzir,
           icone: "🔁",
           titulo: `Gasto frequente: ${desc}`,
           valor: `${qtd}x — R$ ${totalDesc.toFixed(2)}`,
@@ -176,7 +176,7 @@ export function gerarRecomendacoes(
     const taxaPoupanca = ((receitas - total) / receitas) * 100;
     if (taxaPoupanca < 10) {
       recomendacoes.push({
-        imagem:imgContas,
+        imagem: imgContas,
         icone: "🏦",
         titulo: "Taxa de poupança baixa",
         valor: `${taxaPoupanca.toFixed(0)}% da receita`,
@@ -184,7 +184,7 @@ export function gerarRecomendacoes(
       });
     } else if (taxaPoupanca >= 20) {
       recomendacoes.push({
-        imagem:imgInvestimento,
+        imagem: imgInvestimento,
         icone: "🌟",
         titulo: "Ótima poupança!",
         valor: `${taxaPoupanca.toFixed(0)}% da receita`,
@@ -198,7 +198,7 @@ export function gerarRecomendacoes(
   const pctLazer = (lazer / total) * 100;
   if (pctLazer > 15) {
     recomendacoes.push({
-        imagem:imgControlar,
+      imagem: imgControlar,
       icone: "🎬",
       titulo: "Lazer elevado",
       valor: `${pctLazer.toFixed(0)}% dos gastos`,
@@ -209,7 +209,7 @@ export function gerarRecomendacoes(
   // 6. Fallback positivo
   if (recomendacoes.length === 0) {
     recomendacoes.push({
-        imagem:imgParabens,
+      imagem: imgParabens,
       icone: "🎯",
       titulo: "Ótimo trabalho!",
       valor: null,
@@ -228,4 +228,60 @@ export function ultimas5Transacoes(transacoes) {
 
 export function formatarMoeda(valor) {
   return valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+}
+
+export function calcularScore(transacoes, porCategoria, totalGastos, mesAnterior, limites) {
+  let score = 0;
+  const detalhes = [];
+
+  const totalReceita = transacoes
+    .filter(function (t) { return t.tipo === "entrada"; })
+    .reduce(function (acc, t) { return acc + t.valor; }, 0);
+
+  if (totalReceita === 0) return { score: 0, nivel: "danger", detalhes: [] };
+
+  // 1. Taxa de poupança (até 30 pts)
+  const taxaPoupanca = ((totalReceita - totalGastos) / totalReceita) * 100;
+  if (taxaPoupanca >= 30) { score += 30; detalhes.push({ texto: "Ótima taxa de poupança", pts: 30, ok: true }); }
+  else if (taxaPoupanca >= 20) { score += 20; detalhes.push({ texto: "Boa taxa de poupança", pts: 20, ok: true }); }
+  else if (taxaPoupanca >= 10) { score += 10; detalhes.push({ texto: "Taxa de poupança baixa", pts: 10, ok: false }); }
+  else { detalhes.push({ texto: "Gastando mais do que recebe", pts: 0, ok: false }); }
+
+  // 2. Controle de categorias (até 25 pts)
+  const totalCats = Object.keys(porCategoria).length;
+  const catsNoDominio = Object.entries(porCategoria).filter(function (entry) {
+    return (entry[1] / totalGastos) < 0.5;
+  }).length;
+  const ptsCats = Math.round((catsNoDominio / totalCats) * 25);
+  score += ptsCats;
+  detalhes.push({ texto: "Distribuição de categorias", pts: ptsCats, ok: ptsCats >= 15 });
+
+  // 3. Comparação com mês anterior (até 20 pts)
+  if (mesAnterior && totalGastos <= mesAnterior.totalGastos) {
+    score += 20;
+    detalhes.push({ texto: "Gastos menores que o mês anterior", pts: 20, ok: true });
+  } else {
+    detalhes.push({ texto: "Gastos maiores que o mês anterior", pts: 0, ok: false });
+  }
+
+  // 4. Saldo positivo (até 15 pts)
+  if (totalReceita > totalGastos) {
+    score += 15;
+    detalhes.push({ texto: "Saldo positivo no mês", pts: 15, ok: true });
+  } else {
+    detalhes.push({ texto: "Saldo negativo no mês", pts: 0, ok: false });
+  }
+
+  // 5. Ticket médio controlado (até 10 pts)
+  const qtdTransacoes = transacoes.filter(function (t) { return t.tipo === "saida"; }).length;
+  const ticketMedio = qtdTransacoes > 0 ? totalGastos / qtdTransacoes : 0;
+  if (ticketMedio < totalReceita * 0.1) {
+    score += 10;
+    detalhes.push({ texto: "Ticket médio saudável", pts: 10, ok: true });
+  } else {
+    detalhes.push({ texto: "Ticket médio elevado", pts: 0, ok: false });
+  }
+
+  const nivel = score >= 75 ? "ok" : score >= 50 ? "warning" : "danger";
+  return { score: Math.min(score, 100), nivel, detalhes };
 }
