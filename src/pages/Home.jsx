@@ -28,6 +28,9 @@ import { motion } from "framer-motion";
 import {
   LineChart,
   Line,
+  BarChart,
+  Bar,
+  Cell,
   XAxis,
   YAxis,
   Tooltip,
@@ -51,8 +54,10 @@ const MESES = [
   { valor: "12", nome: "Dezembro" },
 ];
 
+const CORES_BAR = ["#1A5A5A", "#589D99", "#90CFCB", "#D7B06B", "#F1D39F"];
+
 function ScoreFinanceiro({ score, nivel, detalhes }) {
-  const cor =
+  const corVar =
     nivel === "ok"
       ? "var(--success)"
       : nivel === "warning"
@@ -60,59 +65,59 @@ function ScoreFinanceiro({ score, nivel, detalhes }) {
         : "var(--danger)";
   const label =
     nivel === "ok" ? "Excelente" : nivel === "warning" ? "Regular" : "Atenção";
-  const raio = 48;
+  const raio = 38;
   const circunf = 2 * Math.PI * raio;
   const offset = circunf - (score / 100) * circunf;
 
   return (
     <motion.section
       className="score"
-      aria-label={"Score financeiro: " + score + " de 100 — " + label}
+      aria-label={`Score financeiro: ${score} de 100 — ${label}`}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.7 }}
     >
-      <h3 className="score__titulo">Score Financeiro</h3>
+      <p className="score__label">Score financeiro</p>
 
-      <div className="score__topo">
-        <div className="score__circulo-wrap" aria-hidden="true">
-          <svg width="120" height="120" viewBox="0 0 120 120">
+      <div className="score__corpo">
+        <div className="score__anel-wrap" aria-hidden="true">
+          <svg width="96" height="96" viewBox="0 0 96 96">
             <circle
-              cx="60"
-              cy="60"
+              cx="48"
+              cy="48"
               r={raio}
               fill="none"
               stroke="var(--border)"
-              strokeWidth="9"
+              strokeWidth="7"
             />
             <circle
-              cx="60"
-              cy="60"
+              cx="48"
+              cy="48"
               r={raio}
               fill="none"
-              stroke={cor}
-              strokeWidth="9"
+              stroke={corVar}
+              strokeWidth="7"
               strokeDasharray={circunf}
               strokeDashoffset={offset}
               strokeLinecap="round"
-              transform="rotate(-90 60 60)"
+              transform="rotate(-90 48 48)"
               style={{ transition: "stroke-dashoffset 1.2s ease" }}
             />
             <text
-              x="60"
-              y="55"
+              x="48"
+              y="44"
               textAnchor="middle"
-              fill={cor}
-              fontSize="24"
-              fontWeight="700"
+              fill="var(--text-primary)"
+              fontSize="22"
+              fontWeight="500"
               fontFamily="Quicksand"
             >
               {score}
             </text>
             <text
-              x="60"
-              y="70"
+              x="48"
+              y="58"
               textAnchor="middle"
               fill="var(--text-muted)"
               fontSize="10"
@@ -120,33 +125,40 @@ function ScoreFinanceiro({ score, nivel, detalhes }) {
               de 100
             </text>
           </svg>
-          <span className="score__nivel" style={{ color: cor }}>
+          <span className="score__nivel" style={{ color: corVar }}>
             {label}
           </span>
         </div>
 
-        <ul
-          className="score__detalhes"
-          aria-label="Critérios do score financeiro"
-        >
+        <ul className="score__itens" aria-label="Critérios do score financeiro">
           {detalhes.map(function (d, i) {
             return (
               <li
                 key={i}
-                className={
-                  "score__detalhe " +
-                  (d.ok ? "score__detalhe--ok" : "score__detalhe--nok")
-                }
+                className={`score__item ${d.ok ? "score__item--ok" : "score__item--nok"}`}
               >
-                <span className="score__detalhe-icone" aria-hidden="true">
-                  {d.ok ? "✅" : "❌"}
+                <span className="score__item-icone" aria-hidden="true">
+                  {d.ok ? "✓" : "✕"}
                 </span>
-                <span className="score__detalhe-texto">{d.texto}</span>
-                <span className="score__pts">+{d.pts}pts</span>
+                <span className="score__item-texto">{d.texto}</span>
+                <span className="score__item-pts">+{d.pts} pts</span>
               </li>
             );
           })}
         </ul>
+      </div>
+
+      <div className="score__footer" aria-hidden="true">
+        <span className="score__footer-label">0</span>
+        <div className="score__barra">
+          <div
+            className="score__barra-fill"
+            style={{ width: `${score}%`, background: corVar }}
+          />
+        </div>
+        <span className="score__footer-total" style={{ color: corVar }}>
+          {score} / 100
+        </span>
       </div>
     </motion.section>
   );
@@ -259,6 +271,7 @@ function Home() {
   const [erro, setErro] = useState("");
   const [mesIdx, setMesIdx] = useState(4);
   const [percentualInvestimento] = useState(10);
+  const [busca, setBusca] = useState("");
 
   useEffect(function () {
     async function carregarDados() {
@@ -321,7 +334,17 @@ function Home() {
     mesAnterior || {},
     transacoesFiltradas,
   );
+
   const ultimas = ultimas5Transacoes(transacoesFiltradas);
+  const ultimasFiltradas = busca.trim()
+    ? ultimas.filter(function (t) {
+        return (
+          t.descricao.toLowerCase().includes(busca.toLowerCase()) ||
+          t.categoria.toLowerCase().includes(busca.toLowerCase())
+        );
+      })
+    : ultimas;
+
   const qtdSaidas = transacoesFiltradas.filter(function (t) {
     return t.tipo === "saida";
   }).length;
@@ -339,35 +362,87 @@ function Home() {
     {},
   );
 
+  const topCategorias = Object.entries(porCategoria)
+    .sort(function (a, b) {
+      return b[1] - a[1];
+    })
+    .slice(0, 5)
+    .map(function ([nome, valor]) {
+      return {
+        nome,
+        valor: parseFloat(valor.toFixed(2)),
+        pct:
+          totalGastos > 0
+            ? parseFloat(((valor / totalGastos) * 100).toFixed(1))
+            : 0,
+      };
+    });
+
   return (
     <div className="home">
-      {/* ─── Navegação de mês ─── */}
-      <div className="home__mes-nav" role="group" aria-label="Selecionar mês">
-        <button
-          className="home__mes-btn"
-          onClick={function () {
-            setMesIdx(function (i) {
-              return (i - 1 + 12) % 12;
-            });
-          }}
-          aria-label="Mês anterior"
-        >
-          ←
-        </button>
-        <span className="home__mes-nome" aria-live="polite" aria-atomic="true">
-          {nomeMes} 2026
-        </span>
-        <button
-          className="home__mes-btn"
-          onClick={function () {
-            setMesIdx(function (i) {
-              return (i + 1) % 12;
-            });
-          }}
-          aria-label="Próximo mês"
-        >
-          →
-        </button>
+      {/* ─── Navegação de mês + busca ─── */}
+      <div className="home__controles">
+        <div className="home__mes-nav" role="group" aria-label="Selecionar mês">
+          <button
+            className="home__mes-btn"
+            onClick={function () {
+              setMesIdx(function (i) {
+                return (i - 1 + 12) % 12;
+              });
+            }}
+            aria-label="Mês anterior"
+          >
+            ←
+          </button>
+          <span
+            className="home__mes-nome"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            {nomeMes} 2026
+          </span>
+          <button
+            className="home__mes-btn"
+            onClick={function () {
+              setMesIdx(function (i) {
+                return (i + 1) % 12;
+              });
+            }}
+            aria-label="Próximo mês"
+          >
+            →
+          </button>
+        </div>
+
+        <div className="home__busca-wrap">
+          <label htmlFor="home-busca" className="sr-only">
+            Buscar transação
+          </label>
+          <span className="home__busca-icone" aria-hidden="true">
+            🔍
+          </span>
+          <input
+            id="home-busca"
+            className="home__busca"
+            type="text"
+            placeholder="Buscar transação..."
+            value={busca}
+            onChange={function (e) {
+              setBusca(e.target.value);
+            }}
+          />
+          {busca && (
+            <button
+              className="home__busca-limpar"
+              onClick={function () {
+                setBusca("");
+              }}
+              aria-label="Limpar busca"
+            >
+              ✕
+            </button>
+          )}
+        </div>
       </div>
 
       {/* ─── Cards topo ─── */}
@@ -476,13 +551,80 @@ function Home() {
               Ver análise →
             </button>
           </div>
+
           {Object.keys(porCategoria).length === 0 ? (
             <div className="home__vazio" role="status">
               <span aria-hidden="true">📊</span>
               <p>Nenhum gasto registrado em {nomeMes}.</p>
             </div>
           ) : (
-            <Chart porCategoria={porCategoria} />
+            <>
+              <Chart porCategoria={porCategoria} />
+
+              {/* BarChart top categorias */}
+              <div
+                className="home__chart-bar"
+                aria-label="Gráfico de top categorias"
+              >
+                <p className="home__chart-bar-titulo">Top Categorias</p>
+                <ResponsiveContainer width="100%" height={160}>
+                  <BarChart
+                    data={topCategorias}
+                    margin={{ top: 5, right: 10, left: 0, bottom: 5 }}
+                  >
+                    <CartesianGrid
+                      strokeDasharray="3 3"
+                      stroke="rgba(255,255,255,0.06)"
+                      vertical={false}
+                    />
+                    <XAxis
+                      dataKey="nome"
+                      tick={{ fill: "var(--text-muted)", fontSize: 10 }}
+                      axisLine={false}
+                      tickLine={false}
+                    />
+                    <YAxis
+                      tick={{ fill: "var(--text-muted)", fontSize: 10 }}
+                      axisLine={false}
+                      tickLine={false}
+                      tickFormatter={function (v) {
+                        return (
+                          "R$" + (v >= 1000 ? (v / 1000).toFixed(0) + "k" : v)
+                        );
+                      }}
+                    />
+                    <Tooltip
+                      formatter={function (value, _name, props) {
+                        return [
+                          formatarMoeda(value),
+                          `${props.payload.pct}% do total`,
+                        ];
+                      }}
+                      contentStyle={{
+                        background: "var(--bg-card)",
+                        border: "1px solid var(--border)",
+                        borderRadius: "8px",
+                        fontSize: "11px",
+                      }}
+                    />
+                    <Bar
+                      dataKey="valor"
+                      radius={[4, 4, 0, 0]}
+                      animationDuration={1000}
+                    >
+                      {topCategorias.map(function (_, index) {
+                        return (
+                          <Cell
+                            key={index}
+                            fill={CORES_BAR[index % CORES_BAR.length]}
+                          />
+                        );
+                      })}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </>
           )}
         </motion.div>
 
@@ -538,7 +680,7 @@ function Home() {
             Ver todas →
           </button>
         </div>
-        <TransactionList transacoes={ultimas} />
+        <TransactionList transacoes={ultimasFiltradas} />
       </div>
 
       {/* ─── Atalhos rápidos ─── */}
