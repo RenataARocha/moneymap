@@ -149,6 +149,21 @@
     font-weight: 600;
 }
 
+.transaction-list__vazio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 2.5rem 1rem;
+    color: var(--text-muted);
+    font-size: var(--fs-base);
+    text-align: center;
+}
+
+.transaction-list__vazio span {
+    font-size: 2rem;
+}
+
 @media (max-width: 768px) {
     .transaction-list {
         padding: 0.875rem;

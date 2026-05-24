@@ -16,15 +16,12 @@ const ITENS_POR_PAGINA = 5;
 
 function TransactionList({ transacoes }) {
   const [paginaAtual, setPaginaAtual] = useState(1);
-
-  const totalPaginas = Math.ceil(transacoes.length / ITENS_POR_PAGINA);
-
-  const inicio = (paginaAtual - 1) * ITENS_POR_PAGINA;
-
-  const transacoesPaginadas = transacoes.slice(
-    inicio,
-    inicio + ITENS_POR_PAGINA,
+  const totalPaginas = Math.max(
+    1,
+    Math.ceil(transacoes.length / ITENS_POR_PAGINA),
   );
+  const inicio = (paginaAtual - 1) * ITENS_POR_PAGINA;
+  const paginadas = transacoes.slice(inicio, inicio + ITENS_POR_PAGINA);
 
   return (
     <motion.div
@@ -32,68 +29,100 @@ function TransactionList({ transacoes }) {
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
-      transition={{
-        duration: 0.8,
-        ease: "easeOut",
-      }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
     >
       <h3 className="transaction-list__titulo">Últimas Transações</h3>
-      <table className="transaction-list__tabela">
-        <thead>
-          <tr>
-            <th>Data</th>
-            <th>Descrição</th>
-            <th>Categoria</th>
-            <th>Valor</th>
-          </tr>
-        </thead>
-        <tbody>
-          {transacoesPaginadas.map((t) => (
-            <tr key={t.id}>
-              <td className="transaction-list__data">
-                {new Date(t.data + "T00:00:00").toLocaleDateString("pt-BR")}
-              </td>
-              <td className="transaction-list__desc">{t.descricao}</td>
-              <td>
-                <span className="transaction-list__badge">
-                  {iconesPorCategoria[t.categoria] || "📦"} {t.categoria}
-                </span>
-              </td>
-              <td
-                className={`transaction-list__valor ${t.tipo === "entrada" ? "entrada" : "saida"}`}
-              >
-                {t.tipo === "entrada" ? "+" : "-"}
-                {t.valor.toLocaleString("pt-BR", {
-                  style: "currency",
-                  currency: "BRL",
-                })}
-              </td>
+
+      {transacoes.length === 0 ? (
+        <div className="transaction-list__vazio" role="status">
+          <span aria-hidden="true">📭</span>
+          <p>Nenhuma transação neste mês ainda.</p>
+        </div>
+      ) : (
+        <table
+          className="transaction-list__tabela"
+          aria-label="Últimas transações do mês"
+        >
+          <thead>
+            <tr>
+              <th scope="col">Data</th>
+              <th scope="col">Descrição</th>
+              <th scope="col">Categoria</th>
+              <th scope="col">Valor</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {paginadas.map(function (t) {
+              return (
+                <tr key={t.id}>
+                  <td className="transaction-list__data">
+                    {new Date(t.data + "T00:00:00").toLocaleDateString("pt-BR")}
+                  </td>
+                  <td className="transaction-list__desc">{t.descricao}</td>
+                  <td>
+                    <span
+                      className="transaction-list__badge"
+                      aria-label={"Categoria: " + t.categoria}
+                    >
+                      <span aria-hidden="true">
+                        {iconesPorCategoria[t.categoria] || "📦"}
+                      </span>{" "}
+                      {t.categoria}
+                    </span>
+                  </td>
+                  <td
+                    className={
+                      "transaction-list__valor " +
+                      (t.tipo === "entrada" ? "entrada" : "saida")
+                    }
+                  >
+                    {t.tipo === "entrada" ? "+" : "-"}
+                    {t.valor.toLocaleString("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                    })}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      )}
 
-      <div className="transaction-list__paginacao">
-        <button
-          className="transaction-list__pag-btn"
-          onClick={() => setPaginaAtual((p) => Math.max(p - 1, 1))}
-          disabled={paginaAtual === 1}
+      {transacoes.length > ITENS_POR_PAGINA && (
+        <nav
+          className="transaction-list__paginacao"
+          aria-label="Paginação de transações"
         >
-          ‹
-        </button>
-
-        <span className="transaction-list__pag-info">
-          {paginaAtual} de {totalPaginas}
-        </span>
-
-        <button
-          className="transaction-list__pag-btn"
-          onClick={() => setPaginaAtual((p) => Math.min(p + 1, totalPaginas))}
-          disabled={paginaAtual === totalPaginas}
-        >
-          ›
-        </button>
-      </div>
+          <button
+            className="transaction-list__pag-btn"
+            onClick={function () {
+              setPaginaAtual(function (p) {
+                return Math.max(p - 1, 1);
+              });
+            }}
+            disabled={paginaAtual === 1}
+            aria-label="Página anterior"
+          >
+            ‹
+          </button>
+          <span className="transaction-list__pag-info" aria-live="polite">
+            {paginaAtual} de {totalPaginas}
+          </span>
+          <button
+            className="transaction-list__pag-btn"
+            onClick={function () {
+              setPaginaAtual(function (p) {
+                return Math.min(p + 1, totalPaginas);
+              });
+            }}
+            disabled={paginaAtual === totalPaginas}
+            aria-label="Próxima página"
+          >
+            ›
+          </button>
+        </nav>
+      )}
     </motion.div>
   );
 }
