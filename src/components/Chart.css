@@ -4,18 +4,21 @@
 
 .chart__wrap {
     display: flex;
-    flex-direction: column;
-    /* ← muda de row para column */
+    flex-direction: row;
     align-items: center;
     gap: 1.25rem;
+}
+
+.chart__donut {
+    flex-shrink: 0;
 }
 
 .chart__legenda {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
-    width: 100%;
+    gap: 0.5rem;
+    flex: 1;
 }
 
 .chart__legenda-item {
@@ -42,6 +45,8 @@
     font-weight: 600;
 }
 
-.chart__donut {
-    flex-shrink: 0;
+@media (max-width: 480px) {
+    .chart__wrap {
+        flex-direction: column;
+    }
 }
