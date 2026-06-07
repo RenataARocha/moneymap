@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import "./Transacoes.css";
 import { useTransacoes } from "../context/TransacoesContext";
 import { deleteTransacao } from "../services/api";
+import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const iconesPorCategoria = {
   Alimentação: "🥗",
@@ -14,8 +16,6 @@ const iconesPorCategoria = {
   Outros: "📦",
 };
 
-// Array garante ordem e evita o problema do Prettier
-// remover aspas das chaves numéricas >= 10
 const MESES = [
   { valor: "01", nome: "Janeiro" },
   { valor: "02", nome: "Fevereiro" },
@@ -35,11 +35,15 @@ const ITENS_POR_PAGINA = 7;
 
 function Transacoes() {
   const [filtroTipo, setFiltroTipo] = useState("saida");
-  const [mesSelecionado, setMesSelecionado] = useState("05");
+  const [mesSelecionado, setMesSelecionado] = useState(
+    String(new Date().getMonth() + 1).padStart(2, "0"),
+  );
   const [paginaAtual, setPaginaAtual] = useState(1);
   const [mensagem, setMensagem] = useState({ texto: "", tipo: "" });
 
   const { transacoes, carregando, recarregar, erro } = useTransacoes();
+  const { autenticado } = useAuth();
+  const navigate = useNavigate();
 
   function mostrarMensagem(texto, tipo = "sucesso") {
     setMensagem({ texto, tipo });
@@ -47,11 +51,14 @@ function Transacoes() {
   }
 
   async function handleDeletar(id) {
+    if (!autenticado) {
+      navigate("/login");
+      return;
+    }
     const confirmar = window.confirm(
       "Tem certeza que deseja excluir esta transação?",
     );
     if (!confirmar) return;
-
     try {
       await deleteTransacao(id);
       await recarregar();
