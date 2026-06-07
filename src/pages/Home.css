@@ -553,6 +553,34 @@
     margin-bottom: 0.5rem;
 }
 
+/* ─── AVISO DEMO ────────────────────────────────────── */
+.home__demo-aviso {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(88, 157, 153, 0.12);
+    border: 1px solid rgba(88, 157, 153, 0.35);
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+}
+
+.home__demo-btn {
+    background: none;
+    border: none;
+    color: var(--accent);
+    font-weight: 700;
+    cursor: pointer;
+    font-size: var(--fs-sm);
+    padding: 0;
+    text-decoration: underline;
+}
+
+.home__demo-btn:hover {
+    opacity: 0.75;
+}
+
 /* ─── RESPONSIVO ────────────────────────────────────── */
 @media (max-width: 1024px) {
     .home__atalhos {

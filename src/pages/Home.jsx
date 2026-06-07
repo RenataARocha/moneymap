@@ -13,7 +13,6 @@ import {
   formatarMoeda,
   calcularScore,
 } from "../utils/calculations";
-import { getTransacoes, getMesAnterior } from "../services/api";
 import CardResumo from "../components/CardResumo";
 import CardCategoria from "../components/CardCategoria";
 import Chart from "../components/Chart";
@@ -25,6 +24,9 @@ import imgGasto from "../assets/gasto.png";
 import imgCategoria from "../assets/categoria.png";
 import imgInvestimento from "../assets/investimento.png";
 import { motion } from "framer-motion";
+import { useTransacoes } from "../context/TransacoesContext";
+import { getMesAnterior } from "../services/api";
+import dadosDemo from "../data/gastos.json";
 import {
   LineChart,
   Line,
@@ -264,31 +266,21 @@ function ProjecaoSemestral({ totalGastos, totalEntradas, mesAtual }) {
 }
 
 function Home() {
+  const { transacoes, carregando, isDemo, erro } = useTransacoes();
   const navigate = useNavigate();
-  const [transacoes, setTransacoes] = useState([]);
-  const [mesAnterior, setMesAnterior] = useState(null);
-  const [carregando, setCarregando] = useState(true);
-  const [erro, setErro] = useState("");
-  const [mesIdx, setMesIdx] = useState(4);
-  const [percentualInvestimento] = useState(10);
-  const [busca, setBusca] = useState("");
+  const [mesAnterior, setMesAnterior] = useState(dadosDemo.mesAnterior); // ← inicia com fallback, não null
 
   useEffect(function () {
-    async function carregarDados() {
-      try {
-        setCarregando(true);
-        const [t, m] = await Promise.all([getTransacoes(), getMesAnterior()]);
-        setTransacoes(t);
-        setMesAnterior(m);
-      } catch (err) {
-        console.log(err);
-        setErro("Não foi possível carregar os dados.");
-      } finally {
-        setCarregando(false);
-      }
-    }
-    carregarDados();
+    getMesAnterior()
+      .then(setMesAnterior)
+      .catch(function () {
+        setMesAnterior(dadosDemo.mesAnterior);
+      });
   }, []);
+
+  const [mesIdx, setMesIdx] = useState(new Date().getMonth());
+  const [percentualInvestimento] = useState(10);
+  const [busca, setBusca] = useState("");
 
   if (carregando) return <SkeletonHome />;
 
@@ -380,6 +372,28 @@ function Home() {
 
   return (
     <div className="home">
+      {isDemo && (
+        <motion.div
+          className="home__demo-aviso"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <span aria-hidden="true">👁️</span>
+          <span>
+            Você está vendo dados de demonstração.{" "}
+            <button
+              className="home__demo-btn"
+              onClick={function () {
+                navigate("/login");
+              }}
+            >
+              Faça login
+            </button>{" "}
+            para ver e salvar seus dados reais.
+          </span>
+        </motion.div>
+      )}
+
       {/* ─── Navegação de mês + busca ─── */}
       <div className="home__controles">
         <div className="home__mes-nav" role="group" aria-label="Selecionar mês">
