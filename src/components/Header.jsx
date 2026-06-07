@@ -12,7 +12,7 @@ function saudacaoPorHorario() {
   return "Boa noite";
 }
 
-function Header({ nomeUsuario, onAbrirModal }) {
+function Header({ nomeUsuario, onAbrirModal, autenticado }) {
   const navigate = useNavigate();
   const { logout } = useAuth();
 
@@ -29,7 +29,7 @@ function Header({ nomeUsuario, onAbrirModal }) {
 
   function handleLogout() {
     logout();
-    navigate("/login");
+    navigate("/dashboard");
   }
 
   return (
@@ -41,7 +41,7 @@ function Header({ nomeUsuario, onAbrirModal }) {
     >
       <div className="header__saudacao">
         <h1 className="header__titulo">
-          {saudacaoPorHorario()}, {primeiroNome}! 👋
+          {saudacaoPorHorario()}, {autenticado ? primeiroNome : "visitante"}! 👋
         </h1>
         <p className="header__subtitulo">Resumo de consumo — MoneyMap</p>
       </div>
@@ -52,7 +52,6 @@ function Header({ nomeUsuario, onAbrirModal }) {
           onClick={function () {
             onAbrirModal("saida");
           }}
-          aria-label="Adicionar despesa"
         >
           + Despesa
         </button>
@@ -61,18 +60,22 @@ function Header({ nomeUsuario, onAbrirModal }) {
           onClick={function () {
             onAbrirModal("entrada");
           }}
-          aria-label="Adicionar receita"
         >
           + Receita
         </button>
+
         <ThemeToggle />
-        <button
-          className="header__logout"
-          onClick={handleLogout}
-          aria-label="Sair da conta"
-        >
-          <LogOut size={16} />
-        </button>
+
+        {autenticado && (
+          <button
+            className="header__logout"
+            onClick={handleLogout}
+            aria-label="Sair da conta"
+          >
+            <LogOut size={16} />
+          </button>
+        )}
+
         <div
           className="header__avatar"
           title={nomeUsuario}
@@ -81,12 +84,12 @@ function Header({ nomeUsuario, onAbrirModal }) {
           }}
           role="button"
           tabIndex={0}
-          aria-label={"Perfil de " + nomeUsuario}
+          aria-label={autenticado ? "Perfil de " + nomeUsuario : "Perfil"}
           onKeyDown={function (e) {
             if (e.key === "Enter") navigate("/perfil");
           }}
         >
-          {iniciais}
+          {autenticado ? iniciais : "👤"}
         </div>
       </div>
     </motion.header>
