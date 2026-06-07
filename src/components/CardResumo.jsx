@@ -1,5 +1,5 @@
-import { motion, useMotionValue, useTransform, animate } from "framer-motion";
-import { useEffect } from "react";
+import { motion, useMotionValue, animate } from "framer-motion";
+import { useEffect, useRef } from "react";
 import "./CardResumo.css";
 
 function ValorAnimado({ valor }) {
@@ -9,17 +9,27 @@ function ValorAnimado({ valor }) {
       .replace(",", "."),
   );
   const isMonetary = String(valor).includes("R$");
+  const spanRef = useRef(null);
   const motionVal = useMotionValue(0);
 
   useEffect(
     function () {
-      if (!isNaN(raw)) {
+      if (!isNaN(raw) && isMonetary) {
         const ctrl = animate(motionVal, raw, {
           duration: 1.2,
           ease: "easeOut",
+          onUpdate: function (v) {
+            if (spanRef.current) {
+              spanRef.current.textContent = v.toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL",
+              });
+            }
+          },
         });
         return ctrl.stop;
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
     [raw],
   );
@@ -29,14 +39,9 @@ function ValorAnimado({ valor }) {
   }
 
   return (
-    <motion.span className="card-resumo__valor">
-      {useTransform(motionVal, function (v) {
-        return v.toLocaleString("pt-BR", {
-          style: "currency",
-          currency: "BRL",
-        });
-      })}
-    </motion.span>
+    <span ref={spanRef} className="card-resumo__valor">
+      {valor}
+    </span>
   );
 }
 
