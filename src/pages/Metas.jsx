@@ -1,8 +1,10 @@
 import { useState } from "react";
-import dados from "../data/gastos.json";
 import { calcularPorCategoria, formatarMoeda } from "../utils/calculations";
 import "./Metas.css";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTransacoes } from "../context/TransacoesContext";
+import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const iconesPorCategoria = {
   Alimentação: "🥗",
@@ -22,7 +24,9 @@ const limitesPadrao = {
 };
 
 function Metas() {
-  const { transacoes } = dados;
+  const { transacoes } = useTransacoes();
+  const { autenticado } = useAuth();
+  const navigate = useNavigate();
   const porCategoria = calcularPorCategoria(transacoes);
   const totalGastos = Object.values(porCategoria).reduce((a, b) => a + b, 0);
 
@@ -74,6 +78,10 @@ function Metas() {
         : "danger";
 
   function salvarEconomia() {
+    if (!autenticado) {
+      navigate("/login");
+      return;
+    }
     const val = parseFloat(economiaTemp) || 0;
     setMetaEconomia(val);
     localStorage.setItem("mm-meta-economia", String(val));
@@ -89,6 +97,10 @@ function Metas() {
   }
 
   function handleEditar(cat) {
+    if (!autenticado) {
+      navigate("/login");
+      return;
+    }
     setEditando(cat);
     setValorTemp(limites[cat] || "");
   }
