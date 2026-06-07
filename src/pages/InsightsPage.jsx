@@ -1,5 +1,5 @@
 import { useState } from "react";
-import dados from "../data/gastos.json";
+import { useTransacoes } from "../context/TransacoesContext";
 import {
   calcularTotalGastos,
   calcularPorCategoria,
@@ -11,7 +11,17 @@ import "./InsightsPage.css";
 import { motion } from "framer-motion";
 
 function InsightsPage() {
-  const { transacoes } = dados;
+  const { transacoes } = useTransacoes();
+  const mesAnterior = {
+    totalGastos: 1648.2,
+    porCategoria: {
+      Alimentação: 580,
+      Lazer: 180,
+      Transporte: 160,
+      Moradia: 1020,
+      Saúde: 108.2,
+    },
+  };
   const [mesSelecionado, setMesSelecionado] = useState("maio");
 
   const totalGastos = calcularTotalGastos(transacoes);
@@ -19,8 +29,17 @@ function InsightsPage() {
   const [maiorCat] = maiorCategoria(porCategoria);
 
   const maiorTransacao = transacoes
-    .filter((t) => t.tipo === "saida")
-    .reduce((maior, t) => (t.valor > maior.valor ? t : maior), transacoes[0]);
+    .filter(function (t) {
+      return t.tipo === "saida";
+    })
+    .reduce(
+      function (maior, t) {
+        return t.valor > maior.valor ? t : maior;
+      },
+      transacoes.find(function (t) {
+        return t.tipo === "saida";
+      }) || { valor: 0, categoria: "—" },
+    );
 
   const totalReceita = transacoes
     .filter((t) => t.tipo === "entrada")
@@ -71,7 +90,12 @@ function InsightsPage() {
     },
   ];
 
-  const recomendacoes = gerarRecomendacoes(porCategoria, totalGastos, dados.mesAnterior, transacoes);
+  const recomendacoes = gerarRecomendacoes(
+    porCategoria,
+    totalGastos,
+    mesAnterior,
+    transacoes,
+  );
 
   return (
     <div className="insights-page">
