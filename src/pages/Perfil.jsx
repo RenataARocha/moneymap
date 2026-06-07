@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Perfil.css";
 import { motion } from "framer-motion";
+import { useAuth } from "../hooks/useAuth";
 
 const avatares = [
   { id: "neutro", emoji: "🧑" },
@@ -13,6 +14,7 @@ const avatares = [
 
 function Perfil() {
   const navigate = useNavigate();
+  const { autenticado } = useAuth();
 
   const [nome, setNome] = useState(() => localStorage.getItem("mm-nome") || "");
   const [sobrenome, setSobrenome] = useState(
@@ -27,14 +29,19 @@ function Perfil() {
   const [salvo, setSalvo] = useState(false);
 
   function handleSalvar() {
+    if (!autenticado) {
+      navigate("/login");
+      return;
+    }
     localStorage.setItem("mm-nome", nome);
     localStorage.setItem("mm-sobrenome", sobrenome);
     localStorage.setItem("mm-genero", genero);
     localStorage.setItem("mm-avatar", avatar);
     setSalvo(true);
-    setTimeout(() => setSalvo(false), 2500);
+    setTimeout(function () {
+      setSalvo(false);
+    }, 2500);
   }
-
   const avatarAtual = avatares.find((a) => a.id === avatar);
 
   return (
