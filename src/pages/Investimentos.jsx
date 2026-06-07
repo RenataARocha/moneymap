@@ -1,5 +1,4 @@
 import { useState } from "react";
-import dados from "../data/gastos.json";
 import { formatarMoeda } from "../utils/calculations";
 import {
   LineChart,
@@ -12,7 +11,14 @@ import {
   ReferenceLine,
 } from "recharts";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import { useTransacoes } from "../context/TransacoesContext";
 import "./Investimentos.css";
+
+const hoje = new Date();
+const MES_ATUAL = String(hoje.getMonth() + 1).padStart(2, "0");
+const ANO_ATUAL = String(hoje.getFullYear());
 
 const TIPOS_INVESTIMENTO = [
   { id: "renda_fixa", label: "Renda Fixa", icone: "🏦", taxa: 0.01 },
@@ -35,11 +41,15 @@ function gerarProjecao(valorMensal, meses, taxaMensal) {
 }
 
 function Investimentos() {
-  const { transacoes } = dados;
+  const { autenticado } = useAuth();
+  const navigate = useNavigate();
+  const { transacoes } = useTransacoes();
 
   const totalReceita = transacoes
     .filter(function (t) {
-      return t.tipo === "entrada";
+      if (!t.data) return false;
+      const [ano, mes] = t.data.split("-");
+      return t.tipo === "entrada" && mes === MES_ATUAL && ano === ANO_ATUAL;
     })
     .reduce(function (acc, t) {
       return acc + t.valor;
@@ -47,7 +57,9 @@ function Investimentos() {
 
   const totalGastos = transacoes
     .filter(function (t) {
-      return t.tipo === "saida";
+      if (!t.data) return false;
+      const [ano, mes] = t.data.split("-");
+      return t.tipo === "saida" && mes === MES_ATUAL && ano === ANO_ATUAL;
     })
     .reduce(function (acc, t) {
       return acc + t.valor;
@@ -81,6 +93,10 @@ function Investimentos() {
         : "danger";
 
   function salvarPercentual() {
+    if (!autenticado) {
+      navigate("/login");
+      return;
+    }
     const val = Math.min(Math.max(parseFloat(pctTemp) || 0, 0), 100);
     setPercentual(val);
     localStorage.setItem("mm-invest-pct", String(val));
