@@ -9,6 +9,7 @@ import { useAuth } from "../hooks/useAuth";
 
 function Login() {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
@@ -17,10 +18,8 @@ function Login() {
   const [carregando, setCarregando] = useState(false);
   const [erroLogin, setErroLogin] = useState("");
 
-  const { login } = useAuth();
-
   const loginComGoogle = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
+    onSuccess: async function (tokenResponse) {
       try {
         const res = await fetch(
           "https://www.googleapis.com/oauth2/v3/userinfo",
@@ -35,7 +34,9 @@ function Login() {
         setErroLogin("Erro ao obter dados do Google.");
       }
     },
-    onError: () => setErroLogin("Erro ao entrar com Google."),
+    onError: function () {
+      setErroLogin("Erro ao entrar com Google.");
+    },
   });
 
   function validar() {
@@ -64,7 +65,7 @@ function Login() {
     setCarregando(true);
 
     getUsuario()
-      .then(function (usuario) {
+      .then(async function (usuario) {
         if (usuario.email.toLowerCase() !== email.trim().toLowerCase()) {
           setErroLogin("E-mail não encontrado. Use o e-mail cadastrado.");
           return;
@@ -72,10 +73,10 @@ function Login() {
         login(usuario.nome);
         navigate("/dashboard");
       })
-      .catch(() => {
+      .catch(function () {
         setErroLogin("Não foi possível conectar ao servidor. Tente novamente.");
       })
-      .finally(() => {
+      .finally(function () {
         setCarregando(false);
       });
   }
