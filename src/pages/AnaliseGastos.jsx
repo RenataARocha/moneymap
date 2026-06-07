@@ -1,5 +1,5 @@
 import { useState } from "react";
-import dados from "../data/gastos.json";
+import { useTransacoes } from "../context/TransacoesContext";
 import {
   calcularTotalGastos,
   calcularPorCategoria,
@@ -20,10 +20,24 @@ import {
   CartesianGrid,
 } from "recharts";
 import { motion } from "framer-motion";
-
 import "./AnaliseGastos.css";
 
 const CORES = ["#1A5A5A", "#589D99", "#90CFCB", "#D7B06B", "#F1D39F"];
+
+const MESES = [
+  { valor: "01", nome: "Janeiro" },
+  { valor: "02", nome: "Fevereiro" },
+  { valor: "03", nome: "Março" },
+  { valor: "04", nome: "Abril" },
+  { valor: "05", nome: "Maio" },
+  { valor: "06", nome: "Junho" },
+  { valor: "07", nome: "Julho" },
+  { valor: "08", nome: "Agosto" },
+  { valor: "09", nome: "Setembro" },
+  { valor: "10", nome: "Outubro" },
+  { valor: "11", nome: "Novembro" },
+  { valor: "12", nome: "Dezembro" },
+];
 
 const iconesPorCategoria = {
   Alimentação: "🥗",
@@ -48,26 +62,55 @@ const TooltipCustom = ({ active, payload, label }) => {
 
 const ITENS_POR_PAGINA = 5;
 
+// ─── datas dinâmicas ───────────────────────────────────
+const hoje = new Date();
+const ANO_ATUAL = hoje.getFullYear();
+const MES_ATUAL = String(hoje.getMonth() + 1).padStart(2, "0");
+
 function AnaliseGastos() {
-  const { transacoes, mesAnterior } = dados;
+  const { transacoes } = useTransacoes();
+
+  const mesAnterior = {
+    totalGastos: 1648.2,
+    porCategoria: {
+      Alimentação: 580,
+      Lazer: 180,
+      Transporte: 160,
+      Moradia: 1020,
+      Saúde: 108.2,
+    },
+  };
+
   const [tipoGrafico, setTipoGrafico] = useState("barra");
   const [paginaAtual, setPaginaAtual] = useState(1);
+  const [mesSelecionado, setMesSelecionado] = useState(MES_ATUAL);
 
-  const transacoesOrdenadas = [...transacoes]
+  const nomeMesSelecionado =
+    MESES.find((m) => m.valor === mesSelecionado)?.nome ?? "";
+
+  // ─── filtra transações pelo mês selecionado ───────────
+  const transacoesMes = transacoes.filter((t) => {
+    if (!t.data) return false;
+    const [ano, mes] = t.data.split("-");
+    return mes === mesSelecionado && ano === String(ANO_ATUAL);
+  });
+
+  const transacoesOrdenadas = [...transacoesMes]
     .filter((t) => t.tipo === "saida")
     .sort((a, b) => new Date(b.data) - new Date(a.data));
 
-  const totalPaginas = Math.ceil(transacoesOrdenadas.length / ITENS_POR_PAGINA);
-
+  const totalPaginas = Math.max(
+    1,
+    Math.ceil(transacoesOrdenadas.length / ITENS_POR_PAGINA),
+  );
   const inicio = (paginaAtual - 1) * ITENS_POR_PAGINA;
-
   const transacoesPaginadas = transacoesOrdenadas.slice(
     inicio,
     inicio + ITENS_POR_PAGINA,
   );
 
-  const totalGastos = calcularTotalGastos(transacoes);
-  const porCategoria = calcularPorCategoria(transacoes);
+  const totalGastos = calcularTotalGastos(transacoesMes);
+  const porCategoria = calcularPorCategoria(transacoesMes);
   const [maiorCat] = maiorCategoria(porCategoria);
   const recomendacoes = gerarRecomendacoes(
     porCategoria,
@@ -94,16 +137,18 @@ function AnaliseGastos() {
     tickFormatter: (v) => `R$${v}`,
   };
 
+  function handleMes(e) {
+    setMesSelecionado(e.target.value);
+    setPaginaAtual(1);
+  }
+
   return (
     <div className="analise">
       <motion.div
         className="analise__topo"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{
-          duration: 0.5,
-          ease: "easeOut",
-        }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
       >
         <h2 className="analise__titulo">Análise de Gastos</h2>
         <div className="analise__controles">
@@ -121,12 +166,18 @@ function AnaliseGastos() {
               Barra
             </button>
           </div>
-          <select className="analise__select" defaultValue="maio">
-            <option value="janeiro">Mês: Janeiro 2026</option>
-            <option value="fevereiro">Mês: Fevereiro 2026</option>
-            <option value="março">Mês: Março 2026</option>
-            <option value="abril">Mês: Abril 2026</option>
-            <option value="maio">Mês: Maio 2026</option>
+
+          {/* ─── Select com todos os meses + ano dinâmico ─── */}
+          <select
+            className="analise__select"
+            value={mesSelecionado}
+            onChange={handleMes}
+          >
+            {MESES.map(({ valor, nome }) => (
+              <option key={valor} value={valor}>
+                Mês: {nome} {ANO_ATUAL}
+              </option>
+            ))}
           </select>
         </div>
       </motion.div>
@@ -137,13 +188,11 @@ function AnaliseGastos() {
           initial={{ opacity: 0, x: -40 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          transition={{
-            duration: 0.7,
-            ease: "easeOut",
-          }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
         >
+          {/* ─── Título dinâmico ─── */}
           <h3 className="analise__secao-titulo">
-            Evolução dos Gastos R$ — Maio 2026
+            Evolução dos Gastos R$ — {nomeMesSelecionado} {ANO_ATUAL}
           </h3>
 
           <div className="analise__legenda">
@@ -158,87 +207,96 @@ function AnaliseGastos() {
             ))}
           </div>
 
-          <ResponsiveContainer width="100%" height={260}>
-            {tipoGrafico === "barra" ? (
-              <BarChart
-                tabIndex={-1}
-                data={dadosGrafico}
-                margin={{ top: 30, right: 16, left: 10, bottom: 20 }}
-              >
-                <CartesianGrid
-                  strokeDasharray="3 3"
-                  stroke="rgba(255,255,255,0.15)"
-                  vertical={false}
-                />
-                <XAxis
-                  {...eixoX}
-                  label={{
-                    value: "Categorias",
-                    position: "insideBottom",
-                    offset: -10,
-                    fill: "var(--text-muted)",
-                    fontSize: 12,
-                  }}
-                />
-                <YAxis
-                  {...eixoY}
-                  label={{
-                    value: "R$ Valor",
-                    angle: -90,
-                    position: "insideLeft",
-                    fill: "var(--text-muted)",
-                    fontSize: 12,
-                  }}
-                />
-                <Tooltip
-                  content={<TooltipCustom />}
-                  cursor={{ fill: "rgba(255,255,255,0.05)" }}
-                />
-                <Bar
-                  dataKey="valor"
-                  radius={[6, 6, 0, 0]}
-                  animationDuration={1200}
-                  label={{
-                    position: "top",
-                    fill: "var(--text-muted)",
-                    fontSize: 11,
-                    formatter: (v) => formatarMoeda(v),
-                  }}
+          {dadosGrafico.length === 0 ? (
+            <div className="analise__vazio">
+              <span>📊</span>
+              <p>
+                Nenhum gasto em {nomeMesSelecionado} {ANO_ATUAL}.
+              </p>
+            </div>
+          ) : (
+            <ResponsiveContainer width="100%" height={260}>
+              {tipoGrafico === "barra" ? (
+                <BarChart
+                  tabIndex={-1}
+                  data={dadosGrafico}
+                  margin={{ top: 30, right: 16, left: 10, bottom: 20 }}
                 >
-                  {dadosGrafico.map((_, i) => (
-                    <Cell key={i} fill={CORES[i % CORES.length]} />
-                  ))}
-                </Bar>
-              </BarChart>
-            ) : (
-              <LineChart
-                tabIndex={-1}
-                data={dadosGrafico}
-                margin={{ top: 16, right: 16, left: 10, bottom: 4 }}
-              >
-                <CartesianGrid
-                  strokeDasharray="3 3"
-                  stroke="rgba(255,255,255,0.15)"
-                  vertical={false}
-                />
-                <XAxis {...eixoX} />
-                <YAxis {...eixoY} />
-                <Tooltip
-                  content={<TooltipCustom />}
-                  cursor={{ stroke: "rgba(255,255,255,0.1)" }}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="valor"
-                  animationDuration={1200}
-                  stroke="var(--primary-light)"
-                  strokeWidth={2}
-                  dot={{ fill: "var(--accent)", r: 4 }}
-                  activeDot={{ r: 6, fill: "var(--accent)" }}
-                />
-              </LineChart>
-            )}
-          </ResponsiveContainer>
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="rgba(255,255,255,0.15)"
+                    vertical={false}
+                  />
+                  <XAxis
+                    {...eixoX}
+                    label={{
+                      value: "Categorias",
+                      position: "insideBottom",
+                      offset: -10,
+                      fill: "var(--text-muted)",
+                      fontSize: 12,
+                    }}
+                  />
+                  <YAxis
+                    {...eixoY}
+                    label={{
+                      value: "R$ Valor",
+                      angle: -90,
+                      position: "insideLeft",
+                      fill: "var(--text-muted)",
+                      fontSize: 12,
+                    }}
+                  />
+                  <Tooltip
+                    content={<TooltipCustom />}
+                    cursor={{ fill: "rgba(255,255,255,0.05)" }}
+                  />
+                  <Bar
+                    dataKey="valor"
+                    radius={[6, 6, 0, 0]}
+                    animationDuration={1200}
+                    label={{
+                      position: "top",
+                      fill: "var(--text-muted)",
+                      fontSize: 11,
+                      formatter: (v) => formatarMoeda(v),
+                    }}
+                  >
+                    {dadosGrafico.map((_, i) => (
+                      <Cell key={i} fill={CORES[i % CORES.length]} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              ) : (
+                <LineChart
+                  tabIndex={-1}
+                  data={dadosGrafico}
+                  margin={{ top: 16, right: 16, left: 10, bottom: 4 }}
+                >
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="rgba(255,255,255,0.15)"
+                    vertical={false}
+                  />
+                  <XAxis {...eixoX} />
+                  <YAxis {...eixoY} />
+                  <Tooltip
+                    content={<TooltipCustom />}
+                    cursor={{ stroke: "rgba(255,255,255,0.1)" }}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="valor"
+                    animationDuration={1200}
+                    stroke="var(--primary-light)"
+                    strokeWidth={2}
+                    dot={{ fill: "var(--accent)", r: 4 }}
+                    activeDot={{ r: 6, fill: "var(--accent)" }}
+                  />
+                </LineChart>
+              )}
+            </ResponsiveContainer>
+          )}
         </motion.div>
 
         <motion.div
@@ -246,16 +304,14 @@ function AnaliseGastos() {
           initial={{ opacity: 0, x: 40 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          transition={{
-            duration: 0.7,
-            ease: "easeOut",
-          }}
-          whileHover={{
-            y: -4,
-          }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          whileHover={{ y: -4 }}
         >
           <h3 className="analise__secao-titulo">Resumo do Mês</h3>
-          <p className="analise__resumo-mes">Maio 2026</p>
+          {/* ─── Mês dinâmico ─── */}
+          <p className="analise__resumo-mes">
+            {nomeMesSelecionado} {ANO_ATUAL}
+          </p>
 
           <div className="analise__resumo-item">
             <span className="analise__resumo-label">Total Gasto Mês</span>
@@ -285,44 +341,53 @@ function AnaliseGastos() {
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{
-          duration: 0.8,
-          ease: "easeOut",
-        }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
       >
-        <h3 className="analise__secao-titulo">Lista de Gastos de Maio 2026</h3>
-        <table className="analise__tabela">
-          <thead>
-            <tr>
-              <th>Data</th>
-              <th>Descrição</th>
-              <th>Categoria</th>
-              <th>Valor</th>
-            </tr>
-          </thead>
-          <tbody>
-            {transacoesPaginadas.map((t) => (
-              <tr key={t.id}>
-                <td>
-                  {new Date(t.data + "T00:00:00").toLocaleDateString("pt-BR")}
-                </td>
-                <td>{t.descricao}</td>
-                <td>
-                  <span className="analise__badge">
-                    {iconesPorCategoria[t.categoria] || "📦"} {t.categoria}
-                  </span>
-                </td>
+        {/* ─── Título dinâmico ─── */}
+        <h3 className="analise__secao-titulo">
+          Lista de Gastos de {nomeMesSelecionado} {ANO_ATUAL}
+        </h3>
 
-                <td className="analise__tabela-valor">
-                  <span aria-hidden="true">
-                    {t.tipo === "entrada" ? "+ " : "- "}
-                  </span>
-                  {formatarMoeda(t.valor)}
-                </td>
+        {transacoesOrdenadas.length === 0 ? (
+          <div className="analise__vazio">
+            <span>😕</span>
+            <p>
+              Nenhum gasto em {nomeMesSelecionado} {ANO_ATUAL}.
+            </p>
+          </div>
+        ) : (
+          <table className="analise__tabela">
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Descrição</th>
+                <th>Categoria</th>
+                <th>Valor</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {transacoesPaginadas.map((t) => (
+                <tr key={t.id}>
+                  <td>
+                    {new Date(t.data + "T00:00:00").toLocaleDateString("pt-BR")}
+                  </td>
+                  <td>{t.descricao}</td>
+                  <td>
+                    <span className="analise__badge">
+                      {iconesPorCategoria[t.categoria] || "📦"} {t.categoria}
+                    </span>
+                  </td>
+                  <td className="analise__tabela-valor">
+                    <span aria-hidden="true">
+                      {t.tipo === "entrada" ? "+ " : "- "}
+                    </span>
+                    {formatarMoeda(t.valor)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
 
         <div className="analise__paginacao">
           <button
@@ -332,11 +397,9 @@ function AnaliseGastos() {
           >
             ‹
           </button>
-
           <span className="analise__pag-info">
             {paginaAtual} de {totalPaginas}
           </span>
-
           <button
             className="analise__pag-btn"
             onClick={() => setPaginaAtual((p) => Math.min(p + 1, totalPaginas))}
