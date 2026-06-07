@@ -5,49 +5,55 @@ import {
   useEffect,
   useCallback,
 } from "react";
-import { getTransacoes, usuarioEstaLogado } from "../services/api";
+import { getTransacoes } from "../services/api";
+import { useAuth } from "../hooks/useAuth";
 import dadosDemo from "../data/gastos.json";
 
 const TransacoesContext = createContext();
 
 export function TransacoesProvider({ children }) {
-  const [transacoes, setTransacoes] = useState([]);
+  const { autenticado } = useAuth();
+  const [transacoes, setTransacoes] = useState(dadosDemo.transacoes);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
-  const [isDemo, setIsDemo] = useState(!usuarioEstaLogado());
+  const [isDemo, setIsDemo] = useState(true);
 
-  const carregar = useCallback(async function () {
+  async function buscarTransacoes(logado) {
     setCarregando(true);
     setErro("");
     try {
-      if (!usuarioEstaLogado()) {
+      if (!logado) {
         setTransacoes(dadosDemo.transacoes);
         setIsDemo(true);
       } else {
         const dados = await getTransacoes();
-        setTransacoes(dados);
+        setTransacoes(Array.isArray(dados) ? dados : []);
         setIsDemo(false);
       }
     } catch (err) {
       console.error(err);
-      setErro("Não foi possível carregar as transações.");
+      setTransacoes(dadosDemo.transacoes);
+      setIsDemo(true);
+      setErro("");
     } finally {
       setCarregando(false);
     }
-  }, []);
+  }
 
   useEffect(
     function () {
-      carregar();
+      buscarTransacoes(autenticado);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
-    [carregar],
+    [autenticado],
   );
 
   const recarregar = useCallback(
     async function () {
-      await carregar();
+      await buscarTransacoes(autenticado);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
-    [carregar],
+    [autenticado],
   );
 
   return (
