@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import "./ModalTransacao.css";
 import { postTransacao } from "../services/api";
 import { useTransacoes } from "../context/TransacoesContext";
+import { useAuth } from "../hooks/useAuth";
 
 const iconesPorCategoria = {
   Alimentação: "🥗",
@@ -32,6 +34,8 @@ const estadoInicial = {
 function ModalTransacao({ onAdicionar, onFechar, tipo }) {
   const tipoFinal = tipo || "saida";
   const { recarregar } = useTransacoes();
+  const { autenticado } = useAuth();
+  const navigate = useNavigate();
 
   const [form, setForm] = useState(estadoInicial);
   const [erros, setErros] = useState({});
@@ -60,6 +64,12 @@ function ModalTransacao({ onAdicionar, onFechar, tipo }) {
   }
 
   async function handleAdicionar() {
+    if (!autenticado) {
+      onFechar();
+      navigate("/login");
+      return;
+    }
+
     const e = validar();
     if (Object.keys(e).length > 0) {
       setErros(e);
@@ -67,7 +77,6 @@ function ModalTransacao({ onAdicionar, onFechar, tipo }) {
     }
 
     setCarregando(true);
-
     const nova = {
       id: Date.now(),
       valor: parseFloat(form.valor),
@@ -82,7 +91,7 @@ function ModalTransacao({ onAdicionar, onFechar, tipo }) {
       await postTransacao(nova);
       await recarregar();
       setForm(estadoInicial);
-      onAdicionar(nova); //
+      onAdicionar(nova);
     } catch (error) {
       console.error(error);
       setErros({ geral: "Erro ao salvar. Tente novamente." });
@@ -130,8 +139,14 @@ function ModalTransacao({ onAdicionar, onFechar, tipo }) {
             : "Renda / Receita / Entrada"}
         </p>
 
+        {!autenticado && (
+          <div className="modal__aviso-login">
+            <span>🔒</span>
+            <p>Faça login para salvar suas transações reais.</p>
+          </div>
+        )}
+
         <div className="modal__campos">
-          {/* Valor */}
           <div className="modal__campo">
             <label htmlFor="modal-valor" className="modal__label">
               Valor (R$)
@@ -158,7 +173,6 @@ function ModalTransacao({ onAdicionar, onFechar, tipo }) {
             )}
           </div>
 
-          {/* Descrição */}
           <div className="modal__campo">
             <label htmlFor="modal-descricao" className="modal__label">
               Descrição
@@ -183,7 +197,6 @@ function ModalTransacao({ onAdicionar, onFechar, tipo }) {
             )}
           </div>
 
-          {/* Data */}
           <div className="modal__campo">
             <label htmlFor="modal-data" className="modal__label">
               Data
@@ -207,7 +220,6 @@ function ModalTransacao({ onAdicionar, onFechar, tipo }) {
             )}
           </div>
 
-          {/* Categoria (só saída) */}
           {tipoFinal === "saida" && (
             <div className="modal__campo">
               <label htmlFor="modal-categoria" className="modal__label">
@@ -244,7 +256,6 @@ function ModalTransacao({ onAdicionar, onFechar, tipo }) {
             </div>
           )}
 
-          {/* Método de pagamento */}
           <div className="modal__campo">
             <label htmlFor="modal-metodo" className="modal__label">
               Método de pagamento
@@ -268,6 +279,12 @@ function ModalTransacao({ onAdicionar, onFechar, tipo }) {
           </div>
         </div>
 
+        {erros.geral && (
+          <span className="modal__erro" role="alert">
+            {erros.geral}
+          </span>
+        )}
+
         <div className="modal__botoes">
           <button
             className={
@@ -277,15 +294,23 @@ function ModalTransacao({ onAdicionar, onFechar, tipo }) {
             onClick={handleAdicionar}
             disabled={carregando}
             aria-label={
-              tipoFinal === "saida" ? "Adicionar despesa" : "Adicionar receita"
+              autenticado
+                ? tipoFinal === "saida"
+                  ? "Adicionar despesa"
+                  : "Adicionar receita"
+                : "Fazer login para adicionar"
             }
           >
-            {carregando ? "Salvando..." : "ADICIONAR"}
+            {!autenticado
+              ? "🔒 Fazer login"
+              : carregando
+                ? "Salvando..."
+                : "ADICIONAR"}
           </button>
           <button
             className="modal__btn modal__btn--cancelar"
             onClick={onFechar}
-            aria-label="Cancelar e fechar modal"
+            aria-label="Cancelar"
           >
             CANCELAR
           </button>
