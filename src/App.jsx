@@ -23,7 +23,6 @@ import Investimentos from "./pages/Investimentos";
 import ModalTransacao from "./components/ModalTransacao";
 import { AuthProvider } from "./context/AuthContext";
 import { useAuth } from "./hooks/useAuth";
-import RotaProtegida from "./components/RotaProtegida";
 import Simulador from "./pages/Simulador";
 import "./styles/globals.css";
 
@@ -32,8 +31,11 @@ function LayoutComSidebar() {
   const [modalAberto, setModalAberto] = useState(false);
   const [tipoModal, setTipoModal] = useState("saida");
   const [toastMsg, setToastMsg] = useState("");
-  const nomeUsuario =
-    localStorage.getItem("moneymap-usuario-nome") || "Maria Silva";
+  const { logout, autenticado } = useAuth();
+
+  const nomeUsuario = autenticado
+    ? localStorage.getItem("moneymap-usuario-nome") || ""
+    : "";
   const navigate = useNavigate();
 
   function mostrarToast(msg) {
@@ -43,10 +45,9 @@ function LayoutComSidebar() {
     }, 3000);
   }
 
-  const { logout } = useAuth();
   function handleLogout() {
     logout();
-    navigate("/login");
+    navigate("/dashboard");
   }
 
   return (
@@ -83,6 +84,7 @@ function LayoutComSidebar() {
       <div className="layout__main">
         <Header
           nomeUsuario={nomeUsuario}
+          autenticado={autenticado}
           onAbrirModal={function (tipo) {
             setTipoModal(tipo || "saida");
             setModalAberto(true);
@@ -103,7 +105,7 @@ function LayoutComSidebar() {
                 : "✅ Receita adicionada!";
             setModalAberto(false);
             mostrarToast(msg);
-            navigate("/transacoes"); // ← redireciona após adicionar
+            navigate("/transacoes");
           }}
           onFechar={function () {
             setModalAberto(false);
@@ -116,20 +118,14 @@ function LayoutComSidebar() {
 
 function App() {
   return (
-    <AuthProvider>
-      <ThemeProvider>
-        <TransacoesProvider>
-          <BrowserRouter>
+    <BrowserRouter>
+      <AuthProvider>
+        <ThemeProvider>
+          <TransacoesProvider>
             <Routes>
-              <Route path="/" element={<Navigate to="/login" replace />} />
+              <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/login" element={<Login />} />
-              <Route
-                element={
-                  <RotaProtegida>
-                    <LayoutComSidebar />
-                  </RotaProtegida>
-                }
-              >
+              <Route element={<LayoutComSidebar />}>
                 <Route path="/dashboard" element={<Home />} />
                 <Route path="/analise" element={<AnaliseGastos />} />
                 <Route path="/transacoes" element={<Transacoes />} />
@@ -140,10 +136,10 @@ function App() {
                 <Route path="/simulador" element={<Simulador />} />
               </Route>
             </Routes>
-          </BrowserRouter>
-        </TransacoesProvider>
-      </ThemeProvider>
-    </AuthProvider>
+          </TransacoesProvider>
+        </ThemeProvider>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 
