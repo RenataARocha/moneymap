@@ -1,0 +1,54 @@
+{
+  "transacoes": [
+    {
+      "id": "hcjRrOqZmE0",
+      "valor": 150,
+      "descricao": "teste",
+      "data": "2026-06-06",
+      "categoria": "Saúde",
+      "tipo": "saida",
+      "metodoPagamento": "dinheiro"
+    },
+    {
+      "id": "kA-rSVLO7Ms",
+      "valor": 400,
+      "descricao": "teste1",
+      "data": "2026-06-06",
+      "categoria": "Receita",
+      "tipo": "entrada",
+      "metodoPagamento": "dinheiro"
+    },
+    {
+      "id": "RtEEzg7k4BU",
+      "valor": 500,
+      "descricao": "aluguel",
+      "data": "2026-06-06",
+      "categoria": "Moradia",
+      "tipo": "saida",
+      "metodoPagamento": "dinheiro"
+    },
+    {
+      "id": "kl9_VaSfcRY",
+      "valor": 200,
+      "descricao": "testee",
+      "data": "2026-06-06",
+      "categoria": "Transporte",
+      "tipo": "saida",
+      "metodoPagamento": "cartao"
+    },
+    {
+      "id": "TBmibGgj2OM",
+      "valor": 3000,
+      "descricao": "salario",
+      "data": "2026-06-06",
+      "categoria": "Receita",
+      "tipo": "entrada",
+      "metodoPagamento": "pix"
+    }
+  ],
+  "mesAnterior": {
+    "totalGastos": 0,
+    "porCategoria": {}
+  },
+  "$schema": "./node_modules/json-server/schema.json"
+}
